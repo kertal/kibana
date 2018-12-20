@@ -1,0 +1,72 @@
+{
+  "formats": {
+    "number": {
+      "currency": {
+        "style": "currency"
+      },
+      "percent": {
+        "style": "percent"
+      }
+    },
+    "date": {
+      "short": {
+        "month": "numeric",
+        "day": "numeric",
+        "year": "2-digit"
+      },
+      "medium": {
+        "month": "short",
+        "day": "numeric",
+        "year": "numeric"
+      },
+      "long": {
+        "month": "long",
+        "day": "numeric",
+        "year": "numeric"
+      },
+      "full": {
+        "weekday": "long",
+        "month": "long",
+        "day": "numeric",
+        "year": "numeric"
+      }
+    },
+    "time": {
+      "short": {
+        "hour": "numeric",
+        "minute": "numeric"
+      },
+      "medium": {
+        "hour": "numeric",
+        "minute": "numeric",
+        "second": "numeric"
+      },
+      "long": {
+        "hour": "numeric",
+        "minute": "numeric",
+        "second": "numeric",
+        "timeZoneName": "short"
+      },
+      "full": {
+        "hour": "numeric",
+        "minute": "numeric",
+        "second": "numeric",
+        "timeZoneName": "short"
+      }
+    }
+  },
+  "messages": {
+    "tableVis.params.calculateMetricsLabel": "计算每个桶/级别的指标",
+    "tableVis.params.perPageLabel": "每页",
+    "tableVis.params.showMetricsLabel": "显示每个桶/级别的指标",
+    "tableVis.params.showPartialRowsLabel": "显示部分行",
+    "tableVis.params.showTotalLabel": "显示汇总",
+    "tableVis.params.totalFunctionLabel": "汇总函数",
+    "tableVis.tableVisDescription": "在表中显示值",
+    "tableVis.tableVisEditorConfig.schemas.bucketTitle": "拆分行",
+    "tableVis.tableVisEditorConfig.schemas.metricTitle": "指标",
+    "tableVis.tableVisEditorConfig.schemas.splitTitle": "拆分表",
+    "tableVis.tableVisTitle": "数据表",
+    "tableVis.vis.noResultsFoundTitle": "找不到结果"
+  }
+}

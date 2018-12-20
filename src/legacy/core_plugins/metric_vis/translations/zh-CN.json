@@ -1,0 +1,85 @@
+{
+  "formats": {
+    "number": {
+      "currency": {
+        "style": "currency"
+      },
+      "percent": {
+        "style": "percent"
+      }
+    },
+    "date": {
+      "short": {
+        "month": "numeric",
+        "day": "numeric",
+        "year": "2-digit"
+      },
+      "medium": {
+        "month": "short",
+        "day": "numeric",
+        "year": "numeric"
+      },
+      "long": {
+        "month": "long",
+        "day": "numeric",
+        "year": "numeric"
+      },
+      "full": {
+        "weekday": "long",
+        "month": "long",
+        "day": "numeric",
+        "year": "numeric"
+      }
+    },
+    "time": {
+      "short": {
+        "hour": "numeric",
+        "minute": "numeric"
+      },
+      "medium": {
+        "hour": "numeric",
+        "minute": "numeric",
+        "second": "numeric"
+      },
+      "long": {
+        "hour": "numeric",
+        "minute": "numeric",
+        "second": "numeric",
+        "timeZoneName": "short"
+      },
+      "full": {
+        "hour": "numeric",
+        "minute": "numeric",
+        "second": "numeric",
+        "timeZoneName": "short"
+      }
+    }
+  },
+  "messages": {
+    "metricVis.colorModes.backgroundOptionLabel": "背景",
+    "metricVis.colorModes.labelsOptionLabel": "标签",
+    "metricVis.colorModes.noneOptionLabel": "无",
+    "metricVis.metricDescription": "将计算结果显示为单个数字",
+    "metricVis.metricTitle": "指标图",
+    "metricVis.params.color.colorOptionsTitle": "颜色选项",
+    "metricVis.params.color.resetColorDescription": "重置颜色",
+    "metricVis.params.color.reverseSchemaLabel": "反色模式",
+    "metricVis.params.color.schemaLabel": "颜色模式",
+    "metricVis.params.color.toggleOptionsAriaLabel": "切换颜色选项",
+    "metricVis.params.color.useForLabel": "将颜色用于",
+    "metricVis.params.percentageModeLabel": "百分比模式",
+    "metricVis.params.ranges.addRangeButtonLabel": "添加范围",
+    "metricVis.params.ranges.fromLabel": "从",
+    "metricVis.params.ranges.toggleOptionsAriaLabel": "切换范围选项",
+    "metricVis.params.ranges.toLabel": "到",
+    "metricVis.params.ranges.warning.requiredDescription": "必需：",
+    "metricVis.params.ranges.warning.specifyRangeDescription": "{requiredDescription} 您必须指定至少一个范围。",
+    "metricVis.params.rangesTitle": "范围",
+    "metricVis.params.showLabelsLabel": "显示标签",
+    "metricVis.params.style.fontSizeLabel": "字体大小（{fontSize} 磅）",
+    "metricVis.params.style.styleTitle": "样式",
+    "metricVis.params.style.toggleOptionsAriaLabel": "切换样式选项",
+    "metricVis.schemas.metricTitle": "指标",
+    "metricVis.schemas.splitGroupTitle": "拆分组"
+  }
+}

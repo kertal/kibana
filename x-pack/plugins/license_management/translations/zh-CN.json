@@ -1,0 +1,123 @@
+{
+  "formats": {
+    "number": {
+      "currency": {
+        "style": "currency"
+      },
+      "percent": {
+        "style": "percent"
+      }
+    },
+    "date": {
+      "short": {
+        "month": "numeric",
+        "day": "numeric",
+        "year": "2-digit"
+      },
+      "medium": {
+        "month": "short",
+        "day": "numeric",
+        "year": "numeric"
+      },
+      "long": {
+        "month": "long",
+        "day": "numeric",
+        "year": "numeric"
+      },
+      "full": {
+        "weekday": "long",
+        "month": "long",
+        "day": "numeric",
+        "year": "numeric"
+      }
+    },
+    "time": {
+      "short": {
+        "hour": "numeric",
+        "minute": "numeric"
+      },
+      "medium": {
+        "hour": "numeric",
+        "minute": "numeric",
+        "second": "numeric"
+      },
+      "long": {
+        "hour": "numeric",
+        "minute": "numeric",
+        "second": "numeric",
+        "timeZoneName": "short"
+      },
+      "full": {
+        "hour": "numeric",
+        "minute": "numeric",
+        "second": "numeric",
+        "timeZoneName": "short"
+      }
+    }
+  },
+  "messages": {
+    "xpack.licenseMgmt.licenseDashboard.addLicense.updateLicenseButtonLabel": "更新许可",
+    "xpack.licenseMgmt.licenseDashboard.addLicense.updateLicenseTitle": "更新您的许可",
+    "xpack.licenseMgmt.licenseDashboard.addLicense.useAvailableLicenseDescription": "如果已有新的许可，请立即上传。",
+    "xpack.licenseMgmt.licenseDashboard.licenseStatus.activeLicenseStatusDescription": "您的许可将于 {expiryDate}过期",
+    "xpack.licenseMgmt.licenseDashboard.licenseStatus.activeLicenseStatusText": "有效",
+    "xpack.licenseMgmt.licenseDashboard.licenseStatus.activeLicenseStatusTitle": "您的{typeTitleCase}许可{status}",
+    "xpack.licenseMgmt.licenseDashboard.licenseStatus.expiredLicenseStatusDescription": "您的许可已于 {expiryDate}过期",
+    "xpack.licenseMgmt.licenseDashboard.licenseStatus.expiredLicenseStatusTitle": "您的{typeTitleCase}许可已过期",
+    "xpack.licenseMgmt.licenseDashboard.licenseStatus.inactiveLicenseStatusText": "无效",
+    "xpack.licenseMgmt.licenseDashboard.licenseStatus.permanentActiveLicenseStatusDescription": "您的许可永不会过期。",
+    "xpack.licenseMgmt.licenseDashboard.requestTrialExtension.extendTrialButtonLabel": "延期试用",
+    "xpack.licenseMgmt.licenseDashboard.requestTrialExtension.extendYourTrialTitle": "延期您的试用",
+    "xpack.licenseMgmt.licenseDashboard.requestTrialExtension.howToContinueUsingPluginsDescription": "如果您想继续使用 Security、Machine Learning 以及我们其他超卓的{platinumLicenseFeaturesLinkText}，请立即申请延期。",
+    "xpack.licenseMgmt.licenseDashboard.requestTrialExtension.platinumLicenseFeaturesLinkText": "白金级功能",
+    "xpack.licenseMgmt.licenseDashboard.revertToBasic.acknowledgeModal.revertToBasicButtonLabel": "恢复为基础级",
+    "xpack.licenseMgmt.licenseDashboard.revertToBasic.acknowledgeModalTitle": "恢复为基础级许可",
+    "xpack.licenseMgmt.licenseDashboard.revertToBasic.confirmModal.cancelButtonLabel": "取消",
+    "xpack.licenseMgmt.licenseDashboard.revertToBasic.confirmModal.confirmButtonLabel": "确认",
+    "xpack.licenseMgmt.licenseDashboard.revertToBasic.confirmModalTitle": "确认恢复为基础级许可",
+    "xpack.licenseMgmt.licenseDashboard.revertToBasic.platinumLicenseFeaturesLinkText": "白金级功能",
+    "xpack.licenseMgmt.licenseDashboard.revertToBasic.revertToFreeFeaturesDescription": "您将恢复到我们的免费功能，并失去对 Security、Machine Learning 和其他{platinumLicenseFeaturesLinkText}的访问权限。",
+    "xpack.licenseMgmt.licenseDashboard.startTrial.confirmModal.cancelButtonLabel": "取消",
+    "xpack.licenseMgmt.licenseDashboard.startTrial.confirmModal.startTrialButtonLabel": "开始我的试用",
+    "xpack.licenseMgmt.licenseDashboard.startTrial.confirmModalDescription": "此试用具有 Elastic Stack 的全套{platinumLicenseFeaturesLinkText}您立即可以访问：",
+    "xpack.licenseMgmt.licenseDashboard.startTrial.confirmModalDescription.alertingFeatureTitle": "Alerting",
+    "xpack.licenseMgmt.licenseDashboard.startTrial.confirmModalDescription.dateBaseConnectivityFeatureTitle": "{sqlDateBase} 的 {jdbcStandart} 连接性",
+    "xpack.licenseMgmt.licenseDashboard.startTrial.confirmModalDescription.graphCapabilitiesFeatureTitle": "图表功能",
+    "xpack.licenseMgmt.licenseDashboard.startTrial.confirmModalDescription.mashingLearningFeatureTitle": "Machine Learning",
+    "xpack.licenseMgmt.licenseDashboard.startTrial.confirmModalDescription.platinumLicenseFeaturesLinkText": "白金级功能",
+    "xpack.licenseMgmt.licenseDashboard.startTrial.confirmModalDescription.securityDocumentationLinkText": "文档",
+    "xpack.licenseMgmt.licenseDashboard.startTrial.confirmModalDescription.securityFeaturesConfigurationDescription": "Security 功能，如身份验证（{authenticationTypeList}）、基于角色的访问控制以及审计，需要配置。有关说明，请参阅 {securityDocumentationLinkText}。",
+    "xpack.licenseMgmt.licenseDashboard.startTrial.confirmModalDescription.termsAndConditionsDescription": "通过开始此试用，您同意其受这些{termsAndConditionsLinkText}约束。",
+    "xpack.licenseMgmt.licenseDashboard.startTrial.confirmModalDescription.termsAndConditionsLinkText": "条款和条件",
+    "xpack.licenseMgmt.licenseDashboard.startTrial.confirmModalTitle": "立即开始为期 30 天的免费试用",
+    "xpack.licenseMgmt.licenseDashboard.startTrial.platinumFeaturesExperienceDescription": "体验一下 Security、Machine learning 以及我们所有其他{platinumLicenseFeaturesLinkText}能帮您做什么。",
+    "xpack.licenseMgmt.licenseDashboard.startTrial.platinumLicenseFeaturesLinkText": "白金级功能",
+    "xpack.licenseMgmt.licenseDashboard.startTrial.startTrialButtonLabel": "开始试用",
+    "xpack.licenseMgmt.licenseDashboard.startTrialTitle": "开始为期 30 天的试用",
+    "xpack.licenseMgmt.managementSectionDisplayName": "许可管理",
+    "xpack.licenseMgmt.replacingCurrentLicenseWithBasicLicenseWarningMessage": "如果将您的{currentLicenseType}许可替换成基础级许可，将会失去部分功能。查看下面的功能列表。",
+    "xpack.licenseMgmt.telemetryOptIn.customersHelpSupportDescription": "黄金级和白金级客户：帮助支持人员为您提供更好的服务。",
+    "xpack.licenseMgmt.telemetryOptIn.exampleLinkText": "示例",
+    "xpack.licenseMgmt.telemetryOptIn.featureUsageWarningMessage": "此功能定期发送基本的功能使用统计信息。此信息不会在 Elastic 以外进行共享。请参阅{exampleLink}或阅读我们的{telemetryPrivacyStatementLink}。您可以随时禁用此功能。",
+    "xpack.licenseMgmt.telemetryOptIn.readMoreLinkText": "阅读更多内容",
+    "xpack.licenseMgmt.telemetryOptIn.sendBasicFeatureStatisticsLabel": "定期向 Elastic 发送基本的功能使用统计信息。{popover}",
+    "xpack.licenseMgmt.telemetryOptIn.telemetryPrivacyStatementLinkText": "遥测隐私声明",
+    "xpack.licenseMgmt.uploadLicense.cancelButtonLabel": "取消",
+    "xpack.licenseMgmt.uploadLicense.checkLicenseFileErrorMessage": "{genericUploadError}检查您的许可文件。",
+    "xpack.licenseMgmt.uploadLicense.confirmModal.cancelButtonLabel": "取消",
+    "xpack.licenseMgmt.uploadLicense.confirmModal.confirmButtonLabel": "确认",
+    "xpack.licenseMgmt.uploadLicense.confirmModalTitle": "确认许可上传",
+    "xpack.licenseMgmt.uploadLicense.expiredLicenseErrorMessage": "提供的许可已过期。",
+    "xpack.licenseMgmt.uploadLicense.genericUploadErrorMessage": "上传许可时遇到错误：",
+    "xpack.licenseMgmt.uploadLicense.invalidLicenseErrorMessage": "提供的许可对于此产品无效。",
+    "xpack.licenseMgmt.uploadLicense.licenseFileNotSelectedErrorMessage": "必须选择许可文件。",
+    "xpack.licenseMgmt.uploadLicense.licenseKeyTypeDescription": "您的许可密钥是附有签名的 JSON 文件。",
+    "xpack.licenseMgmt.uploadLicense.problemWithUploadedLicenseDescription": "如果将您的{currentLicenseType}许可替换成{newLicenseType}许可，将会失去部分功能。查看下面的功能列表。",
+    "xpack.licenseMgmt.uploadLicense.replacingCurrentLicenseWarningMessage": "上传许可将会替换您当前的{currentLicenseType}许可。",
+    "xpack.licenseMgmt.uploadLicense.selectLicenseFileDescription": "选择或拖来您的许可文件",
+    "xpack.licenseMgmt.uploadLicense.unknownErrorErrorMessage": "未知错误。",
+    "xpack.licenseMgmt.uploadLicense.uploadButtonLabel": "上传",
+    "xpack.licenseMgmt.uploadLicense.uploadingButtonLabel": "正在上传……",
+    "xpack.licenseMgmt.uploadLicense.uploadLicenseTitle": "上传您的许可"
+  }
+}

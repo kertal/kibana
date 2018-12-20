@@ -1,0 +1,111 @@
+{
+  "formats": {
+    "number": {
+      "currency": {
+        "style": "currency"
+      },
+      "percent": {
+        "style": "percent"
+      }
+    },
+    "date": {
+      "short": {
+        "month": "numeric",
+        "day": "numeric",
+        "year": "2-digit"
+      },
+      "medium": {
+        "month": "short",
+        "day": "numeric",
+        "year": "numeric"
+      },
+      "long": {
+        "month": "long",
+        "day": "numeric",
+        "year": "numeric"
+      },
+      "full": {
+        "weekday": "long",
+        "month": "long",
+        "day": "numeric",
+        "year": "numeric"
+      }
+    },
+    "time": {
+      "short": {
+        "hour": "numeric",
+        "minute": "numeric"
+      },
+      "medium": {
+        "hour": "numeric",
+        "minute": "numeric",
+        "second": "numeric"
+      },
+      "long": {
+        "hour": "numeric",
+        "minute": "numeric",
+        "second": "numeric",
+        "timeZoneName": "short"
+      },
+      "full": {
+        "hour": "numeric",
+        "minute": "numeric",
+        "second": "numeric",
+        "timeZoneName": "short"
+      }
+    }
+  },
+  "messages": {
+    "console.autocomplete.addMethodMetaText": "方法",
+    "console.helpPage.keyboardCommands.autoIndentDescription": "自动缩进当前请求",
+    "console.helpPage.keyboardCommands.closeAutoCompleteMenuDescription": "关闭自动完成菜单",
+    "console.helpPage.keyboardCommands.collapseAllScopesDescription": "折叠当前范围除外的所有范围。通过加按 Shift 键来展开。",
+    "console.helpPage.keyboardCommands.collapseExpandCurrentScopeDescription": "折叠/展开当前范围。",
+    "console.helpPage.keyboardCommands.jumpToPreviousNextRequestDescription": "跳转至前一/后一请求开头或结尾。",
+    "console.helpPage.keyboardCommands.openAutoCompleteDescription": "打开自动完成（即使未键入）",
+    "console.helpPage.keyboardCommands.openDocumentationDescription": "打开当前请求的文档",
+    "console.helpPage.keyboardCommands.selectCurrentlySelectedInAutoCompleteMenuDescription": "选择自动完成菜单中当前选定的词或最顶部的词",
+    "console.helpPage.keyboardCommands.submitRequestDescription": "提交请求",
+    "console.helpPage.keyboardCommands.switchFocusToAutoCompleteMenuDescription": "将焦点切换到自动完成菜单。使用箭头进一步选择词",
+    "console.helpPage.keyboardCommandsTitle": "键盘命令",
+    "console.helpPage.pageTitle": "帮助",
+    "console.helpPage.requestFormatDescription": "您可以在空白编辑器中键入一个或多个请求。Console 理解紧凑格式的请求：",
+    "console.helpPage.requestFormatTitle": "请求格式",
+    "console.historyPage.applyHistoryButtonLabel": "应用",
+    "console.historyPage.clearHistoryButtonLabel": "清除",
+    "console.historyPage.itemOfRequestListAriaLabel": "请求：{historyItem}",
+    "console.historyPage.noHistoryTextMessage": "没有可用的历史记录",
+    "console.historyPage.pageTitle": "历史记录",
+    "console.historyPage.requestListAriaLabel": "已发送请求的历史记录",
+    "console.requestOptions.autoIndentButtonLabel": "自动缩进",
+    "console.requestOptions.copyAsUrlButtonLabel": "复制为 cURL",
+    "console.requestOptions.openDocumentationButtonLabel": "打开文档",
+    "console.requestOptionsButtonAriaLabel": "请求选项",
+    "console.sendRequestButtonTooltip": "单击可发送请求",
+    "console.settingsPage.autocompleteLabel": "自动完成",
+    "console.settingsPage.cancelButtonLabel": "取消",
+    "console.settingsPage.fieldsLabelText": "字段",
+    "console.settingsPage.fontSizeLabel": "字体大小",
+    "console.settingsPage.indicesAndAliasesLabelText": "索引和别名",
+    "console.settingsPage.pageTitle": "设置",
+    "console.settingsPage.saveButtonLabel": "保存",
+    "console.settingsPage.templatesLabelText": "模板",
+    "console.settingsPage.wrapLongLinesLabelText": "长行换行",
+    "console.topNav.helpTabDescription": "帮助",
+    "console.topNav.historyTabDescription": "历史记录",
+    "console.topNav.settingsTabDescription": "设置",
+    "console.welcomePage.closeButtonLabel": "开始工作",
+    "console.welcomePage.pageTitle": "欢迎使用 Console",
+    "console.welcomePage.quickIntroDescription": "Console UI 分成两个窗格：编辑器窗格（左）和响应窗格（右）。使用编辑器键入请求并将它们提交到 Elasticsearch。结果将显示在右侧的响应窗格中。",
+    "console.welcomePage.quickIntroTitle": "UI 简介",
+    "console.welcomePage.quickTips.cUrlFormatForRequestsDescription": "您可以粘贴 cURL 格式的请求，这些请求将转换成 Console 语法格式。",
+    "console.welcomePage.quickTips.keyboardShortcutsDescription": "学习“帮助”按钮下的键盘快捷方式。那里有非常实用的信息。",
+    "console.welcomePage.quickTips.resizeEditorDescription": "您可以通过拖动编辑器和输出窗格之间的分隔条来调整它们的大小。",
+    "console.welcomePage.quickTips.submitRequestDescription": "使用绿色三角按钮将请求提交到 ES。",
+    "console.welcomePage.quickTips.useWrenchMenuDescription": "使用扳手菜单执行其他有用的操作。",
+    "console.welcomePage.quickTipsTitle": "有几个需要您注意的有用提示",
+    "console.welcomePage.supportedRequestFormatDescription": "键入请求时，Console 将提供建议，您可以通过按 Enter/Tab 键来接受建议。这些建议基于请求结构{asWellAs}您的索引和类型做出。",
+    "console.welcomePage.supportedRequestFormatDescription.asWellAsFragmentText": "以及",
+    "console.welcomePage.supportedRequestFormatTitle": "Console 理解紧凑格式的请求，类似于 cURL："
+  }
+}

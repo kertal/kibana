@@ -1,0 +1,74 @@
+{
+  "formats": {
+    "number": {
+      "currency": {
+        "style": "currency"
+      },
+      "percent": {
+        "style": "percent"
+      }
+    },
+    "date": {
+      "short": {
+        "month": "numeric",
+        "day": "numeric",
+        "year": "2-digit"
+      },
+      "medium": {
+        "month": "short",
+        "day": "numeric",
+        "year": "numeric"
+      },
+      "long": {
+        "month": "long",
+        "day": "numeric",
+        "year": "numeric"
+      },
+      "full": {
+        "weekday": "long",
+        "month": "long",
+        "day": "numeric",
+        "year": "numeric"
+      }
+    },
+    "time": {
+      "short": {
+        "hour": "numeric",
+        "minute": "numeric"
+      },
+      "medium": {
+        "hour": "numeric",
+        "minute": "numeric",
+        "second": "numeric"
+      },
+      "long": {
+        "hour": "numeric",
+        "minute": "numeric",
+        "second": "numeric",
+        "timeZoneName": "short"
+      },
+      "full": {
+        "hour": "numeric",
+        "minute": "numeric",
+        "second": "numeric",
+        "timeZoneName": "short"
+      }
+    }
+  },
+  "messages": {
+    "tagCloud.feedbackMessage.tooSmallContainerDescription": "容器太小，无法显示整个云。标记可能被裁剪或省略。",
+    "tagCloud.feedbackMessage.truncatedTagsDescription": "标记数量已截断，以避免绘制时间过长。",
+    "tagCloud.vis.schemas.metricTitle": "标记大小",
+    "tagCloud.vis.schemas.segmentTitle": "标记",
+    "tagCloud.vis.tagCloudDescription": "一组字词，可根据其重要性调整大小",
+    "tagCloud.vis.tagCloudTitle": "标记云",
+    "tagCloud.visParams.fontSizeLabel": "字体大小",
+    "tagCloud.visParams.maxFontSizeAriaLabel": "标记字体最大大小",
+    "tagCloud.visParams.maxPixelsAriaLabel": "像素",
+    "tagCloud.visParams.minFontSizeAriaLabel": "标记字体最小大小",
+    "tagCloud.visParams.minPixelsAriaLabel": "像素",
+    "tagCloud.visParams.orientationsLabel": "方向",
+    "tagCloud.visParams.showLabelToggleLabel": "显示标签",
+    "tagCloud.visParams.textScaleLabel": "文本比例"
+  }
+}

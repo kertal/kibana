@@ -1,0 +1,104 @@
+{
+  "formats": {
+    "number": {
+      "currency": {
+        "style": "currency"
+      },
+      "percent": {
+        "style": "percent"
+      }
+    },
+    "date": {
+      "short": {
+        "month": "numeric",
+        "day": "numeric",
+        "year": "2-digit"
+      },
+      "medium": {
+        "month": "short",
+        "day": "numeric",
+        "year": "numeric"
+      },
+      "long": {
+        "month": "long",
+        "day": "numeric",
+        "year": "numeric"
+      },
+      "full": {
+        "weekday": "long",
+        "month": "long",
+        "day": "numeric",
+        "year": "numeric"
+      }
+    },
+    "time": {
+      "short": {
+        "hour": "numeric",
+        "minute": "numeric"
+      },
+      "medium": {
+        "hour": "numeric",
+        "minute": "numeric",
+        "second": "numeric"
+      },
+      "long": {
+        "hour": "numeric",
+        "minute": "numeric",
+        "second": "numeric",
+        "timeZoneName": "short"
+      },
+      "full": {
+        "hour": "numeric",
+        "minute": "numeric",
+        "second": "numeric",
+        "timeZoneName": "short"
+      }
+    }
+  },
+  "messages": {
+    "inputControl.control.noIndexPatternTooltip": "找不到索引模式 ID：{indexPatternId}。",
+    "inputControl.control.notInitializedTooltip": "控件尚未初始化",
+    "inputControl.control.noValuesDisableTooltip": "按“{fieldName}”字段进行了筛选，但在“{indexPatternName}”索引模式下的任何文档中都不存在该字段。请选择包含此字段值的其他字段或索引文档。",
+    "inputControl.editor.controlEditor.controlLabel": "控件标签",
+    "inputControl.editor.controlEditor.moveControlDownAriaLabel": "下移控件",
+    "inputControl.editor.controlEditor.moveControlUpAriaLabel": "上移控件",
+    "inputControl.editor.controlEditor.removeControlAriaLabel": "删除控件",
+    "inputControl.editor.controlsTab.addButtonLabel": "添加",
+    "inputControl.editor.controlsTab.select.addControlAriaLabel": "添加控件",
+    "inputControl.editor.controlsTab.select.controlTypeAriaLabel": "选择控件类型",
+    "inputControl.editor.controlsTab.select.listDropDownOptionLabel": "选项列表",
+    "inputControl.editor.controlsTab.select.rangeDropDownOptionLabel": "范围滑块",
+    "inputControl.editor.fieldSelect.fieldLabel": "字段",
+    "inputControl.editor.fieldSelect.selectFieldPlaceholder": "选择字段......",
+    "inputControl.editor.indexPatternSelect.patternLabel": "索引模式",
+    "inputControl.editor.indexPatternSelect.patternPlaceholder": "选择索引模式......",
+    "inputControl.editor.listControl.dynamicOptions.stringFieldDescription": "仅适用于“字符串”字段",
+    "inputControl.editor.listControl.dynamicOptions.updateDescription": "基于用户输入更新选项",
+    "inputControl.editor.listControl.dynamicOptionsLabel": "动态选项",
+    "inputControl.editor.listControl.multiselectDescription": "允许多选",
+    "inputControl.editor.listControl.multiselectLabel": "多选",
+    "inputControl.editor.listControl.parentDescription": "选项个数将基于父控件的值。如果未设置父控件，则禁用。",
+    "inputControl.editor.listControl.parentLabel": "父控件",
+    "inputControl.editor.listControl.sizeDescription": "选项个数",
+    "inputControl.editor.listControl.sizeLabel": "大小",
+    "inputControl.editor.optionsTab.pinFiltersLabel": "将筛选器固定到全局状态",
+    "inputControl.editor.optionsTab.updateFilterLabel": "每次更改时更新 Kibana 筛选器",
+    "inputControl.editor.optionsTab.useTimeFilterLabel": "使用时间筛选器",
+    "inputControl.editor.rangeControl.decimalPlacesLabel": "小数位数",
+    "inputControl.editor.rangeControl.stepSizeLabel": "步长",
+    "inputControl.listControl.disableTooltip": "设置“{label}”之前禁用。",
+    "inputControl.listControl.unableToFetchTooltip": "无法提取字词，错误：{errorMessage}",
+    "inputControl.rangeControl.unableToFetchTooltip": "无法提取范围最小值和最大值，错误：{errorMessage}",
+    "inputControl.register.controlsDescription": "创建交互控件，以方便仪表板操控。",
+    "inputControl.register.controlsTitle": "控件",
+    "inputControl.register.tabs.controlsTitle": "控件",
+    "inputControl.register.tabs.optionsTitle": "选项",
+    "inputControl.vis.inputControlVis.applyChangesButtonLabel": "应用更改",
+    "inputControl.vis.inputControlVis.cancelChangesButtonLabel": "取消更改",
+    "inputControl.vis.inputControlVis.clearFormButtonLabel": "清除表单",
+    "inputControl.vis.listControl.selectPlaceholder": "选择......",
+    "inputControl.vis.listControl.selectTextPlaceholder": "选择......",
+    "inputControl.vis.rangeControl.maxValidErrorMessage": "最大值必须大于或等于最小值",
+    "inputControl.vis.rangeControl.minMaxValidErrorMessage": "必须设置最小值和最大值"
+  }
+}

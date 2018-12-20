@@ -1,0 +1,133 @@
+{
+  "formats": {
+    "number": {
+      "currency": {
+        "style": "currency"
+      },
+      "percent": {
+        "style": "percent"
+      }
+    },
+    "date": {
+      "short": {
+        "month": "numeric",
+        "day": "numeric",
+        "year": "2-digit"
+      },
+      "medium": {
+        "month": "short",
+        "day": "numeric",
+        "year": "numeric"
+      },
+      "long": {
+        "month": "long",
+        "day": "numeric",
+        "year": "numeric"
+      },
+      "full": {
+        "weekday": "long",
+        "month": "long",
+        "day": "numeric",
+        "year": "numeric"
+      }
+    },
+    "time": {
+      "short": {
+        "hour": "numeric",
+        "minute": "numeric"
+      },
+      "medium": {
+        "hour": "numeric",
+        "minute": "numeric",
+        "second": "numeric"
+      },
+      "long": {
+        "hour": "numeric",
+        "minute": "numeric",
+        "second": "numeric",
+        "timeZoneName": "short"
+      },
+      "full": {
+        "hour": "numeric",
+        "minute": "numeric",
+        "second": "numeric",
+        "timeZoneName": "short"
+      }
+    }
+  },
+  "messages": {
+    "xpack.idxMgmt.appTitle": "索引管理",
+    "xpack.idxMgmt.clearCacheIndicesAction.successMessage": "已成功清除缓存：[{indexNames}]",
+    "xpack.idxMgmt.closeIndicesAction.successfullyClosedIndicesMessage": "已成功关闭：[{indexNames}]",
+    "xpack.idxMgmt.deleteIndicesAction.successfullyDeletedIndicesMessage": "已成功删除：[{indexNames}]",
+    "xpack.idxMgmt.detailPanel.manageContextMenuLabel": "管理",
+    "xpack.idxMgmt.editIndexSettingsAction.successfullySavedSettingsForIndicesMessage": "已成功保存 {indexName} 的设置",
+    "xpack.idxMgmt.editSettingsJSON.saveJSONButtonLabel": "保存",
+    "xpack.idxMgmt.editSettingsJSON.saveJSONDescription": "编辑并保存您的 JSON",
+    "xpack.idxMgmt.editSettingsJSON.settingsReferenceLinkText": "设置参考",
+    "xpack.idxMgmt.flushIndicesAction.successfullyFlushedIndicesMessage": "已成功清空：[{indexNames}]",
+    "xpack.idxMgmt.forceMergeIndicesAction.successfullyForceMergedIndicesMessage": "已成功强制合并：[{indexNames}]",
+    "xpack.idxMgmt.indexActionsMenu.clearEntityCacheLabel": "清除 {entity} 缓存",
+    "xpack.idxMgmt.indexActionsMenu.closeEntityLabel": "关闭 {entity}",
+    "xpack.idxMgmt.indexActionsMenu.deleteEntity.confirmModal.cancelButtonText": "取消",
+    "xpack.idxMgmt.indexActionsMenu.deleteEntity.confirmModal.confirmButtonText": "确认",
+    "xpack.idxMgmt.indexActionsMenu.deleteEntity.confirmModal.modalTitle": "确认删除 {entity}",
+    "xpack.idxMgmt.indexActionsMenu.deleteEntity.deleteDescription": "您即将删除{oneIndexSelected, plural, one {此} other {这些}}",
+    "xpack.idxMgmt.indexActionsMenu.deleteEntity.deleteEntityWarningDescription": " 此操作无法撤消。确保您有适当的备份。",
+    "xpack.idxMgmt.indexActionsMenu.deleteEntity.proceedWithCautionCallOutTitle": "谨慎操作！",
+    "xpack.idxMgmt.indexActionsMenu.deleteEntityLabel": "删除 {entity}",
+    "xpack.idxMgmt.indexActionsMenu.editEntitySettingsLabel": "编辑 {entity} 设置",
+    "xpack.idxMgmt.indexActionsMenu.flushEntityLabel": "清空 {entity}",
+    "xpack.idxMgmt.indexActionsMenu.forceMerge.confirmModal.cancelButtonText": "取消",
+    "xpack.idxMgmt.indexActionsMenu.forceMerge.confirmModal.confirmButtonText": "强制合并",
+    "xpack.idxMgmt.indexActionsMenu.forceMerge.confirmModal.modalTitle": "强制合并",
+    "xpack.idxMgmt.indexActionsMenu.forceMerge.forceMergeDescription": "您即将强制合并{oneIndexSelected, plural, one {此} other {这些}}",
+    "xpack.idxMgmt.indexActionsMenu.forceMerge.forceMergeSegmentsHelpText": "合并索引中的段，直到段数减至此数目或更小数目。默认值为 1。",
+    "xpack.idxMgmt.indexActionsMenu.forceMerge.forceMergeWarningDescription": " 强制合并大型索引或非只读索引可能会使未正确运行（根据非只读索引运行）或在高峰时段运行的集群出现性能和稳定性问题。",
+    "xpack.idxMgmt.indexActionsMenu.forceMerge.maximumNumberOfSegmentsFormRowLabel": "每分片最大段数",
+    "xpack.idxMgmt.indexActionsMenu.forceMerge.proceedWithCautionCallOutTitle": "谨慎操作！",
+    "xpack.idxMgmt.indexActionsMenu.forceMergeEntityLabel": "强制合并 {entity}",
+    "xpack.idxMgmt.indexActionsMenu.manageButtonLabel": "管理{indexNamesLength, plural, one {索引} other {索引}}",
+    "xpack.idxMgmt.indexActionsMenu.openEntityLabel": "打开 {entity}",
+    "xpack.idxMgmt.indexActionsMenu.panelTitle": "{entityUpper} 选项",
+    "xpack.idxMgmt.indexActionsMenu.refreshEntityLabel": "刷新 {entity}",
+    "xpack.idxMgmt.indexActionsMenu.segmentsNumberErrorMessage": "段数必须大于零。",
+    "xpack.idxMgmt.indexActionsMenu.showEntityMappingLabel": "显示 {entity} 映射",
+    "xpack.idxMgmt.indexActionsMenu.showEntitySettingsLabel": "显示 {entity} 设置",
+    "xpack.idxMgmt.indexActionsMenu.showEntityStatsLabel": "显示 {entity} 统计",
+    "xpack.idxMgmt.indexStatusLabels.clearingCacheStatusLabel": "正在清除缓存...",
+    "xpack.idxMgmt.indexStatusLabels.closedStatusLabel": "已关闭",
+    "xpack.idxMgmt.indexStatusLabels.closingStatusLabel": "正在关闭...",
+    "xpack.idxMgmt.indexStatusLabels.flushingStatusLabel": "正在清空...",
+    "xpack.idxMgmt.indexStatusLabels.forcingMergeStatusLabel": "正在强制合并...",
+    "xpack.idxMgmt.indexStatusLabels.mergingStatusLabel": "正在合并...",
+    "xpack.idxMgmt.indexStatusLabels.openingStatusLabel": "正在打开...",
+    "xpack.idxMgmt.indexStatusLabels.refreshingStatusLabel": "正在刷新...",
+    "xpack.idxMgmt.indexTable.headers.documentsHeader": "文档计数",
+    "xpack.idxMgmt.indexTable.headers.healthHeader": "运行状况",
+    "xpack.idxMgmt.indexTable.headers.nameHeader": "名称",
+    "xpack.idxMgmt.indexTable.headers.primaryHeader": "主分片",
+    "xpack.idxMgmt.indexTable.headers.primaryStorageSizeHeader": "主存储大小",
+    "xpack.idxMgmt.indexTable.headers.replicaHeader": "副本分片",
+    "xpack.idxMgmt.indexTable.headers.statusHeader": "状态",
+    "xpack.idxMgmt.indexTable.headers.storageSizeHeader": "存储大小",
+    "xpack.idxMgmt.indexTable.sectionDescription": "分别或批量更新您的 Elasticsearch 索引",
+    "xpack.idxMgmt.indexTable.sectionHeading": "索引管理",
+    "xpack.idxMgmt.indexTable.systemIndicesSearchIndicesAriaLabel": "搜索索引",
+    "xpack.idxMgmt.indexTable.systemIndicesSearchInputPlaceholder": "搜索",
+    "xpack.idxMgmt.indexTable.systemIndicesSwitchLabel": "包括系统索引",
+    "xpack.idxMgmt.noMatch.noIndicesDescription": "没有要显示的索引",
+    "xpack.idxMgmt.openIndicesAction.successfullyOpenedIndicesMessage": "已成功打开：[{indexNames}]",
+    "xpack.idxMgmt.refreshIndicesAction.successfullyRefreshedIndicesMessage": "已成功刷新：[{indexNames}]",
+    "xpack.idxMgmt.reloadIndicesAction.indicesPageRefreshFailureMessage": "无法刷新当前页面的索引。",
+    "xpack.idxMgmt.summary.headers.deletedDocumentsHeader": "文档已删除",
+    "xpack.idxMgmt.summary.headers.documentsHeader": "文档计数",
+    "xpack.idxMgmt.summary.headers.healthHeader": "运行状况",
+    "xpack.idxMgmt.summary.headers.primaryHeader": "主分片",
+    "xpack.idxMgmt.summary.headers.primaryStorageSizeHeader": "主存储大小",
+    "xpack.idxMgmt.summary.headers.replicaHeader": "副本分片",
+    "xpack.idxMgmt.summary.headers.statusHeader": "状态",
+    "xpack.idxMgmt.summary.headers.storageSizeHeader": "存储大小",
+    "xpack.idxMgmt.updateIndexSettingsAction.settingsSuccessUpdateMessage": "已成功更新索引 {indexName} 的设置"
+  }
+}

@@ -21,7 +21,7 @@ import uiRoutes from 'ui/routes';
 import { getSafeAggregationName } from 'plugins/ml/../common/util/job_utils';
 import { checkLicenseExpired } from 'plugins/ml/license/check_license';
 import { checkCreateJobsPrivilege } from 'plugins/ml/privilege/check_privilege';
-import { IntervalHelperProvider } from 'plugins/ml/util/ml_time_buckets';
+import { MlTimeBuckets } from 'plugins/ml/util/ml_time_buckets';
 import { getCreateSingleMetricJobBreadcrumbs } from 'plugins/ml/jobs/breadcrumbs';
 import { filterAggTypes } from 'plugins/ml/jobs/new_job/simple/components/utils/filter_agg_types';
 import { validateJob } from 'plugins/ml/jobs/new_job/simple/components/utils/validate_job';
@@ -64,12 +64,11 @@ import { uiModules } from 'ui/modules';
 const module = uiModules.get('apps/ml');
 
 module
-  .controller('MlCreateSingleMetricJob', function ($scope, $route, $filter, $timeout, Private, AppState) {
+  .controller('MlCreateSingleMetricJob', function ($scope, $route, $timeout, Private, AppState) {
 
     timefilter.enableTimeRangeSelector();
     timefilter.disableAutoRefreshSelector();
     const msgs = mlMessageBarService;
-    const MlTimeBuckets = Private(IntervalHelperProvider);
     const moveToAdvancedJobCreation = Private(moveToAdvancedJobCreationProvider);
     const mlSingleMetricJobService = Private(SingleMetricJobServiceProvider);
 
@@ -515,7 +514,7 @@ module
 
               // check to see if the percentage is past a threshold for reloading the full model
               let fullModelRefresh = false;
-              _.each(jobProgressChecks, (c, i) => {
+              _.each(jobProgressChecks, (c, i) => { // eslint-disable-line no-unused-vars
                 if (jobProgressChecks[i] === false && $scope.chartData.percentComplete >= i) {
                   jobProgressChecks[i] = true;
                   fullModelRefresh = true;
@@ -600,7 +599,7 @@ module
       $scope.jobState = JOB_STATE.NOT_STARTED;
       angular.element('.model-chart, .swimlane').css('opacity', 0);
 
-      _.each(jobProgressChecks, (c, i) => {
+      _.each(jobProgressChecks, (c, i) => { // eslint-disable-line no-unused-vars
         jobProgressChecks[i] = false;
       });
 

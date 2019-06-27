@@ -19,11 +19,40 @@
 
 import d3 from 'd3';
 import { get } from 'lodash';
-import $ from 'jquery';
 import { SimpleEmitter } from '../../utils/simple_emitter';
 import chrome from 'ui/chrome';
 
 const config = chrome.getUiSettingsClient();
+
+/**
+ * add css styles to highlight all elements with the given data-label
+ * by dimming all elements with a different data-label
+*/
+function appendHighlightStyle(label, dimming, styleId = 'visLibHighlight') {
+  if(!document.getElementById(styleId)) {
+    //dimm all elements that have another label then the given
+    const css = document.createTextNode(`
+    .visLib--highlight [data-label] { opacity: ${dimming}; }
+    .visLib--highlight [data-label="${label}"] { opacity: 1!important; }; }
+    `);
+    const style = document.createElement('style');
+    style.id = styleId;
+    style.appendChild(css);
+    document.head.appendChild(style);
+  }
+}
+
+/**
+ * remove styles to highlight all elements with the given data-label
+ */
+function removeHighlightStyle(styleId = 'visLibHighlight') {
+  const styleDom = document.getElementById(styleId);
+
+  if(styleDom) {
+    styleDom.parentNode.removeChild(styleDom);
+  }
+}
+
 
 /**
  * Handles event responses
@@ -296,15 +325,10 @@ export class Dispatch extends SimpleEmitter {
    * @method highlight
    */
   highlight(element) {
-    const label = this.getAttribute('data-label');
-    if (!label) return;
+    element.parentNode.classList.add('visLib--highlight');
     const dimming = config.get('visualization:dimmingOpacity');
-    $(element)
-      .parent()
-      .find('[data-label]')
-      .css('opacity', 1) //Opacity 1 is needed to avoid the css application
-      .not((els, el) => String($(el).data('label')) === label)
-      .css('opacity', justifyOpacity(dimming));
+    const label = this.getAttribute('data-label');
+    appendHighlightStyle(label, justifyOpacity(dimming));
   }
 
   /**
@@ -314,7 +338,8 @@ export class Dispatch extends SimpleEmitter {
    * @method unHighlight
    */
   unHighlight(element) {
-    $('[data-label]', element.parentNode).css('opacity', 1);
+    element.parentNode.classList.remove('visLib--highlight');
+    removeHighlightStyle();
   }
 
   /**

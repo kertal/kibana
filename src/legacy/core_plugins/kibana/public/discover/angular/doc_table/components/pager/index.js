@@ -17,17 +17,15 @@
  * under the License.
  */
 
-import { uiModules } from 'ui/modules';
 import { ToolBarPagerText } from './tool_bar_pager_text';
 import { ToolBarPagerButtons } from './tool_bar_pager_buttons';
 import { wrapInI18nContext } from 'ui/i18n';
+import { getDiscoverModule } from '../../../get_discover_module';
 
-const app = uiModules.get('kibana');
-
-app.directive('toolBarPagerText', function (reactDirective) {
+getDiscoverModule().directive('toolBarPagerText', function (reactDirective) {
   return reactDirective(wrapInI18nContext(ToolBarPagerText));
 });
 
-app.directive('toolBarPagerButtons', function (reactDirective) {
+getDiscoverModule().directive('toolBarPagerButtons', function (reactDirective) {
   return reactDirective(wrapInI18nContext(ToolBarPagerButtons));
 });

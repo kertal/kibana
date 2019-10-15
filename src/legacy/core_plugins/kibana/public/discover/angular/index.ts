@@ -16,8 +16,16 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-import './dependencies';
+
 import './discover';
-import './doc';
+import { initDiscoverDocApp } from './doc';
 import './context';
-import './doc_viewer';
+import { getDirectives } from './get_directives';
+import { getDiscoverModule } from './get_discover_module';
+import { getRoutes } from './get_routes';
+
+const discoverModule = getDiscoverModule();
+const routes = getRoutes();
+
+initDiscoverDocApp(discoverModule, routes);
+getDirectives(discoverModule);

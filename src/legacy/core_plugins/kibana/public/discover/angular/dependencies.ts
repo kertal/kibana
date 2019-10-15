@@ -16,6 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+// LP type imports
 import 'ui/collapsible_sidebar';
 import 'ui/directives/listen';
 import 'ui/visualize';
@@ -24,19 +25,13 @@ import 'ui/index_patterns';
 import 'ui/state_management/app_state';
 import 'ui/capabilities/route_setup';
 
-import uiRoutes from 'ui/routes';
-export { uiRoutes };
-
 import angular from 'angular';
-export { angular };
-
 import { npStart } from 'ui/new_platform';
 const { chrome } = npStart.core;
+export { angular };
+export { npStart };
 export { chrome };
-
-// @ts-ignore
-export { uiModules } from 'ui/modules';
-export { IndexPattern, IndexPatterns, StaticIndexPattern } from 'ui/index_patterns';
+export { IndexPattern, IndexPatterns, StaticIndexPattern, FieldList } from 'ui/index_patterns';
 export { wrapInI18nContext } from 'ui/i18n';
 export { timefilter } from 'ui/timefilter';
 export { FilterBarQueryFilterProvider } from 'ui/filter_manager/query_filter';
@@ -44,8 +39,7 @@ export { i18n } from '@kbn/i18n';
 export { subscribeWithScope } from 'ui/utils/subscribe_with_scope';
 // @ts-ignore
 export { callAfterBindingsWorkaround } from 'ui/compat';
-// @ts-ignore
-export { hasSearchStategyForIndexPattern, isDefaultTypeIndexPattern } from 'ui/courier';
+
 export { toastNotifications } from 'ui/notify';
 export { VisProvider } from 'ui/vis';
 // @ts-ignore
@@ -71,10 +65,21 @@ export {
   getResponseInspectorStats,
 } from 'ui/courier/utils/courier_inspector_utils';
 // @ts-ignore
+export {
+  // @ts-ignore
+  hasSearchStategyForIndexPattern,
+  // @ts-ignore
+  isDefaultTypeIndexPattern,
+  // @ts-ignore
+  SearchSourceProvider,
+} from 'ui/courier';
+// @ts-ignore
 export { tabifyAggResponse } from 'ui/agg_response/tabify';
 export { showSaveModal } from 'ui/saved_objects/show_saved_object_save_modal';
 export { SavedObjectSaveModal } from 'ui/saved_objects/components/saved_object_save_modal';
 export { getRootBreadcrumbs, getSavedSearchBreadcrumbs } from '../breadcrumbs';
 export { buildVislibDimensions } from 'ui/visualize/loader/pipeline_helpers/build_pipeline';
+export { IPrivate } from 'ui/private';
 
-import './directives';
+// import { SavedObjectRegistryProvider } from 'ui/saved_objects/saved_object_registry';
+// import { SavedObjectsClientProvider } from 'ui/saved_objects';

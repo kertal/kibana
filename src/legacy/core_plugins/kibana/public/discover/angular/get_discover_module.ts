@@ -17,7 +17,7 @@
  * under the License.
  */
 // @ts-ignore
-import uiModules from 'ui/modules';
+import { uiModules } from 'ui/modules';
 let discoverUiModule: any;
 
 export function getDiscoverModule() {

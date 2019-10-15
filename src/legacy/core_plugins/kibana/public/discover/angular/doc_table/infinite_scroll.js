@@ -18,10 +18,9 @@
  */
 
 import $ from 'jquery';
-import { uiModules } from '../dependencies';
-const module = uiModules.get('app/discover');
+import { getDiscoverModule } from '../get_discover_module';
 
-module.directive('kbnInfiniteScroll', function () {
+getDiscoverModule().directive('kbnInfiniteScroll', function () {
   return {
     restrict: 'E',
     scope: {

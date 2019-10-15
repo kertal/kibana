@@ -65,8 +65,6 @@ import {
   tabifyAggResponse,
   timefilter,
   toastNotifications,
-  uiModules,
-  uiRoutes,
   vislibSeriesResponseHandlerProvider,
   VisProvider,
 } from './dependencies';
@@ -74,7 +72,8 @@ import {
 import { getRootBreadcrumbs, getSavedSearchBreadcrumbs } from '../breadcrumbs';
 import { extractTimeFilter, changeTimeFilter } from '../../../../data/public';
 import { start as data } from '../../../../data/public/legacy';
-
+import { getDiscoverModule } from './get_discover_module';
+import { getRoutes } from './get_routes';
 
 const { savedQueryService } = data.search.services;
 
@@ -84,11 +83,8 @@ const fetchStatuses = {
   COMPLETE: 'complete',
 };
 
-const app = uiModules.get('apps/discover', [
-  'kibana/courier',
-  'kibana/url',
-  'kibana/index_patterns'
-]);
+const app = getDiscoverModule();
+const uiRoutes = getRoutes();
 
 uiRoutes
   .defaults(/^\/discover(\/|$)/, {

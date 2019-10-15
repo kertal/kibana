@@ -16,48 +16,50 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-import { uiRoutes, uiModules, wrapInI18nContext, timefilter, IndexPatterns } from './dependencies';
+import { wrapInI18nContext, timefilter, IndexPatterns } from './dependencies';
 // @ts-ignore
 import { getRootBreadcrumbs } from '../breadcrumbs';
 import html from './doc.html';
 import { Doc } from '../doc/doc';
 
-uiModules.get('apps/discover').directive('discoverDoc', function(reactDirective: any) {
-  return reactDirective(
-    wrapInI18nContext(Doc),
-    [
-      ['id', { watchDepth: 'value' }],
-      ['index', { watchDepth: 'value' }],
-      ['indexPatternId', { watchDepth: 'reference' }],
-      ['indexPatternService', { watchDepth: 'reference' }],
-      ['esClient', { watchDepth: 'reference' }],
-    ],
-    { restrict: 'E' }
-  );
-});
-
-uiRoutes
-  // the old, pre 8.0 route, no longer used, keep it to stay compatible
-  // somebody might have bookmarked his favorite log messages
-  .when('/doc/:indexPattern/:index/:type', {
-    redirectTo: '/doc/:indexPattern/:index',
-  })
-  // the new route, es 7 deprecated types, es 8 removed them
-  .when('/doc/:indexPattern/:index', {
-    controller: ($scope: any, $route: any, es: any, indexPatterns: IndexPatterns) => {
-      timefilter.disableAutoRefreshSelector();
-      timefilter.disableTimeRangeSelector();
-      $scope.esClient = es;
-      $scope.id = $route.current.params.id;
-      $scope.index = $route.current.params.index;
-      $scope.indexPatternId = $route.current.params.indexPattern;
-      $scope.indexPatternService = indexPatterns;
-    },
-    template: html,
-    k7Breadcrumbs: ($route: any) => [
-      ...getRootBreadcrumbs(),
-      {
-        text: `${$route.current.params.index}#${$route.current.params.id}`,
-      },
-    ],
+export function initDiscoverDocApp(angularModule: any, route: any) {
+  angularModule.directive('discoverDoc', function(reactDirective: any) {
+    return reactDirective(
+      wrapInI18nContext(Doc),
+      [
+        ['id', { watchDepth: 'value' }],
+        ['index', { watchDepth: 'value' }],
+        ['indexPatternId', { watchDepth: 'reference' }],
+        ['indexPatternService', { watchDepth: 'reference' }],
+        ['esClient', { watchDepth: 'reference' }],
+      ],
+      { restrict: 'E' }
+    );
   });
+
+  route
+    // the old, pre 8.0 route, no longer used, keep it to stay compatible
+    // somebody might have bookmarked his favorite log messages
+    .when('/doc/:indexPattern/:index/:type', {
+      redirectTo: '/doc/:indexPattern/:index',
+    })
+    // the new route, es 7 deprecated types, es 8 removed them
+    .when('/doc/:indexPattern/:index', {
+      controller: ($scope: any, $route: any, es: any, indexPatterns: IndexPatterns) => {
+        timefilter.disableAutoRefreshSelector();
+        timefilter.disableTimeRangeSelector();
+        $scope.esClient = es;
+        $scope.id = $route.current.params.id;
+        $scope.index = $route.current.params.index;
+        $scope.indexPatternId = $route.current.params.indexPattern;
+        $scope.indexPatternService = indexPatterns;
+      },
+      template: html,
+      k7Breadcrumbs: ($route: any) => [
+        ...getRootBreadcrumbs(),
+        {
+          text: `${$route.current.params.index}#${$route.current.params.id}`,
+        },
+      ],
+    });
+}

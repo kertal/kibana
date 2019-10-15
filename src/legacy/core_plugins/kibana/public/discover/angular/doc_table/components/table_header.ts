@@ -17,11 +17,10 @@
  * under the License.
  */
 import { wrapInI18nContext } from 'ui/i18n';
-import { uiModules } from '../../dependencies';
 import { TableHeader } from './table_header/table_header';
-const module = uiModules.get('app/discover');
+import { getDiscoverModule } from '../../get_discover_module';
 
-module.directive('kbnTableHeader', function(reactDirective: any, config: any) {
+getDiscoverModule().directive('kbnTableHeader', function(reactDirective: any, config: any) {
   return reactDirective(
     wrapInI18nContext(TableHeader),
     [

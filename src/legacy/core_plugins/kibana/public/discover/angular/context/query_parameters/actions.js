@@ -18,9 +18,7 @@
  */
 
 import _ from 'lodash';
-
-import { FilterBarQueryFilterProvider } from 'ui/filter_manager/query_filter';
-import { getFilterGenerator } from 'ui/filter_manager';
+import { FilterBarQueryFilterProvider, getFilterGenerator } from '../../dependencies';
 import {
   MAX_CONTEXT_SIZE,
   MIN_CONTEXT_SIZE,

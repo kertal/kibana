@@ -18,12 +18,15 @@
  */
 
 import _ from 'lodash';
-import { FilterBarQueryFilterProvider, uiRoutes, i18n, subscribeWithScope } from './dependencies';
+import { FilterBarQueryFilterProvider, i18n, subscribeWithScope } from '../dependencies';
 import { npStart } from 'ui/new_platform';
 
 import './context_app';
 import contextAppRouteTemplate from './context.html';
-import { getRootBreadcrumbs } from '../breadcrumbs';
+import { getRootBreadcrumbs } from '../../breadcrumbs';
+import { getRoutes } from '../get_routes';
+
+const uiRoutes = getRoutes();
 
 const k7Breadcrumbs = $route => {
   const { indexPattern } = $route.current.locals;

@@ -16,6 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+
 import { SearchSource } from 'ui/courier';
 import { convertTimeValueToIso } from './date_conversion';
 import { SortDirection } from './sorting';

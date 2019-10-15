@@ -18,10 +18,8 @@
  */
 
 // @ts-ignore
-import { SearchSourceProvider } from 'ui/courier';
-import { IPrivate } from 'ui/private';
 import { Filter } from '@kbn/es-query';
-import { IndexPatterns, IndexPattern } from 'ui/index_patterns';
+import { SearchSourceProvider, IPrivate, IndexPatterns, IndexPattern } from '../../dependencies';
 import { reverseSortDir, SortDirection } from './utils/sorting';
 import { extractNanos, convertIsoToMillis } from './utils/date_conversion';
 import { fetchHitsInInterval } from './utils/fetch_hits_in_interval';

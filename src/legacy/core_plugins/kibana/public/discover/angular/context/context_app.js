@@ -18,32 +18,27 @@
  */
 
 import _ from 'lodash';
-import { callAfterBindingsWorkaround, uiModules, timefilter } from './dependencies';
+import { callAfterBindingsWorkaround, timefilter } from '../dependencies';
 import contextAppTemplate from './context_app.html';
-import '../context/components/action_bar';
-import { getFirstSortableField } from '../context/api/utils/sorting';
+import { getFirstSortableField } from './api/utils/sorting';
 import {
   createInitialQueryParametersState,
   QueryParameterActionsProvider,
   QUERY_PARAMETER_KEYS,
-} from '../context/query_parameters';
+} from './query_parameters';
 import {
   createInitialLoadingStatusState,
   FAILURE_REASONS,
   LOADING_STATUS,
   QueryActionsProvider,
-} from '../context/query';
+} from './query';
 
 
 // load directives
-import '../../../../data/public/legacy';
+import '../../../../../data/public/legacy';
+import { getDiscoverModule } from '../get_discover_module';
 
-const module = uiModules.get('apps/context', [
-  'elasticsearch',
-  'kibana',
-  'kibana/config',
-  'ngRoute',
-]);
+const module = getDiscoverModule();
 
 module.directive('contextApp', function ContextApp() {
   return {

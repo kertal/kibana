@@ -17,22 +17,20 @@
  * under the License.
  */
 
-import 'ngreact';
 import React, { Fragment } from 'react';
-import { uiModules } from 'ui/modules';
-import { wrapInI18nContext } from 'ui/i18n';
 import { FormattedMessage } from '@kbn/i18n/react';
 import { npStart } from 'ui/new_platform';
 
-import {
-  EuiFlexGroup,
-  EuiFlexItem,
-  EuiCallOut,
-  EuiCodeBlock,
-  EuiSpacer,
-} from '@elastic/eui';
+import { EuiFlexGroup, EuiFlexItem, EuiCallOut, EuiCodeBlock, EuiSpacer } from '@elastic/eui';
 
-const DiscoverFetchError = ({ fetchError }) => {
+interface FetchError {
+  lang: string;
+  script: string;
+  message: string;
+  error: string;
+}
+
+export const DiscoverFetchError = ({ fetchError }: { fetchError: FetchError }) => {
   if (!fetchError) {
     return null;
   }
@@ -40,6 +38,7 @@ const DiscoverFetchError = ({ fetchError }) => {
   let body;
 
   if (fetchError.lang === 'painless') {
+    // @ts-ignore
     const managementUrl = npStart.core.chrome.navLinks.get('kibana:management').url;
     const url = `${managementUrl}/kibana/index_patterns`;
 
@@ -51,10 +50,12 @@ const DiscoverFetchError = ({ fetchError }) => {
             in {managementLink}, under the {scriptedFields} tab."
           values={{
             fetchErrorScript: `'${fetchError.script}'`,
-            scriptedFields: <FormattedMessage
-              id="kbn.discover.fetchError.scriptedFieldsText"
-              defaultMessage="&ldquo;Scripted fields&rdquo;"
-            />,
+            scriptedFields: (
+              <FormattedMessage
+                id="kbn.discover.fetchError.scriptedFieldsText"
+                defaultMessage="&ldquo;Scripted fields&rdquo;"
+              />
+            ),
             managementLink: (
               <a href={url}>
                 <FormattedMessage
@@ -62,7 +63,7 @@ const DiscoverFetchError = ({ fetchError }) => {
                   defaultMessage="Management &gt; Index Patterns"
                 />
               </a>
-            )
+            ),
           }}
         />
       </p>
@@ -75,16 +76,10 @@ const DiscoverFetchError = ({ fetchError }) => {
 
       <EuiFlexGroup justifyContent="center" data-test-subj="discoverFetchError">
         <EuiFlexItem grow={false} className="discoverFetchError">
-          <EuiCallOut
-            title={fetchError.message}
-            color="danger"
-            iconType="cross"
-          >
+          <EuiCallOut title={fetchError.message} color="danger" iconType="cross">
             {body}
 
-            <EuiCodeBlock>
-              {fetchError.error}
-            </EuiCodeBlock>
+            <EuiCodeBlock>{fetchError.error}</EuiCodeBlock>
           </EuiCallOut>
         </EuiFlexItem>
       </EuiFlexGroup>
@@ -93,7 +88,3 @@ const DiscoverFetchError = ({ fetchError }) => {
     </Fragment>
   );
 };
-
-const app = uiModules.get('apps/discover', ['react']);
-
-app.directive('discoverFetchError', reactDirective => reactDirective(wrapInI18nContext(DiscoverFetchError)));

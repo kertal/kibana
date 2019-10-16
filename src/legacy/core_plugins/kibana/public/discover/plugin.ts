@@ -19,6 +19,7 @@
 
 import { CoreSetup, CoreStart, Plugin, PluginInitializerContext } from 'kibana/public';
 import { i18n } from '@kbn/i18n';
+import { LocalApplicationService } from '../local_application_service';
 
 import {
   FeatureCatalogueRegistryProvider,
@@ -52,8 +53,9 @@ function registerFeature() {
 export type DiscoverSetup = {};
 // eslint-disable-next-line @typescript-eslint/prefer-interface
 export type DiscoverStart = {};
-// eslint-disable-next-line @typescript-eslint/prefer-interface
-export type DiscoverSetupDeps = {};
+export interface DiscoverSetupDeps {
+  localApplicationService: LocalApplicationService;
+};
 // eslint-disable-next-line @typescript-eslint/prefer-interface
 export type DiscoverStartDeps = {};
 
@@ -61,7 +63,9 @@ export class DiscoverPlugin implements Plugin<DiscoverSetup, DiscoverStart> {
   constructor(initializerContext: PluginInitializerContext) {}
   setup(core: CoreSetup, plugins: DiscoverSetupDeps): DiscoverSetup {
     registerFeature();
-    core.application.register({
+    // TODO once there is a central platform router in place,
+    // switch this back to core.application.register
+    plugins.localApplicationService.register({
       id: 'discover',
       title: 'Discover',
       order: -1004,

@@ -18,11 +18,6 @@
  */
 import 'ui/collapsible_sidebar';
 import 'ui/directives/listen';
-import 'ui/visualize';
-import 'ui/fixed_scroll';
-import 'ui/index_patterns';
-import 'ui/state_management/app_state';
-import 'ui/capabilities/route_setup';
 import '../saved_searches/saved_searches';
 import '../components/field_chooser/field_chooser';
 // import { SavedObjectRegistryProvider } from 'ui/saved_objects/saved_object_registry';

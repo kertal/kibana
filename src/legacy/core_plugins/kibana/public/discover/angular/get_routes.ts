@@ -16,8 +16,26 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-import uiRoutes from 'ui/routes';
+// import uiRoutes from 'ui/routes';
+import { getDiscoverModule } from './get_discover_module';
 
 export function getRoutes() {
+  const module = getDiscoverModule();
+  const uiRoutes = {
+    defaults: (a: unknown, b: unknown) => {
+      module.config(function($routeProvider: any) {
+        // this need to be done in a different way
+        // $routeProvider.defaults(a, b);
+      });
+      return uiRoutes;
+    },
+    when: (a: unknown, b: unknown) => {
+      module.config(function($routeProvider: any) {
+        $routeProvider.when(a, b);
+      });
+      return uiRoutes;
+    },
+  };
+
   return uiRoutes;
 }

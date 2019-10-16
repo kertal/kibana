@@ -19,9 +19,6 @@
 
 import { CoreSetup, CoreStart, Plugin, PluginInitializerContext } from 'kibana/public';
 import { i18n } from '@kbn/i18n';
-import './saved_searches/saved_searches';
-import './components/field_chooser/field_chooser';
-import './angular';
 
 import {
   FeatureCatalogueRegistryProvider,
@@ -64,6 +61,27 @@ export class DiscoverPlugin implements Plugin<DiscoverSetup, DiscoverStart> {
   constructor(initializerContext: PluginInitializerContext) {}
   setup(core: CoreSetup, plugins: DiscoverSetupDeps): DiscoverSetup {
     registerFeature();
+    core.application.register({
+      id: 'discover',
+      title: 'Discover',
+      order: -1004,
+      icon: 'plugins/kibana/assets/discover.svg',
+      euiIconType: 'discoverApp',
+      mount: async (context, params) => {
+        const { renderApp } = await import('./render_app');
+        return renderApp(
+          context,
+          {
+            ...params,
+            ...plugins,
+            addBasePath: core.http.basePath.prepend,
+            getBasePath: core.http.basePath.get,
+          },
+          {}
+        );
+      },
+    });
+
     return {};
   }
 

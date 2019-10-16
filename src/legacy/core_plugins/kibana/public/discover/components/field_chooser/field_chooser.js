@@ -28,9 +28,9 @@ import $ from 'jquery';
 import rison from 'rison-node';
 import { fieldCalculator } from './lib/field_calculator';
 import { FieldList } from 'ui/index_patterns';
-import { uiModules } from 'ui/modules';
 import fieldChooserTemplate from './field_chooser.html';
-const app = uiModules.get('apps/discover');
+import { getDiscoverModule } from '../../angular/get_discover_module';
+const app = getDiscoverModule();
 
 app.directive('discFieldChooser', function ($location, config, $route) {
   return {

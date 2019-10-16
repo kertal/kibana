@@ -17,9 +17,14 @@
  * under the License.
  */
 // @ts-ignore
-import { uiModules } from 'ui/modules';
+// import { uiModules } from 'ui/modules';
+import { npSetup } from 'ui/new_platform';
+import { configureAppAngularModule } from 'ui/legacy_compat';
+import { createLocalAngularModule } from '../render_app';
+
 let discoverUiModule: any;
 
+/**
 export function getDiscoverModule() {
   if (!discoverUiModule) {
     discoverUiModule = uiModules.get('apps/discover', [
@@ -27,6 +32,15 @@ export function getDiscoverModule() {
       'kibana/url',
       'kibana/index_patterns',
     ]);
+  }
+  return discoverUiModule;
+}
+ **/
+
+export function getDiscoverModule() {
+  if (!discoverUiModule) {
+    discoverUiModule = createLocalAngularModule(npSetup as any);
+    configureAppAngularModule(discoverUiModule);
   }
   return discoverUiModule;
 }

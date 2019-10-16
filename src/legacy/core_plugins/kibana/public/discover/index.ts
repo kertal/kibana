@@ -19,7 +19,7 @@
 import { PluginInitializer, PluginInitializerContext } from 'kibana/public';
 import { npSetup, npStart } from 'ui/new_platform';
 import { DiscoverPlugin, DiscoverSetup, DiscoverStart } from './plugin';
-
+import { start as data } from '../../../../../../src/legacy/core_plugins/data/public/legacy';
 // Core will be looking for this when loading our plugin in the new platform
 export const plugin: PluginInitializer<DiscoverSetup, DiscoverStart> = (
   initializerContext: PluginInitializerContext
@@ -28,5 +28,5 @@ export const plugin: PluginInitializer<DiscoverSetup, DiscoverStart> = (
 };
 
 const pluginInstance = plugin({} as PluginInitializerContext);
-export const setup = pluginInstance.setup(npSetup.core, npSetup.plugins);
-export const start = pluginInstance.start(npStart.core, npStart.plugins);
+export const setup = pluginInstance.setup(npSetup.core, { data, npData: npStart.plugins.data });
+export const start = pluginInstance.start(npStart.core, { data, npData: npStart.plugins.data });

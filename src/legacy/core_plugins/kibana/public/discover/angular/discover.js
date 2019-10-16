@@ -33,7 +33,6 @@ import * as filterActions from './doc_table/actions/filter';
 import indexTemplate from './discover.html';
 import { showOpenSearchPanel } from '../top_nav/show_open_search_panel';
 import { addHelpMenuToAppChrome } from '../components/help_menu/help_menu_util';
-import '../components/fetch_error';
 import { getPainlessError } from './get_painless_error';
 
 import {

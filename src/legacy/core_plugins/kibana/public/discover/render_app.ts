@@ -106,8 +106,8 @@ export async function renderApp(
   };
    */
 
-  getDiscoverModule();
-  await import('./angular');
+  const app = getDiscoverModule();
+  require('./angular');
   const $injector = mountDiscoverApp(appBasePath, element);
   return () => $injector.get('$rootScope').$destroy();
 }

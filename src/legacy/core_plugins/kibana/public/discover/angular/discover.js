@@ -115,7 +115,8 @@ uiRoutes
     template: indexTemplate,
     reloadOnSearch: false,
     resolve: {
-      ip: function (Promise, indexPatterns, config, Private) {
+      ip: function (Promise, /*indexPatterns, config,*/ Private) {
+        return null;
         const State = Private(StateProvider);
         return indexPatterns.getCache().then((savedObjects)=> {
           /**
@@ -142,7 +143,8 @@ uiRoutes
           });
         });
       },
-      savedSearch: function (redirectWhenMissing, savedSearches, $route) {
+      savedSearch: function (/*redirectWhenMissing, savedSearches,*/ $route) {
+        return null;
         const savedSearchId = $route.current.params.id;
         return savedSearches.get(savedSearchId)
           .then((savedSearch) => {

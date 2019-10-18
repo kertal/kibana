@@ -40,6 +40,8 @@ import { createTopNavDirective, createTopNavHelper } from 'ui/kbn_top_nav/kbn_to
 import { PromiseServiceCreator } from 'ui/promises/promises';
 // @ts-ignore
 import { KbnUrlProvider } from 'ui/url';
+// @ts-ignore
+import { AppStateProvider } from 'ui/state_management/app_state';
 
 // type imports
 import { IPrivate } from 'ui/private';
@@ -106,7 +108,7 @@ export async function renderApp(
   };
    */
 
-  const app = getDiscoverModule();
+  getDiscoverModule();
   require('./angular');
   const $injector = mountDiscoverApp(appBasePath, element);
   return () => $injector.get('$rootScope').$destroy();
@@ -145,6 +147,7 @@ export function createLocalAngularModule(core: AppMountContext['core']) {
   createLocalPersistedStateModule();
   createLocalTopNavModule();
   createLocalGlobalStateModule();
+  createLocalAppStateModule();
 
   return angular.module(moduleName, [
     ...thirdPartyAngularDependencies,
@@ -153,6 +156,7 @@ export function createLocalAngularModule(core: AppMountContext['core']) {
     'discoverPersistedState',
     'discoverTopNav',
     'discoverGlobalState',
+    'discoverAppState',
   ]);
 }
 
@@ -224,4 +228,21 @@ function createLocalI18nModule() {
     .provider('i18n', I18nProvider)
     .filter('i18n', i18nFilter)
     .directive('i18nId', i18nDirective);
+}
+
+function createLocalAppStateModule() {
+  angular
+    .module('discoverAppState', [
+      'discoverGlobalState',
+      'discoverPrivate',
+      'discoverConfig',
+      'discoverKbnUrl',
+      'discoverPromise',
+    ])
+    .service('AppState', function(Private: any) {
+      return Private(AppStateProvider);
+    })
+    .service('getAppState', function(Private: any) {
+      return Private(AppStateProvider).getAppState;
+    });
 }

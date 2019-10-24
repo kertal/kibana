@@ -17,12 +17,10 @@
  * under the License.
  */
 
-import { uiModules } from 'ui/modules';
 import { Pager } from './pager';
+import { getDiscoverModule } from '../../../get_discover_module';
 
-const app = uiModules.get('kibana');
-
-app.factory('pagerFactory', () => {
+getDiscoverModule().factory('pagerFactory', () => {
   return {
     create(...args) {
       return new Pager(...args);

@@ -42,6 +42,11 @@ import { PromiseServiceCreator } from 'ui/promises/promises';
 import { KbnUrlProvider } from 'ui/url';
 // @ts-ignore
 import { AppStateProvider } from 'ui/state_management/app_state';
+// @ts-ignore
+import { createCourierService } from 'ui/courier/courier';
+import { Storage } from 'ui/storage';
+// @ts-ignore
+import { createEsService } from 'ui/es';
 
 // type imports
 import { IPrivate } from 'ui/private';
@@ -87,27 +92,9 @@ export interface LegacyAngularInjectedDependencies {
 
 export async function renderApp(
   { core }: AppMountContext,
-  { element, appBasePath, data, npData, fatalError, getBasePath, Storage }: DiscoverDependencies,
+  { element, appBasePath }: DiscoverDependencies,
   angularDeps: LegacyAngularInjectedDependencies
 ) {
-  /**
-   * const deps = {
-    capabilities: core.application.capabilities.discover,
-    coreStart: core,
-    chrome: core.chrome,
-    config: core.uiSettings,
-    toastNotifications: core.notifications.toasts,
-    indexPatterns: data.indexPatterns.indexPatterns,
-    npData,
-    fatalError,
-    appBasePath,
-    getBasePath,
-    KbnUrlProvider,
-    Storage,
-    ...angularDeps,
-  };
-   */
-
   getDiscoverModule();
   require('./angular');
   const $injector = mountDiscoverApp(appBasePath, element);
@@ -122,7 +109,13 @@ const mainTemplate = (basePath: string) => `<div style="height: 100%">
 
 const moduleName = 'app/discover';
 
-const thirdPartyAngularDependencies = ['ngSanitize', 'ngRoute', 'react', 'ui.bootstrap'];
+const thirdPartyAngularDependencies = [
+  'ngSanitize',
+  'ngRoute',
+  'react',
+  'ui.bootstrap',
+  'elasticsearch',
+];
 
 function mountDiscoverApp(appBasePath: string, element: HTMLElement) {
   const mountpoint = document.createElement('div');
@@ -148,6 +141,9 @@ export function createLocalAngularModule(core: AppMountContext['core']) {
   createLocalTopNavModule();
   createLocalGlobalStateModule();
   createLocalAppStateModule();
+  createLocalCourierModule();
+  createLocalStorageModule();
+  createElasticSearchModule();
 
   return angular.module(moduleName, [
     ...thirdPartyAngularDependencies,
@@ -157,6 +153,9 @@ export function createLocalAngularModule(core: AppMountContext['core']) {
     'discoverTopNav',
     'discoverGlobalState',
     'discoverAppState',
+    'discoverCourierProvider',
+    'discoverEs',
+    'discoverLocalStorageProvider',
   ]);
 }
 
@@ -245,4 +244,30 @@ function createLocalAppStateModule() {
     .service('getAppState', function(Private: any) {
       return Private(AppStateProvider).getAppState;
     });
+}
+
+function createLocalCourierModule() {
+  angular
+    .module('discoverCourierProvider', ['discoverPrivate'])
+    .service('courier', (Private: IPrivate) => Private(createCourierService));
+}
+
+function createLocalStorageModule() {
+  angular
+    .module('discoverLocalStorageProvider', ['discoverPrivate'])
+    .service('localStorage', createLocalStorageService('localStorage'))
+    .service('sessionStorage', createLocalStorageService('sessionStorage'));
+}
+
+const createLocalStorageService = function(type: string) {
+  return function($window: any) {
+    return new Storage($window[type]);
+  };
+};
+
+function createElasticSearchModule() {
+  angular
+    .module('discoverEs', ['elasticsearch', 'discoverConfig'])
+    // Elasticsearch client used for requesting data.  Connects to the /elasticsearch proxy
+    .service('es', createEsService);
 }

@@ -31,7 +31,7 @@ import { searchRequestQueue } from './search_request_queue';
 import { FetchSoonProvider } from './fetch';
 import { SearchPollProvider } from './search_poll';
 
-uiModules.get('kibana/courier').service('courier', ($rootScope, Private) => {
+export function createCourierService($rootScope, Private) {
   const fetchSoon = Private(FetchSoonProvider);
 
   // This manages the doc fetch interval.
@@ -88,4 +88,7 @@ uiModules.get('kibana/courier').service('courier', ($rootScope, Private) => {
   }
 
   return new Courier();
-});
+}
+
+uiModules.get('kibana/courier').service('courier', createCourierService);
+

@@ -62,7 +62,7 @@ require('plugins/timelion/services/_saved_sheet');
 
 require('./vis');
 
-SavedObjectRegistryProvider.register(require('plugins/timelion/services/saved_sheet_register'));
+npStart.plugins.saved_object.savedObjectRegistry.register(require('plugins/timelion/services/saved_sheet_register'));
 
 require('ui/routes').enable();
 

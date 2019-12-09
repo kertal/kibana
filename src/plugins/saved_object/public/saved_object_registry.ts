@@ -33,8 +33,9 @@ export class SavedObjectRegistry {
   public start() {
     return {
       list: (): readonly SavedObjectLoader[] => this.entries,
-      get: (type: string): SavedObjectLoader | undefined =>
-        this.entries.find(entry => entry.type === type),
+      get: (type: string): SavedObjectLoader | undefined => {
+        return this.entries.find(entry => entry.type === type);
+      },
       register: (entry: SavedObjectLoader) => {
         this.entries.push(entry);
       },

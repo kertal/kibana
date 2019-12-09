@@ -24,6 +24,7 @@ import { SavedObjectLoader, SavedObjectsClientProvider } from 'ui/saved_objects'
 import { savedObjectManagementRegistry } from '../../management/saved_object_registry';
 import { npStart } from '../../../../../ui/public/new_platform';
 
+
 const module = uiModules.get('app/dashboard');
 
 // Register this service with the saved object registry so it can be
@@ -38,5 +39,7 @@ savedObjectManagementRegistry.register({
 // This is the only thing that gets injected into controllers
 module.service('savedDashboards', function (Private, SavedDashboard) {
   const savedObjectClient = Private(SavedObjectsClientProvider);
-  return new SavedObjectLoader(SavedDashboard, savedObjectClient, npStart.core.chrome);
+  const service = new SavedObjectLoader(SavedDashboard, savedObjectClient, npStart.core.chrome);
+  npStart.plugins.saved_object.savedObjectRegistry.register(service);
+  return service;
 });

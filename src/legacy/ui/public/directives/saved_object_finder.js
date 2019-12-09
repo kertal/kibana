@@ -20,8 +20,8 @@
 import _ from 'lodash';
 import rison from 'rison-node';
 import { keyMap } from '../utils/key_map';
-import { SavedObjectRegistryProvider } from '../saved_objects/saved_object_registry';
 import { uiModules } from '../modules';
+import { npStart } from 'ui/new_platform';
 
 import savedObjectFinderTemplate from './partials/saved_object_finder.html';
 import './input_focus';
@@ -31,7 +31,7 @@ const module = uiModules.get('kibana');
 
 module.directive('savedObjectFinder', function ($location, kbnUrl, Private, config) {
 
-  const services = Private(SavedObjectRegistryProvider).byLoaderPropertiesName;
+
 
   return {
     restrict: 'E',
@@ -77,7 +77,7 @@ module.directive('savedObjectFinder', function ($location, kbnUrl, Private, conf
       // the list of hits, used to render display
       self.hits = [];
 
-      self.service = services[$scope.type];
+      self.service = npStart.plugins.saved_object.savedObjectRegistry.get($scope.type);
       self.properties = self.service.loaderProperties;
 
       filterResults();

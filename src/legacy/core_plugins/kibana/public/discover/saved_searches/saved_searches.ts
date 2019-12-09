@@ -18,7 +18,6 @@
  */
 import { npStart } from 'ui/new_platform';
 // @ts-ignore
-import { uiModules } from 'ui/modules';
 import { ChromeStart, SavedObjectsClientContract } from 'kibana/public';
 import { SavedObjectLoader } from 'ui/saved_objects';
 // @ts-ignore
@@ -52,12 +51,9 @@ export function createSavedSearchesService(
 
   return savedSearchLoader;
 }
-// this is needed for saved object management
-const module = uiModules.get('discover/saved_searches');
-module.service('savedSearches', () =>
-  createSavedSearchesService(
-    npStart.core.savedObjects.client,
-    data.indexPatterns.indexPatterns,
-    npStart.core.chrome
-  )
+const service = createSavedSearchesService(
+  npStart.core.savedObjects.client,
+  data.indexPatterns.indexPatterns,
+  npStart.core.chrome
 );
+npStart.plugins.saved_object.savedObjectRegistry.register(service);

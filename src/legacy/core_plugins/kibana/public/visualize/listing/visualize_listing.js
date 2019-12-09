@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-
+import { npStart } from 'ui/new_platform';
 import { addHelpMenuToAppChrome } from '../help_menu/help_menu_util';
 import { VisualizeListingTable } from './visualize_listing_table';
 import { NewVisModal } from '../wizard/new_vis_modal';
@@ -29,7 +29,6 @@ const {
   addBasePath,
   chrome,
   chromeLegacy,
-  SavedObjectRegistryProvider,
   SavedObjectsClientProvider,
   timefilter,
   toastNotifications,
@@ -82,8 +81,7 @@ export function VisualizeListingController($injector, createNewVis) {
   }
 
   // TODO: Extract this into an external service.
-  const services = Private(SavedObjectRegistryProvider).byLoaderPropertiesName;
-  const visualizationService = services.visualizations;
+  const visualizationService = npStart.plugins.saved_object.savedObjectRegistry.get('visualizations');
   this.visTypeRegistry = visualizations.types;
 
   this.fetchItems = filter => {

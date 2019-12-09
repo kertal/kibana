@@ -87,6 +87,7 @@ app.service('savedVisualizations', function (SavedVis, Private, kbnUrl) {
       visTypes: visualizations.types.getAliases(),
     });
   };
+  npStart.plugins.saved_object.savedObjectRegistry.register(saveVisualizationLoader);
 
   return saveVisualizationLoader;
 });

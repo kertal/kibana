@@ -7,10 +7,9 @@
 import _ from 'lodash';
 
 import chrome from 'ui/chrome';
-import { SavedObjectRegistryProvider } from 'ui/saved_objects/saved_object_registry';
 import { SavedObjectsClientProvider } from 'ui/saved_objects';
 import { i18n } from '@kbn/i18n';
-
+import { npStart } from 'ui/new_platform';
 import { SavedWorkspaceProvider } from './saved_workspace';
 
 
@@ -85,6 +84,7 @@ export function SavedWorkspacesProvider(kbnUrl, Private, Promise) {
         };
       });
   };
+  npStart.plugins.saved_object.savedObjectRegistry.register(this);
 }
 
-SavedObjectRegistryProvider.register(SavedWorkspacesProvider);
+

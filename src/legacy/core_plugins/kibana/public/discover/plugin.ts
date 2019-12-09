@@ -30,6 +30,9 @@ import { EuiUtilsStart } from '../../../../../plugins/eui_utils/public';
 import { buildServices } from './helpers/build_services';
 import { SharePluginStart } from '../../../../../plugins/share/public';
 import { KibanaLegacySetup } from '../../../../../plugins/kibana_legacy/public';
+import { start as data } from '../../../data/public/legacy';
+import { createSavedSearchesService } from './saved_searches/saved_searches';
+import { SavedObjectPublicPluginStart } from '../../../../../plugins/saved_object/public';
 
 /**
  * These are the interfaces with your public contracts. You should export these
@@ -49,6 +52,7 @@ export interface DiscoverStartPlugins {
   navigation: NavigationStart;
   eui_utils: EuiUtilsStart;
   data: DataPublicPluginStart;
+  saved_object: SavedObjectPublicPluginStart;
   share: SharePluginStart;
   inspector: any;
 }
@@ -117,6 +121,12 @@ export class DiscoverPlugin implements Plugin<DiscoverSetup, DiscoverStart> {
 
     this.registerEmbeddable(core, plugins);
     registerFeature();
+    const service = createSavedSearchesService(
+      core.savedObjects.client,
+      data.indexPatterns.indexPatterns,
+      core.chrome
+    );
+    plugins.saved_object.savedObjectRegistry.register(service);
   }
 
   /**

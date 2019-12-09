@@ -1,0 +1,6 @@
+{
+  "id": "saved_object",
+  "version": "kibana",
+  "server": false,
+  "ui": true
+}

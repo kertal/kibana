@@ -32,6 +32,10 @@ import { DevToolsSetup, DevToolsStart } from '../../../../plugins/dev_tools/publ
 import { KibanaLegacySetup, KibanaLegacyStart } from '../../../../plugins/kibana_legacy/public';
 import { HomePublicPluginSetup, HomePublicPluginStart } from '../../../../plugins/home/public';
 import { SharePluginSetup, SharePluginStart } from '../../../../plugins/share/public';
+import {
+  SavedObjectPublicPluginSetup,
+  SavedObjectPublicPluginStart,
+} from '../../../../plugins/saved_object/public';
 
 export interface PluginsSetup {
   data: ReturnType<DataPlugin['setup']>;
@@ -42,6 +46,7 @@ export interface PluginsSetup {
   uiActions: IUiActionsSetup;
   dev_tools: DevToolsSetup;
   kibana_legacy: KibanaLegacySetup;
+  saved_object: SavedObjectPublicPluginSetup;
   share: SharePluginSetup;
 }
 
@@ -55,6 +60,7 @@ export interface PluginsStart {
   uiActions: IUiActionsStart;
   dev_tools: DevToolsStart;
   kibana_legacy: KibanaLegacyStart;
+  saved_object: SavedObjectPublicPluginStart;
   share: SharePluginStart;
 }
 

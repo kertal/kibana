@@ -30,6 +30,7 @@ export default function({ getService, getPageObjects }) {
   const defaultSettings = {
     defaultIndex: 'logstash-*',
   };
+  let fetchCounter = 0;
 
   describe('discover test', function describeIndexTests() {
     before(async function() {
@@ -42,6 +43,8 @@ export default function({ getService, getPageObjects }) {
       log.debug('discover');
       await PageObjects.common.navigateToApp('discover');
       await PageObjects.timePicker.setDefaultAbsoluteRange();
+      //there has been a fetch at loading the page, and when setting a timerange
+      fetchCounter = 1;
     });
 
     describe('query', function() {
@@ -55,6 +58,8 @@ export default function({ getService, getPageObjects }) {
         const rowData = await PageObjects.discover.getDocTableIndex(1);
         log.debug('check the newest doc timestamp in UTC (check diff timezone in last test)');
         expect(rowData.startsWith('Sep 22, 2015 @ 23:50:13.253')).to.be.ok();
+        await PageObjects.common.sleep(30000);
+        expect(await PageObjects.discover.getNrOfFetches()).to.equal(++fetchCounter);
       });
 
       it('save query should show toast message and display query name', async function() {
@@ -65,10 +70,12 @@ export default function({ getService, getPageObjects }) {
 
       it('load query should show query name', async function() {
         await PageObjects.discover.loadSavedSearch(queryName1);
+        fetchCounter = 0;
 
         await retry.try(async function() {
           expect(await PageObjects.discover.getCurrentQueryName()).to.be(queryName1);
         });
+        expect(await PageObjects.discover.getNrOfFetches()).to.equal(++fetchCounter);
       });
 
       it('should show the correct hit count', async function() {
@@ -86,17 +93,22 @@ export default function({ getService, getPageObjects }) {
 
       it('should modify the time range when a bar is clicked', async function() {
         await PageObjects.timePicker.setDefaultAbsoluteRange();
+        fetchCounter++;
         await PageObjects.discover.clickHistogramBar();
+        fetchCounter++;
         const time = await PageObjects.timePicker.getTimeConfig();
         expect(time.start).to.be('Sep 21, 2015 @ 09:00:00.000');
         expect(time.end).to.be('Sep 21, 2015 @ 12:00:00.000');
         const rowData = await PageObjects.discover.getDocTableField(1);
         expect(rowData).to.have.string('Sep 21, 2015 @ 11:59:22.316');
+        expect(await PageObjects.discover.getNrOfFetches()).to.equal(fetchCounter);
       });
 
       it('should modify the time range when the histogram is brushed', async function() {
         await PageObjects.timePicker.setDefaultAbsoluteRange();
+        fetchCounter++;
         await PageObjects.discover.brushHistogram();
+        fetchCounter++;
 
         const newDurationHours = await PageObjects.timePicker.getTimeDurationInHours();
         expect(Math.round(newDurationHours)).to.be(25);
@@ -105,6 +117,7 @@ export default function({ getService, getPageObjects }) {
           Date.parse('Sep 20, 2015 @ 22:00:00.000'),
           Date.parse('Sep 20, 2015 @ 23:30:00.000')
         );
+        expect(await PageObjects.discover.getNrOfFetches()).to.equal(fetchCounter);
       });
 
       it('should show correct initial chart interval of Auto', async function() {

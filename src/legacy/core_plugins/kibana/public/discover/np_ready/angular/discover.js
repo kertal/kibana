@@ -215,6 +215,8 @@ function discoverController(
   $scope.intervalOptions = intervalOptions;
   $scope.showInterval = false;
   $scope.minimumVisibleRows = 50;
+  //this counter is used for functional testing
+  $scope.fetchCounter = 0;
   $scope.fetchStatus = fetchStatuses.UNINITIALIZED;
   $scope.showSaveQuery = uiCapabilities.discover.saveQuery;
 
@@ -778,6 +780,7 @@ function discoverController(
       .updateDataSource()
       .then(setupVisualization)
       .then(function() {
+        $scope.fetchCounter++;
         $state.save();
         $scope.fetchStatus = fetchStatuses.LOADING;
         logInspectorRequest();

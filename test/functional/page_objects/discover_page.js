@@ -179,14 +179,12 @@ export function DiscoverPageProvider({ getService, getPageObjects }) {
       const $ = await svg.parseDomContent();
       const yAxisHeight = $('rect.background').attr('height');
       log.debug('theHeight = ' + yAxisHeight);
-      const bars = $('g > g.series > rect')
+      return $('g > g.series > rect')
         .toArray()
         .map(chart => {
           const barHeight = $(chart).attr('height');
           return Math.round((barHeight / yAxisHeight) * yAxisLabel);
         });
-
-      return bars;
     }
 
     async getChartInterval() {
@@ -326,6 +324,11 @@ export function DiscoverPageProvider({ getService, getPageObjects }) {
 
     async waitForChartLoadingComplete(renderCount) {
       await elasticChart.waitForRenderingCount('discoverChart', renderCount);
+    }
+    async getNrOfFetches() {
+      const el = await find.byCssSelector('[data-fetch-counter]');
+      const nr = await el.getAttribute('data-fetch-counter');
+      return Number(nr);
     }
   }
 

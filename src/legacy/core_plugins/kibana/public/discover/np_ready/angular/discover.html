@@ -1,4 +1,4 @@
-<discover-app class="app-container">
+<discover-app class="app-container" data-fetch-counter="{{fetchCounter}}">
   <h1 class="euiScreenReaderOnly">{{screenTitle}}</h1>
 
   <!-- Local nav. -->
@@ -12,7 +12,7 @@
 
     query="state.query"
     on-query-submit="updateQuery"
-	
+
     show-save-query="showSaveQuery"
     saved-query-id="state.savedQuery"
     on-saved-query-id-change="updateSavedQueryId"

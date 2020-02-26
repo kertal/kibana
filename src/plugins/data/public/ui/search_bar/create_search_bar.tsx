@@ -74,20 +74,20 @@ const defaultOnQuerySubmit = (
     const isUpdate =
       !_.isEqual(timefilter.getTime(), payload.dateRange) ||
       !_.isEqual(payload.query, currentQuery);
+
     if (isUpdate) {
       timefilter.setTime(payload.dateRange);
       setQueryStringState(payload.query);
-    } else {
-      // Refresh button triggered for an update
-      if (props.onQuerySubmit)
-        props.onQuerySubmit(
-          {
-            dateRange: timefilter.getTime(),
-            query: currentQuery,
-          },
-          false
-        );
     }
+
+    if (props.onQuerySubmit)
+      props.onQuerySubmit(
+        {
+          dateRange: isUpdate ? payload.dateRange : timefilter.getTime(),
+          query: isUpdate ? payload.query : currentQuery,
+        },
+        isUpdate
+      );
   };
 };
 
@@ -124,8 +124,6 @@ export function createSearchBar({ core, storage, data }: StatefulSearchBarDeps) 
         language: core.uiSettings.get('search:queryLanguage'),
       }
     );
-    console.log('createSearchBar 1', props.query);
-    console.log('createSearchBar 2', query);
 
     // handle service state updates.
     // i.e. filters being added from a visualization directly to filterManager.
@@ -150,18 +148,12 @@ export function createSearchBar({ core, storage, data }: StatefulSearchBarDeps) 
       uiSettings: core.uiSettings,
     });
 
-    // Fire onQuerySubmit on query or timerange change
     useEffect(() => {
       if (!props.useDefaultBehaviors) return;
-      if (props.onQuerySubmit)
-        props.onQuerySubmit(
-          {
-            dateRange: timeRange,
-            query,
-          },
-          true
-        );
-    }, [props, props.onQuerySubmit, props.useDefaultBehaviors, query, timeRange]);
+      if (props.query && !_.isEqual(props.query, query)) {
+        setQuery(props.query as Query);
+      }
+    }, [props.query, props.useDefaultBehaviors, query]);
 
     return (
       <KibanaContextProvider

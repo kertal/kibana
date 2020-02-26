@@ -124,6 +124,8 @@ export function createSearchBar({ core, storage, data }: StatefulSearchBarDeps) 
         language: core.uiSettings.get('search:queryLanguage'),
       }
     );
+    console.log('createSearchBar 1', props.query);
+    console.log('createSearchBar 2', query);
 
     // handle service state updates.
     // i.e. filters being added from a visualization directly to filterManager.

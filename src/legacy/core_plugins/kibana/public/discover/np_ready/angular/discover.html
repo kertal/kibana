@@ -11,24 +11,13 @@
     show-save-query="showSaveQuery"
     show-date-picker="enableTimeRangeSelector"
     index-patterns="[indexPattern]"
-    query="state.query"
-
-    filters="filters"
-    on-filters-updated="onFiltersUpdated"
-
+    query="query"
     on-query-submit="updateQuery"
     show-save-query="showSaveQuery"
     saved-query="savedQuery"
-    date-range-from="timeRangeObj.from"
-    date-range-to="timeRangeObj.to"
-    is-refresh-paused="refreshInterval.pause"
-    refresh-interval="refreshInterval.value"
-    on-refresh-change="onRefreshChange"
-
-    on-saved="onSavedQuerySaved"
-    on-saved-query-updated="onSavedQueryUpdated"
-    on-clear-saved-query="onSavedQueryCleared"
-
+    saved-query-id="state.savedQuery"
+    on-saved-query-id-change="updateSavedQueryId"
+    use-default-behaviors="true"
   >
   </kbn-top-nav>
 

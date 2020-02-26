@@ -216,6 +216,7 @@ function discoverController(
     setAppState({ index: $scope.indexPattern.id });
   }
   $scope.state = { ...appStateContainer.getState() };
+  $scope.query = $scope.state.query;
 
   const updateStateFromSavedQuery = savedQuery => {
     setAppState({
@@ -249,6 +250,7 @@ function discoverController(
   const appStateUnsubscribe = appStateContainer.subscribe(async newState => {
     const { state: newStatePartial } = splitState(newState);
     const { state: oldStatePartial } = splitState($scope.state);
+    console.log('appStateContainer change', { newStatePartial, oldStatePartial });
 
     if (!_.isEqual(newStatePartial, oldStatePartial)) {
       $scope.$evalAsync(async () => {
@@ -276,6 +278,13 @@ function discoverController(
           }
         }
         if (queryChanged || sortChanged || savedQueryChanged) {
+          if (queryChanged) {
+            console.log(
+              'appStateContainer change queryChanged',
+              `${$scope.query.query} -> ${newStatePartial.query.query} `
+            );
+            $scope.query = newStatePartial.query;
+          }
           $fetchObservable.next();
         } else {
           $scope.$digest();
@@ -868,17 +877,14 @@ function discoverController(
       });
   };
 
-  $scope.updateQuery = function({ query, dateRange }) {
-    if (dateRange) {
-      timefilter.setTime(dateRange);
-      $scope.timeRangeObj = dateRange;
-    }
+  $scope.updateQuery = function({ query }) {
+    console.log('[updateQuery] start', query);
 
-    if (!_.isEqual(query, $scope.state.query)) {
-      $scope.state.query = query;
+    if (!_.isEqual(query, $scope.query)) {
+      console.log('[updateQuery] setAppState', `${$scope.query.query} -> ${query.query}`);
       setAppState({ query });
     }
-    $fetchObservable.next();
+    console.log('[updateQuery] finished');
   };
 
   function onResults(resp) {

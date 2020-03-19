@@ -25,7 +25,7 @@ export default function({ getPageObjects, getService }: FtrProviderContext) {
   }
 
   // FLAKY: https://github.com/elastic/kibana/issues/60559
-  describe.skip('spaces', () => {
+  describe('spaces', () => {
     before(async () => {
       await esArchiver.loadIfNeeded('logstash_functional');
     });

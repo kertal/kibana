@@ -31,7 +31,7 @@ export default function({ getService, getPageObjects }) {
   const PageObjects = getPageObjects(['context']);
 
   // FLAKY: https://github.com/elastic/kibana/issues/53888
-  describe.skip('context size', function contextSize() {
+  describe('context size', function contextSize() {
     before(async function() {
       await kibanaServer.uiSettings.update({
         'context:defaultSize': `${TEST_DEFAULT_CONTEXT_SIZE}`,

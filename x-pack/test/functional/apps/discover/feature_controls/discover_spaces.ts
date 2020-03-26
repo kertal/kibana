@@ -71,6 +71,8 @@ export default function({ getPageObjects, getService }: FtrProviderContext) {
           basePath: '/s/custom_space',
         });
         await setDiscoverTimeRange();
+        PageObjects.common.sleep(500);
+
         await PageObjects.discover.clickFieldListItem('bytes');
         await PageObjects.discover.expectFieldListItemVisualize('bytes');
       });
@@ -137,6 +139,7 @@ export default function({ getPageObjects, getService }: FtrProviderContext) {
           basePath: '/s/custom_space',
         });
         await setDiscoverTimeRange();
+        PageObjects.common.sleep(500);
         await PageObjects.discover.clickFieldListItem('bytes');
         await PageObjects.discover.expectMissingFieldListItemVisualize('bytes');
       });

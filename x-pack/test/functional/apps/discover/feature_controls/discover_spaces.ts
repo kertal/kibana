@@ -25,7 +25,9 @@ export default function({ getPageObjects, getService }: FtrProviderContext) {
   }
 
   // FLAKY: https://github.com/elastic/kibana/issues/60559
-  describe.skip('spaces', () => {
+
+  // eslint-disable-next-line ban/ban
+  describe.only('spaces', () => {
     before(async () => {
       await esArchiver.loadIfNeeded('logstash_functional');
     });

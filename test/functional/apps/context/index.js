@@ -23,7 +23,8 @@ export default function({ getService, getPageObjects, loadTestFile }) {
   const PageObjects = getPageObjects(['common']);
   const kibanaServer = getService('kibanaServer');
 
-  describe('context app', function() {
+  // eslint-disable-next-line mocha/no-exclusive-tests
+  describe.only('context app', function() {
     this.tags('ciGroup1');
 
     before(async function() {

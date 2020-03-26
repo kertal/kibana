@@ -245,7 +245,9 @@ export function DiscoverPageProvider({ getService, getPageObjects }: FtrProvider
     }
 
     public async expectFieldListItemVisualize(field: string) {
-      await testSubjects.existOrFail(`fieldVisualize-${field}`);
+      await testSubjects.existOrFail(`fieldVisualize-${field}`, {
+        timeout: config.get('timeouts.waitFor'),
+      });
     }
 
     public async expectMissingFieldListItemVisualize(field: string) {

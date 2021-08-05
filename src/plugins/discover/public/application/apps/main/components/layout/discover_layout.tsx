@@ -342,6 +342,7 @@ export function DiscoverLayout({
                             columns={columns}
                             indexPattern={indexPattern}
                             rows={rows}
+                            minimumVisibleRows={50}
                             sort={state.sort || []}
                             searchDescription={savedSearch.description}
                             searchTitle={savedSearch.lastSavedTitle}

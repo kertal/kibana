@@ -21,6 +21,7 @@ interface FetchFieldExistenceParams {
   timeFieldName?: string;
   dataViewsService: DataViewsContract;
   uiSettingsClient: IUiSettingsClient;
+  includeUnmapped?: boolean;
 }
 
 export type LoadFieldExistingHandler = (params: FetchFieldExistenceParams) => Promise<{
@@ -37,6 +38,7 @@ export const loadFieldExisting: LoadFieldExistingHandler = async ({
   dataViewsService,
   uiSettingsClient,
   dataView,
+  includeUnmapped = false,
 }) => {
   const includeFrozen = uiSettingsClient.get(UI_SETTINGS.SEARCH_INCLUDE_FROZEN);
   const metaFields = uiSettingsClient.get(UI_SETTINGS.META_FIELDS);
@@ -48,6 +50,7 @@ export const loadFieldExisting: LoadFieldExistingHandler = async ({
     timeFieldName,
     dataViewsService,
     includeFrozen,
+    includeUnmapped,
     metaFields,
     dataView,
     search: async (params) => {

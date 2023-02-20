@@ -39,6 +39,7 @@ export async function fetchFieldExistence({
   timeFieldName,
   includeFrozen,
   metaFields,
+  includeUnmapped,
 }: {
   search: SearchHandler;
   dataView: DataView;
@@ -49,12 +50,14 @@ export async function fetchFieldExistence({
   includeFrozen: boolean;
   metaFields: string[];
   dataViewsService: DataViewsContract;
+  includeUnmapped: boolean;
 }) {
   const allFields = buildFieldList(dataView, metaFields);
   const existingFieldList = await dataViewsService.getFieldsForIndexPattern(dataView, {
     // filled in by data views service
     pattern: '',
     indexFilter: toQuery(timeFieldName, fromDate, toDate, dslQuery),
+    includeUnmapped,
   });
   return {
     indexPatternTitle: dataView.title,

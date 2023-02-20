@@ -28,12 +28,14 @@ export class IndexPatternsApiServer implements IDataViewsApiClient {
     allowNoIndex,
     indexFilter,
     fields,
+    includeUnmapped,
   }: GetFieldsOptions) {
     const indexPatterns = new IndexPatternsFetcher(this.esClient, allowNoIndex);
     return await indexPatterns
       .getFieldsForWildcard({
         pattern,
         metaFields,
+        fieldCapsOptions: { includeUnmapped },
         type,
         rollupIndex,
         indexFilter,

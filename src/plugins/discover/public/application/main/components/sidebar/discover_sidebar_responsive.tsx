@@ -213,6 +213,7 @@ export function DiscoverSidebarResponsive(props: DiscoverSidebarResponsiveProps)
       dataViews,
       core,
     },
+    includeUnmapped: true,
   });
 
   useEffect(() => {

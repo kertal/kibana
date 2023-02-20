@@ -57,7 +57,7 @@ export class IndexPatternsFetcher {
   async getFieldsForWildcard(options: {
     pattern: string | string[];
     metaFields?: string[];
-    fieldCapsOptions?: { allow_no_indices: boolean; includeUnmapped?: boolean };
+    fieldCapsOptions?: { allow_no_indices?: boolean; includeUnmapped?: boolean };
     type?: string;
     rollupIndex?: string;
     indexFilter?: QueryDslQueryContainer;
@@ -65,9 +65,10 @@ export class IndexPatternsFetcher {
   }): Promise<{ fields: FieldDescriptor[]; indices: string[] }> {
     const { pattern, metaFields = [], fieldCapsOptions, type, rollupIndex, indexFilter } = options;
     const patternList = Array.isArray(pattern) ? pattern : pattern.split(',');
-    const allowNoIndices = fieldCapsOptions
-      ? fieldCapsOptions.allow_no_indices
-      : this.allowNoIndices;
+    const allowNoIndices =
+      fieldCapsOptions && typeof fieldCapsOptions.allow_no_indices === 'boolean'
+        ? fieldCapsOptions.allow_no_indices
+        : this.allowNoIndices;
     let patternListActive: string[] = patternList;
     // if only one pattern, don't bother with validation. We let getFieldCapabilities fail if the single pattern is bad regardless
     if (patternList.length > 1 && !allowNoIndices) {

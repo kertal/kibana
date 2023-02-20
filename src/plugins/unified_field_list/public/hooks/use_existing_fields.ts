@@ -43,6 +43,7 @@ export interface ExistingFieldsFetcherParams {
     dataViews: DataViewsContract;
   };
   onNoData?: (dataViewId: string) => unknown;
+  includeUnmapped?: boolean;
 }
 
 type ExistingFieldsByDataViewMap = Record<string, ExistingFieldsInfo>;
@@ -145,6 +146,7 @@ export const useExistingFieldsFetcher = (
             uiSettingsClient: core.uiSettings,
             dataViewsService: dataViews,
             dataView,
+            includeUnmapped: params.includeUnmapped,
           });
 
           const existingFieldNames = result?.existingFieldNames || [];
@@ -175,7 +177,7 @@ export const useExistingFieldsFetcher = (
 
       setActiveRequests((value) => value - 1);
     },
-    [mountedRef, setActiveRequests]
+    [mountedRef, setActiveRequests, params.includeUnmapped]
   );
 
   const dataViewsHash = getDataViewsHash(params.dataViews);

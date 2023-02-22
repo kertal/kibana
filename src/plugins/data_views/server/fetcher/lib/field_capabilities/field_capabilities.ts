@@ -51,11 +51,10 @@ export async function getFieldCapabilities(params: FieldCapabilitiesParams) {
     fields,
   });
   const fieldsFromFieldCapsByName = keyBy(readFieldCapsResponse(esFieldCaps.body), 'name');
-
   const allFieldsUnsorted = Object.keys(fieldsFromFieldCapsByName)
     // not all meta fields are provided, so remove and manually add
     .filter((name) => !fieldsFromFieldCapsByName[name].metadata_field)
-    .concat(metaFields)
+    .concat(fieldsFromFieldCapsByName.length ? metaFields : [])
     .reduce<{ names: string[]; map: Map<string, string> }>(
       (agg, value) => {
         // This is intentionally using a Map to be highly optimized with very large indexes AND be safe for user provided data

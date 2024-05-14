@@ -66,6 +66,7 @@ import { SelectedVSAvailableCallout } from './selected_vs_available_callout';
 import { useDiscoverCustomization } from '../../../../customizations';
 import { onResizeGridColumn } from '../../../../utils/on_resize_grid_column';
 import { useIsEsqlMode } from '../../hooks/use_is_esql_mode';
+import { useContextAwareness } from '../../../../context_awareness';
 
 const containerStyles = css`
   position: relative;
@@ -318,6 +319,8 @@ function DiscoverDocumentsComponent({
     [viewModeToggle, callouts, gridAnnouncementCallout, loadingIndicator]
   );
 
+  const { rootContext, dataSourceContext, documentContexts } = useContextAwareness();
+
   if (isDataViewLoading || (isEmptyDataResult && isDataLoading)) {
     return (
       <div className="dscDocuments__loading">
@@ -373,6 +376,14 @@ function DiscoverDocumentsComponent({
         )}
         {!isLegacy && (
           <>
+            <div css={{ padding: '8px' }}>
+              <span>
+                <strong>Solution:</strong> {rootContext.solutionType}
+              </span>{' '}
+              <span>
+                <strong>Data source:</strong> {dataSourceContext.category}
+              </span>
+            </div>
             <div className="unifiedDataTable">
               <CellActionsProvider
                 getTriggerCompatibleActions={uiActions.getTriggerCompatibleActions}
@@ -424,7 +435,18 @@ function DiscoverDocumentsComponent({
                   totalHits={totalHits}
                   onFetchMoreRecords={onFetchMoreRecords}
                   componentsTourSteps={TOUR_STEPS}
-                  externalCustomRenderers={externalCustomRenderers}
+                  // externalCustomRenderers={externalCustomRenderers}
+                  externalCustomRenderers={{
+                    _source: (props) => {
+                      return (
+                        <>
+                          <strong>{documentContexts.get(props.row.id)?.type ?? 'unknown'}</strong>
+                          <br />
+                          <div>{JSON.stringify(props.row.flattened)}</div>
+                        </>
+                      );
+                    },
+                  }}
                   customGridColumnsConfiguration={customGridColumnsConfiguration}
                   customControlColumnsConfiguration={customControlColumnsConfiguration}
                 />

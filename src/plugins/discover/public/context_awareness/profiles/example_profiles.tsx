@@ -9,6 +9,7 @@
 import { isOfAggregateQueryType } from '@kbn/es-query';
 import { getIndexPatternFromESQLQuery } from '@kbn/esql-utils';
 import React from 'react';
+import { i18n } from '@kbn/i18n';
 import { DataSourceType, isDataSourceType } from '../../../common/data_sources';
 import {
   DataSourceCategory,
@@ -148,6 +149,57 @@ export const logDocumentProfileProvider: DocumentProfileProvider = {
   },
 };
 
+export const savedObjectProfileProvider: DocumentProfileProvider = {
+  order: 1,
+  profile: {
+    getDocViewsRegistry: (prev) => (registry) => {
+      registry.enableById('doc_view_logs_overview');
+      registry.add({
+        id: 'savedObject',
+        title: i18n.translate('unifiedDocViewer.docViews.savedObject.title', {
+          defaultMessage: 'Saved Object',
+        }),
+        order: 0,
+        enabled: true, // Disabled doc view by default, can be programmatically enabled using the DocViewsRegistry.prototype.enableById method.
+        component: (props) => {
+          // of props.hits.flattened get the first field that contains asset and value
+          const asset = Object.keys(props.hit.flattened).find(
+            (key) => key.includes('asset') && key.includes('value')
+          );
+          const value = props.hit.flattened[asset as string];
+          const searchValue = props.hit.flattened['search.kibanaSavedObjectMeta.searchSourceJSON'];
+          // if there's a searchValue, parse it and format it with json padding
+
+          return (
+            <div style={{ padding: '10px' }}>
+              <h1>
+                Hi my name is <b>{props.hit.flattened.type}</b>, created at{' '}
+                {props.hit.flattened.created_at}
+                {value && (<img src={value} width="100%" />)}
+                {searchValue && <pre>{JSON.stringify(JSON.parse(searchValue), null, 2)}</pre>}
+              </h1>
+            </div>
+          );
+        },
+      });
+      return prev(registry);
+    },
+  },
+  resolve: (params) => {
+    if ('coreMigrationVersion' in params.record.flattened) {
+      return {
+        isMatch: true,
+        context: {
+          type: DocumentType.Log,
+        },
+      };
+    }
+
+    return { isMatch: false };
+  },
+};
+
 rootProfileService.registerProvider(o11yRootProfileProvider);
 dataSourceProfileService.registerProvider(logsDataSourceProfileProvider);
 documentProfileService.registerProvider(logDocumentProfileProvider);
+documentProfileService.registerProvider(savedObjectProfileProvider);

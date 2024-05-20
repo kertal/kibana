@@ -68,6 +68,8 @@ import {
   pick,
   uniqueId,
   concat,
+  omitBy,
+  isNil,
   compact,
 } from 'lodash';
 import { catchError, finalize, first, last, map, shareReplay, switchMap, tap } from 'rxjs';
@@ -240,7 +242,7 @@ export class SearchSource {
    * @private
    * @param newFields New field array.
    */
-  setFields(newFields: SearchSourceFields) {
+  private setFields(newFields: SearchSourceFields) {
     this.fields = newFields;
     return this;
   }
@@ -732,7 +734,7 @@ export class SearchSource {
   }
 
   private readonly getFieldName = (fld: SearchFieldValue): string =>
-    typeof fld === 'string' ? fld : (fld?.field as string);
+    typeof fld === 'string' ? fld : (fld.field as string);
 
   private getFieldsWithoutSourceFilters(
     index: DataView | undefined,
@@ -846,14 +848,13 @@ export class SearchSource {
     const { getConfig } = this.dependencies;
     const searchRequest = this.mergeProps();
     searchRequest.body = searchRequest.body || {};
-    const { body, index, query, filters, highlightAll, pit } = searchRequest;
-
+    const { body, index, query, filters, highlightAll } = searchRequest;
     searchRequest.indexType = this.getIndexType(index);
     const metaFields = getConfig(UI_SETTINGS.META_FIELDS) ?? [];
 
     // get some special field types from the index pattern
     const { docvalueFields, scriptFields, runtimeFields } = index
-      ? index.getComputedFields({})
+      ? index.getComputedFields()
       : {
           docvalueFields: [],
           scriptFields: {},
@@ -883,11 +884,11 @@ export class SearchSource {
 
       const filter = fieldWildcardFilter(body._source.excludes, metaFields);
       // also apply filters to provided fields & default docvalueFields
-      body.fields = body.fields?.filter((fld: SearchFieldValue) => filter(this.getFieldName(fld)));
-      fieldsFromSource = fieldsFromSource?.filter((fld: SearchFieldValue) =>
+      body.fields = body.fields.filter((fld: SearchFieldValue) => filter(this.getFieldName(fld)));
+      fieldsFromSource = fieldsFromSource.filter((fld: SearchFieldValue) =>
         filter(this.getFieldName(fld))
       );
-      filteredDocvalueFields = filteredDocvalueFields?.filter((fld: SearchFieldValue) =>
+      filteredDocvalueFields = filteredDocvalueFields.filter((fld: SearchFieldValue) =>
         filter(this.getFieldName(fld))
       );
     }
@@ -901,7 +902,7 @@ export class SearchSource {
         // filter down script_fields to only include items specified
         body.script_fields = pick(
           body.script_fields,
-          Object.keys(body.script_fields)?.filter((f) => uniqFieldNames.includes(f))
+          Object.keys(body.script_fields).filter((f) => uniqFieldNames.includes(f))
         );
       }
 
@@ -910,7 +911,7 @@ export class SearchSource {
       const remainingFields = difference(uniqFieldNames, [
         ...Object.keys(body.script_fields),
         ...Object.keys(body.runtime_mappings),
-      ])?.filter((remainingField) => {
+      ]).filter((remainingField) => {
         if (!remainingField) return false;
         if (!body._source || !body._source.excludes) return true;
         return !body._source.excludes.includes(remainingField);
@@ -929,7 +930,7 @@ export class SearchSource {
         // already set in docvalue_fields
         body.fields = [
           ...body.fields,
-          ...filteredDocvalueFields?.filter((fld: SearchFieldValue) => {
+          ...filteredDocvalueFields.filter((fld: SearchFieldValue) => {
             return (
               fieldsFromSource.includes(this.getFieldName(fld)) &&
               !(body.docvalue_fields || [])
@@ -945,38 +946,16 @@ export class SearchSource {
         // remove _source, since everything's coming from fields API, scripted, or stored fields
         body._source = false;
 
-        // if items that are in the docvalueFields are provided, we should
-        // inject the format from the computed fields if one isn't given
-        const docvaluesIndex = keyBy(filteredDocvalueFields, 'field');
-        const bodyFields = this.getFieldsWithoutSourceFilters(index, body.fields);
-
-        const uniqueFieldNames = new Set();
-        const uniqueFields = [];
-        for (const field of bodyFields.concat(filteredDocvalueFields)) {
-          const fieldName = this.getFieldName(field);
-          if (metaFields.includes(fieldName) || uniqueFieldNames.has(fieldName)) {
-            continue;
-          }
-          uniqueFieldNames.add(fieldName);
-          if (Object.keys(docvaluesIndex).includes(fieldName)) {
-            // either provide the field object from computed docvalues,
-            // or merge the user-provided field with the one in docvalues
-            uniqueFields.push(
-              typeof field === 'string'
-                ? docvaluesIndex[field]
-                : this.getFieldFromDocValueFieldsOrIndexPattern(docvaluesIndex, field, index)
-            );
-          } else {
-            uniqueFields.push(field);
-          }
-        }
-        body.fields = uniqueFields;
+        body.fields = this.getUniqueFields({
+          index,
+          fields: body.fields,
+          metaFields,
+          filteredDocvalueFields,
+        });
       }
     } else {
       body.fields = filteredDocvalueFields;
     }
-    // @ts-ignore
-    body.fields = body.fields.filter((field) => Boolean(field));
 
     // If sorting by _score, build queries in the "must" clause instead of "filter" clause to enable scoring
     const filtersInMustClause = (body.sort ?? []).some((sort: EsQuerySortValue[]) =>
@@ -1012,11 +991,54 @@ export class SearchSource {
       delete searchRequest.highlightAll;
     }
 
-    if (pit) {
-      body.pit = pit;
-    }
+    const omitByIsNil = (object: Record<string, any>) => omitBy(object, isNil);
 
-    return searchRequest;
+    const bodyToReturn = {
+      ...searchRequest.body,
+      pit: searchRequest.pit,
+    };
+
+    return omitByIsNil({ ...searchRequest, body: omitByIsNil(bodyToReturn) }) as SearchRequest;
+  }
+
+  private getUniqueFields({
+    index,
+    fields,
+    metaFields,
+    filteredDocvalueFields,
+  }: {
+    index?: DataView;
+    fields: any;
+    metaFields: string;
+    filteredDocvalueFields: any;
+  }) {
+    const bodyFields = this.getFieldsWithoutSourceFilters(index, fields);
+    // if items that are in the docvalueFields are provided, we should
+    // inject the format from the computed fields if one isn't given
+    const docvaluesIndex = keyBy(filteredDocvalueFields, 'field');
+    const docValuesIndexKeys = new Set(Object.keys(docvaluesIndex));
+
+    const uniqueFieldNames = new Set();
+    const uniqueFields = [];
+    for (const field of bodyFields.concat(filteredDocvalueFields)) {
+      const fieldName = this.getFieldName(field);
+      if (metaFields.includes(fieldName) || uniqueFieldNames.has(fieldName)) {
+        continue;
+      }
+      uniqueFieldNames.add(fieldName);
+      if (docValuesIndexKeys.has(fieldName)) {
+        // either provide the field object from computed docvalues,
+        // or merge the user-provided field with the one in docvalues
+        uniqueFields.push(
+          typeof field === 'string'
+            ? docvaluesIndex[field]
+            : this.getFieldFromDocValueFieldsOrIndexPattern(docvaluesIndex, field, index)
+        );
+      } else {
+        uniqueFields.push(field);
+      }
+    }
+    return uniqueFields;
   }
 
   /**

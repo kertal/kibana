@@ -36,7 +36,6 @@ export const setupGetFieldSuggestions: KqlQuerySuggestionProvider<QuerySuggestio
       indexPatterns.map((indexPattern) => {
         return indexPattern.fields.filter(indexPatternsUtils.isFilterable);
       })
-      // temp until IIndexPattern => DataView
     ) as DataViewField[];
     const search = `${prefix}${suffix}`.trim().toLowerCase();
     const matchingFields = allFields.filter((field) => {

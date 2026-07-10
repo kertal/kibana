@@ -42,8 +42,6 @@ For every failure, try to retrieve:
 - **Server logs** (`kibana.log`, `elasticsearch.log` when present). Cross-reference the failure timestamp with any errors in the logs — a server-side 500 or unexpected warning is strong evidence the failure is a product bug, not a test bug.
 - **Full session trace** when the framework supports it (Scout / Playwright). Lets you scrub through every step, locator query, network call, and DOM snapshot.
 
-How to actually find and download each artifact type is framework-specific — see "Retrieve failure artifacts" below.
-
 Things to specifically check in the artifacts before forming a root-cause hypothesis:
 
 - **Did the expected element render at all?** If yes and the selector missed it → flaky selector (Tier 2 fix territory). If no → real rendering / race / data issue (Tier 1 territory).
@@ -53,27 +51,9 @@ Things to specifically check in the artifacts before forming a root-cause hypoth
 
 If artifacts are not available (expired, not uploaded, no `read_artifacts` token), say so in the report rather than fabricating a hypothesis. "Screenshot would have resolved this; not available" is a valid open question.
 
-### Retrieve failure artifacts
+### List failure artifacts
 
-The standard recipe is **list → filter by path → download by ID**, always scoped to the failed job's UUID. Two Buildkite gotchas to know about first:
-
-- **Failed-attempt jobs are hidden by default.** `/builds/<n>` returns only the latest attempt; append `?include_retried_jobs=true` to find the original failing job (the one cited in `failed-test` comments). `retried` and `retried_in_job_id` link the two.
-- **Per-job artifacts use a different endpoint than build-wide artifacts.** If a build retried to green, failure artifacts only live on the failed job's listing (`bk artifacts list <build> -p <pipeline> --job-uuid <jobId>`). Don't conclude "no screenshot uploaded" until you've checked there.
-
-**Scout** (`@kbn/scout-reporting`, not standard Playwright output — `playwright-report/`, `trace.zip`, and video are NOT published):
-
-- `.scout/reports/scout-playwright-test-failures-<runId>/test-failures-summary.json` — maps test name → HTML report. Start here.
-- `.scout/reports/scout-playwright-test-failures-<runId>/<testId>.html` — self-contained: error, stdout, embedded screenshot. Usually sufficient on its own.
-- `.scout/reports/scout-playwright-test-failures-<runId>/scout-failures-<runId>.ndjson` — one record per failure (`id` = `<testId>`, `owner`, `location`, `error.*`) for programmatic use.
-- `**/.scout/test-artifacts/<test-slug>/test-failed-<N>.png` — plain Playwright screenshot; the PNG doesn't carry `<testId>`, so correlate via spec path.
-
-**FTR** (a single content `<hash>` links every artifact for one failure):
-
-- `target/test_failures/<jobId>_<hash>.{json,log,html}` — `.json` is source of truth; full Kibana/ES stdout lives in `system-out` (there is no separate `kibana.log`). Pull this first.
-- `<test-root>/screenshots/failure/*-<hash>.png` and `<test-root>/failure_debug/html/*-<hash>.html` — UI tests only; fetch only when the failure is UI-side.
-- `.es/*.log` — transport/cluster-shaped failures.
-
-`target/test_failures/` is shared with Scout; filter by `.jobName` (e.g. `FTR Configs #90` vs `Scout Lane #12`) to keep only FTR. On Cloud FTR pipelines the layout differs: one self-contained HTML per failure at `<config-path-with-underscores>-<unix-timestamp>/html/<contentHash>.html` — no `target/test_failures/`, screenshot, or DOM artifacts.
+`bk artifacts list <build> -p <pipeline> --job-uuid <jobId> --json` returns a JSON listing of every artifact uploaded for the failing job. Pass `--job-uuid <jobId>` for the failed attempt (without it, `bk` only returns the latest attempt and hides retried failures). If a build retried to green, failure artifacts only live on the failed job's listing; don't conclude "no screenshot" until you've scoped to the right job UUID.
 
 ### Understand the scope
 
@@ -83,6 +63,9 @@ Work through all of these questions:
   - _Why it matters:_ concentrated failures point to a specific cause tied to that window (a bad commit, an infrastructure incident, a dependency change).
 - **When did the test last fail?**
   - _Why it matters:_ if the last failure was 2–3 weeks ago and there are no new comments on the `failed-test` issue, the flakiness may have already resolved itself — intentionally or as a side effect of unrelated changes.
+- **Does the test still exist on the branch that's failing?** A test can be deleted or migrated (e.g. FTR → Scout) on `main` while it still runs on a release branch. Identify the branch of the most recent failure and inspect the file there, not on `main`.
+  - _Why it matters:_ if the file is gone from `main`, the failure is branch-local — a fix (if any) belongs on the release branch, and reasoning from `main`'s code will be wrong.
+  - Don't spend time on tests that no longer exist (the CI build may have not picked up the latest branch changes). Acknowledge the deletion and move on.
 - **Are other tests in the same suite or config failing with similar or identical errors?**
   - _Why it matters:_ shared failure modes point to shared building blocks (page objects, fixtures, setup) and usually call for a structural change rather than a per-test patch.
 - **Did it fail on a specific version branch?**
@@ -104,6 +87,7 @@ Common best-practice violations that cause flakiness:
 - **Prefer APIs for setup and teardown** (`docs/extend/scout/ui-best-practices#prefer-kibana-apis-over-ui-for-setup-and-teardown`). Driving setup/teardown through the UI is slower and flakier.
 - **Wait for UI updates after actions** (`docs/extend/scout/ui-best-practices#wait-for-ui-updates-when-the-next-action-requires-it`). Confirm the action produced the expected result and the UI has rendered before continuing.
 - **Wait for complex UI to finish rendering** (`docs/extend/scout/ui-best-practices#wait-for-complex-components-to-fully-render`).
+- **Don't use manual retry loops** (`docs/extend/scout/ui-best-practices#dont-use-manual-retry-loops`). If a click or type only works "sometimes", don't re-issue it in a retry — that hides an actionability bug a real user would hit. Fix the interaction or wait on a stable readiness signal instead (see the retry pitfall below).
 
 Scout and FTR tests should also follow the general best practices in `docs/extend/scout/best-practices.md`, the UI best practices in `docs/extend/scout/ui-best-practices.md`, and the API best practices in `docs/extend/scout/api-best-practices.md`.
 
@@ -113,7 +97,7 @@ Watch out for these pitfalls when investigating the failure:
 
 - **Ignoring the bigger picture**: ensure you have as much data as you can about the test environment and related failures (in the same test file, test config or elsewhere).
 - **Recommending a timeout bump as the primary fix**: timeout bumps consistently fail to hold in Kibana. Investigate what never happened — confirm the slow operation is intrinsic to the product (e.g. index creation, SLO calculation) rather than a missing `waitForResponse`/`waitForSelector` upstream.
-- **Never recommend wrapping the assertion in `retry()` as the fix.** Wrapping the assertion in `retry()` without addressing the underlying cause frequently recurs. Acceptable only as a temporary unblock; in that case the recommendation must explicitly say "this is a stopgap" and link a follow-up issue for the real fix.
+- **Never recommend wrapping an assertion _or an interaction_ in a retry as the fix.** This covers both the obvious form — wrapping `expect` / `existOrFail` in `retry()` / `retry.tryForTime` — and the subtler one: re-issuing a `click`, `setValue`/type, or `goto`/navigation inside a retry so a "missed" interaction lands on a later attempt (e.g. `retry.tryForTime(() => { await testSubjects.click(x); await testSubjects.existOrFail(y); })`). Real users don't click or type the same thing repeatedly, so retrying the interaction hides a genuine actionability bug that a real user would hit (element off-screen or at the viewport edge, the wrong sub-element being targeted, an unstable re-render). Instead, diagnose _what specifically fails_ and fix that: scroll/ensure the element is stably actionable before acting, target the correct element, or wait on an explicit readiness `data-test-subj` signal.
 - **Never recommend only test-side async hooks (`await`, `waitFor`, `waitUntil`) when there is evidence of a production-side race.** This is the most common pattern that looks like a fix but isn't — popular precisely because it appears principled, but it lets the test wait _longer_ without fixing the race.
 - **Weakening assertions**: don't recommend making assertions more lenient or narrowing their scope just to make the test pass — this hides regressions instead of catching them. Generic test-only refactors that loosen assertions often regress.
 - **Reducing coverage surface**: don't recommend stripping tags to skip the test in certain environments (e.g. Cloud) or project types (e.g. serverless Security) unless you have a real reason it shouldn't run there. "It's flaky here" is not a real reason.

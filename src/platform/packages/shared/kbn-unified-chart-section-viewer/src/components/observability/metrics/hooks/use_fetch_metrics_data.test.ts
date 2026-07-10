@@ -29,8 +29,15 @@ jest.mock('../utils/get_esql_query', () => ({
   getEsqlQuery: jest.fn((query: { esql?: string } | undefined) => query?.esql),
 }));
 jest.mock('@kbn/esql-utils', () => ({
-  buildMetricsInfoQuery: jest.fn((esql: string, dims?: string[]) =>
-    dims?.length ? `${esql} | WHERE dim IS NOT NULL | METRICS_INFO` : `${esql} | METRICS_INFO`
+  buildMetricsInfoQuery: jest.fn((esql: string, dims?: string[], postFilter?: string) => {
+    const preFilter = dims?.length ? ' | WHERE dim IS NOT NULL' : '';
+    const post = postFilter ? ` | WHERE ${postFilter}` : '';
+    return `${esql}${preFilter} | METRICS_INFO${post}`;
+  }),
+  escapeStringValue: jest.fn((val: string) => `"${val}"`),
+  buildJoinedFilter: jest.fn(
+    (fields: string[] | undefined, clause: (field: string) => string, separator = ' AND ') =>
+      fields?.map(clause).join(separator) ?? ''
   ),
   hasTransformationalCommand: jest.fn(() => false),
 }));
@@ -79,7 +86,7 @@ const createMockParsedMetrics = (
 ): ParsedMetricsWithTelemetry => ({
   metricItems: metricNames.map((name) => ({
     metricName: name,
-    dataStream: 'metrics-*',
+    indexName: 'metrics-*',
     units: [null],
     metricTypes: ['gauge'],
     fieldTypes: [ES_FIELD_TYPES.DOUBLE],
@@ -91,7 +98,7 @@ const createMockParsedMetrics = (
     total_number_of_dimensions: dimensions.length,
     metrics_by_type: { gauge: metricNames.length },
     units: { none: metricNames.length },
-    multi_value_counts: { data_streams: 0, field_types: 0, metric_types: 0, units: 0 },
+    multi_value_counts: { index_names: 0, field_types: 0, metric_types: 0, units: 0 },
   },
 });
 
@@ -150,10 +157,18 @@ describe('useFetchMetricsData', () => {
     const { getEsqlQuery } = jest.requireMock('../utils/get_esql_query');
     getEsqlQuery.mockImplementation((query: { esql?: string } | undefined) => query?.esql);
 
-    const { buildMetricsInfoQuery, hasTransformationalCommand } =
+    const { buildMetricsInfoQuery, buildJoinedFilter, hasTransformationalCommand } =
       jest.requireMock('@kbn/esql-utils');
-    buildMetricsInfoQuery.mockImplementation((esql: string, dims?: string[]) =>
-      dims?.length ? `${esql} | WHERE dim IS NOT NULL | METRICS_INFO` : `${esql} | METRICS_INFO`
+    buildMetricsInfoQuery.mockImplementation(
+      (esql: string, dims?: string[], postFilter?: string) => {
+        const preFilter = dims?.length ? ' | WHERE dim IS NOT NULL' : '';
+        const post = postFilter ? ` | WHERE ${postFilter}` : '';
+        return `${esql}${preFilter} | METRICS_INFO${post}`;
+      }
+    );
+    buildJoinedFilter.mockImplementation(
+      (fields: string[] | undefined, clause: (field: string) => string, separator = ' AND ') =>
+        fields?.map(clause).join(separator) ?? ''
     );
     hasTransformationalCommand.mockImplementation(() => false);
 
@@ -170,7 +185,7 @@ describe('useFetchMetricsData', () => {
       documents: [
         {
           metric_name: 'system.cpu.utilization',
-          data_stream: 'metrics-*',
+          index_name: 'metrics-*',
           unit: null,
           metric_type: 'gauge',
           field_type: 'double',
@@ -233,7 +248,7 @@ describe('useFetchMetricsData', () => {
           total_number_of_dimensions: 0,
           metrics_by_type: {},
           units: {},
-          multi_value_counts: { data_streams: 0, field_types: 0, metric_types: 0, units: 0 },
+          multi_value_counts: { index_names: 0, field_types: 0, metric_types: 0, units: 0 },
         },
       });
 
@@ -349,7 +364,7 @@ describe('useFetchMetricsData', () => {
           documents: [
             {
               metric_name: 'system.cpu.utilization',
-              data_stream: 'metrics-*',
+              index_name: 'metrics-*',
               unit: null,
               metric_type: 'gauge',
               field_type: 'double',
@@ -386,7 +401,7 @@ describe('useFetchMetricsData', () => {
         documents: [
           {
             metric_name: 'system.cpu.utilization',
-            data_stream: 'metrics-*',
+            index_name: 'metrics-*',
             unit: null,
             metric_type: 'gauge',
             field_type: 'double',
@@ -693,7 +708,7 @@ describe('useFetchMetricsData', () => {
         expect(result.current.loading).toBe(false);
       });
 
-      expect(buildMetricsInfoQueryMock).toHaveBeenLastCalledWith('TS metrics-*', []);
+      expect(buildMetricsInfoQueryMock).toHaveBeenLastCalledWith('TS metrics-*', [], '');
       expect(result.current.activeDimensions).toEqual([]);
       // Intent must not be mutated — the caller still sees the original array.
       expect(params.selectedDimensionNames).toEqual([hostDimension]);
@@ -713,7 +728,11 @@ describe('useFetchMetricsData', () => {
         expect(result.current.loading).toBe(false);
       });
 
-      expect(buildMetricsInfoQueryMock).toHaveBeenLastCalledWith('TS metrics-*', ['host.name']);
+      expect(buildMetricsInfoQueryMock).toHaveBeenLastCalledWith(
+        'TS metrics-*',
+        ['host.name'],
+        'MV_CONTAINS(dimension_fields, "host.name")'
+      );
       expect(result.current.activeDimensions).toEqual([hostDimension]);
     });
 
@@ -728,10 +747,11 @@ describe('useFetchMetricsData', () => {
         expect(result.current.loading).toBe(false);
       });
 
-      expect(buildMetricsInfoQueryMock).toHaveBeenLastCalledWith('TS metrics-*', [
-        'host.name',
-        'service.name',
-      ]);
+      expect(buildMetricsInfoQueryMock).toHaveBeenLastCalledWith(
+        'TS metrics-*',
+        ['host.name', 'service.name'],
+        'MV_CONTAINS(dimension_fields, "host.name") AND MV_CONTAINS(dimension_fields, "service.name")'
+      );
       expect(result.current.activeDimensions).toEqual([hostDimension, serviceDimension]);
     });
 
@@ -799,7 +819,7 @@ describe('useFetchMetricsData', () => {
         expect(mockExecuteEsqlQuery).toHaveBeenCalledTimes(2);
       });
 
-      expect(buildMetricsInfoQueryMock).toHaveBeenLastCalledWith('TS metrics-*', []);
+      expect(buildMetricsInfoQueryMock).toHaveBeenLastCalledWith('TS metrics-*', [], '');
     });
   });
 

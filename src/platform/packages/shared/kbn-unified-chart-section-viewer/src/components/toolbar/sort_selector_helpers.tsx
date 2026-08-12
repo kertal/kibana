@@ -10,7 +10,6 @@
 import React from 'react';
 import { EuiButtonGroup } from '@elastic/eui';
 import { i18n } from '@kbn/i18n';
-import { CHARTS_TOOLBAR_EBT_ELEMENT, EBT_CLICK_ACTIONS, getEbtProps } from '@kbn/ebt-click';
 import { METRICS_SORT_BY, METRICS_SORT_DIRECTION } from '../../common/constants';
 import type { MetricsSortBy, MetricsSortDirection } from '../../types';
 
@@ -39,11 +38,6 @@ const directionOptions = [
     label: i18n.translate('metricsExperience.sortSelector.ascending', {
       defaultMessage: 'Ascending',
     }),
-    ...getEbtProps({
-      action: EBT_CLICK_ACTIONS.SET_SORT_DIRECTION,
-      element: CHARTS_TOOLBAR_EBT_ELEMENT,
-      detail: METRICS_SORT_DIRECTION.asc,
-    }),
   },
   {
     id: METRICS_SORT_DIRECTION.desc,
@@ -51,11 +45,6 @@ const directionOptions = [
     'data-test-subj': 'metricsExperienceSortDirectionDesc',
     label: i18n.translate('metricsExperience.sortSelector.descending', {
       defaultMessage: 'Descending',
-    }),
-    ...getEbtProps({
-      action: EBT_CLICK_ACTIONS.SET_SORT_DIRECTION,
-      element: CHARTS_TOOLBAR_EBT_ELEMENT,
-      detail: METRICS_SORT_DIRECTION.desc,
     }),
   },
 ];

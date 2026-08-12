@@ -161,9 +161,6 @@ describe('scheduled Significant Events managed workflows', () => {
       reviewIntervalMinutes: 20,
       discoveryBatchSize: 7,
       maxReviewPasses: 6,
-      flakyRuleDetectionThreshold: 12,
-      flakyRuleProbeAfterMinutes: 180,
-      flakyRuleExemptSeverityScore: 85,
     });
 
     expect(parsed.enabled).toBe(false);
@@ -180,12 +177,7 @@ describe('scheduled Significant Events managed workflows', () => {
     const discover = findStep(drainLoop?.steps ?? [], 'discover');
     expect(discover?.with).toEqual({
       'workflow-id': SIGNIFICANT_EVENTS_DISCOVERY_WORKFLOW_ID,
-      inputs: {
-        detectionBatchMax: 7,
-        flakyRuleDetectionThreshold: 12,
-        flakyRuleProbeAfterMinutes: 180,
-        flakyRuleExemptSeverityScore: 85,
-      },
+      inputs: { detectionBatchMax: 7 },
     });
   });
 
@@ -233,9 +225,6 @@ describe('SignificantEventsScheduledWorkflowsService', () => {
         reviewIntervalMinutes: 10,
         discoveryBatchSize: 3,
         maxReviewPasses: 3,
-        flakyRuleDetectionThreshold: 10,
-        flakyRuleProbeAfterMinutes: 360,
-        flakyRuleExemptSeverityScore: 80,
       },
     });
 
@@ -261,9 +250,6 @@ describe('SignificantEventsScheduledWorkflowsService', () => {
           reviewIntervalMinutes: 10,
           discoveryBatchSize: 3,
           maxReviewPasses: 3,
-          flakyRuleDetectionThreshold: 10,
-          flakyRuleProbeAfterMinutes: 360,
-          flakyRuleExemptSeverityScore: 80,
         },
       }
     );
@@ -304,9 +290,6 @@ describe('SignificantEventsScheduledWorkflowsService', () => {
         reviewIntervalMinutes: 15,
         discoveryBatchSize: 10,
         maxReviewPasses: 4,
-        flakyRuleDetectionThreshold: 10,
-        flakyRuleProbeAfterMinutes: 360,
-        flakyRuleExemptSeverityScore: 80,
       },
     });
 
@@ -343,9 +326,6 @@ describe('SignificantEventsScheduledWorkflowsService', () => {
         reviewIntervalMinutes: 10,
         discoveryBatchSize: 3,
         maxReviewPasses: 3,
-        flakyRuleDetectionThreshold: 10,
-        flakyRuleProbeAfterMinutes: 360,
-        flakyRuleExemptSeverityScore: 80,
       },
     });
 

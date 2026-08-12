@@ -89,11 +89,7 @@ export function TutorialConfigAgent({
         }
       } catch (e) {
         setIsLoading(false);
-
-        // A 403 response is expected if the user does not have permission to read fleet agents.
-        if (e.response?.status !== 403) {
-          console.error('Error while fetching fleet agents.', e);
-        }
+        console.error('Error while fetching fleet agents.', e);
       }
     }
     fetchData();

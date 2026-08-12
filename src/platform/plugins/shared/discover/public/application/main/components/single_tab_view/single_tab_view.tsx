@@ -162,9 +162,10 @@ export const SingleTabView = ({
             );
             const dataView = dataViewUnknown as DataView;
             initializeTab.current({
-              defaultUrlState: dataView.id
-                ? { dataSource: createDataViewDataSource({ dataViewId: dataView.id }) }
-                : undefined,
+              defaultUrlState:
+                dataView && dataView.id
+                  ? { dataSource: createDataViewDataSource({ dataViewId: dataView.id }) }
+                  : undefined,
             });
           }}
           onESQLNavigationComplete={() => {
@@ -174,7 +175,6 @@ export const SingleTabView = ({
       </HideTabsBar>
     );
   }
-
   if (!currentDataStateContainer || !currentCustomizationService || !currentDataView) {
     return <BrandedLoadingIndicator />;
   }

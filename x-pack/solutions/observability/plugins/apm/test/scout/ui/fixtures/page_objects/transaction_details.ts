@@ -9,7 +9,7 @@ import type { KibanaUrl, ScoutPage } from '@kbn/scout-oblt';
 import { expect } from '@kbn/scout-oblt/ui';
 import {
   dismissGlobalToastsIfPresent,
-  waitForApmAppMenuReady,
+  waitForApmSettingsHeaderLink,
   waitForSearchBarReady,
 } from '../page_helpers';
 import { EXTENDED_TIMEOUT } from '../constants';
@@ -40,7 +40,7 @@ export class TransactionDetailsPage {
         }
       )}`
     );
-    await waitForApmAppMenuReady(this.page);
+    await waitForApmSettingsHeaderLink(this.page);
   }
 
   /**
@@ -67,7 +67,7 @@ export class TransactionDetailsPage {
         }
       )}`
     );
-    await waitForApmAppMenuReady(this.page);
+    await waitForApmSettingsHeaderLink(this.page);
   }
 
   /**
@@ -80,7 +80,7 @@ export class TransactionDetailsPage {
     const url = new URL(this.page.url());
     url.searchParams.delete('transactionName');
     await this.page.goto(url.toString());
-    await waitForApmAppMenuReady(this.page);
+    await waitForApmSettingsHeaderLink(this.page);
   }
 
   /**
@@ -121,7 +121,7 @@ export class TransactionDetailsPage {
 
   async reload() {
     await this.page.reload();
-    await waitForApmAppMenuReady(this.page);
+    await waitForApmSettingsHeaderLink(this.page);
   }
 
   async fillApmUnifiedSearchBar(query: string) {

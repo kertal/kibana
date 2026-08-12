@@ -22,7 +22,7 @@ import { AppMenu } from './app_menu';
 import { AppHeaderMetadata } from './app_header_metadata';
 import { AppHeaderDescription } from './app_header_description';
 import { APP_HEADER_TEST_SUBJECTS } from './test_subjects';
-import { useCanAccessIntegrations, useResolvedBadges } from './hooks';
+import { useCanAccessIntegrations, useResolvedBadges, useShareAction } from './hooks';
 
 export type AppHeaderViewProps = DistributiveOmit<AppHeaderConfig, 'back' | 'spacing'> & {
   back?: AppHeaderBack | AppHeaderBack[];
@@ -54,7 +54,6 @@ const getPublicAppHeaderViewProps = ({
   badges,
   menu,
   favorite,
-  share,
   description,
   metadata,
   sticky,
@@ -71,7 +70,6 @@ const getPublicAppHeaderViewProps = ({
     badges,
     menu,
     favorite,
-    share,
     ...secondaryContent,
     sticky,
     spacing,
@@ -88,7 +86,6 @@ const AppHeaderViewInternal = React.memo<AppHeaderViewInternalProps>(
     badges,
     menu,
     favorite,
-    share,
     titleAppend,
     description,
     metadata,
@@ -99,6 +96,7 @@ const AppHeaderViewInternal = React.memo<AppHeaderViewInternalProps>(
     showAddIntegrations,
   }) => {
     const hasLegacyActionMenu = useHasLegacyActionMenu();
+    const shareAction = useShareAction(menu);
     const resolvedBadges = useResolvedBadges(badges);
     const canAccessIntegrations = useCanAccessIntegrations();
     const showIntegrations = !!showAddIntegrations && canAccessIntegrations;
@@ -113,8 +111,7 @@ const AppHeaderViewInternal = React.memo<AppHeaderViewInternalProps>(
       !description &&
       !metadata?.length &&
       !titleAppend &&
-      !favorite &&
-      !share;
+      !favorite;
     const resolvedSpacing = spacing ?? (isSparse ? 'compact' : 'standard');
 
     // Match the title size to the spacing: the shorter `compact` header uses an `xs` title, while the
@@ -128,7 +125,7 @@ const AppHeaderViewInternal = React.memo<AppHeaderViewInternalProps>(
       !!resolvedBadges?.length ||
       !!menu?.items?.length ||
       !!titleAppend ||
-      !!share ||
+      !!shareAction ||
       !!favorite ||
       !!description ||
       !!metadata?.length ||
@@ -144,7 +141,7 @@ const AppHeaderViewInternal = React.memo<AppHeaderViewInternalProps>(
       <AppHeaderShell
         title={<TitleArea title={title} back={back} size={titleSize} />}
         badges={<AppBadges badges={resolvedBadges} />}
-        titleActions={<TitleActions shareAction={share} favorite={favorite} />}
+        titleActions={<TitleActions shareAction={shareAction} favorite={favorite} />}
         titleAppend={titleAppend}
         trailing={
           <AppMenu menu={menu} docLink={docLink} showAddIntegrations={showAddIntegrations} />

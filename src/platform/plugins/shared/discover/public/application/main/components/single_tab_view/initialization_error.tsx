@@ -26,6 +26,7 @@ export const InitializationError = ({
     () => (originalError instanceof Error ? originalError : new Error(originalError.message)),
     [originalError]
   );
+  console.error(error);
 
   if (error instanceof SavedObjectNotFound) {
     return <RedirectWhenSavedObjectNotFound error={error} />;

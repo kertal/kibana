@@ -18,7 +18,6 @@ export interface ActionsPublicPluginSetup {
   isWebhookSslWithPfxEnabled?: boolean;
   isEarsEnabled: boolean;
   isEarsExperimentalEnabled: boolean;
-  isInboundEventsEnabled: boolean;
 }
 
 export interface Config {
@@ -41,9 +40,6 @@ export interface Config {
       enableExperimental: boolean;
     };
   };
-  inboundEvents?: {
-    enabled: boolean;
-  };
 }
 
 export class Plugin implements CorePlugin<ActionsPublicPluginSetup> {
@@ -52,7 +48,6 @@ export class Plugin implements CorePlugin<ActionsPublicPluginSetup> {
   private readonly webhookSslWithPfxEnabled: boolean;
   private readonly earsEnabled: boolean;
   private readonly earsExperimentalEnabled: boolean;
-  private readonly inboundEventsEnabled: boolean;
 
   constructor(ctx: PluginInitializerContext<Config>) {
     const config = ctx.config.get();
@@ -61,7 +56,6 @@ export class Plugin implements CorePlugin<ActionsPublicPluginSetup> {
     this.webhookSslWithPfxEnabled = config.webhook?.ssl.pfx.enabled ?? true;
     this.earsEnabled = config.auth?.ears?.enabled ?? false;
     this.earsExperimentalEnabled = config.auth?.ears?.enableExperimental ?? false;
-    this.inboundEventsEnabled = config.inboundEvents?.enabled ?? false;
   }
 
   public setup(): ActionsPublicPluginSetup {
@@ -72,7 +66,6 @@ export class Plugin implements CorePlugin<ActionsPublicPluginSetup> {
       isWebhookSslWithPfxEnabled: this.webhookSslWithPfxEnabled,
       isEarsEnabled: this.earsEnabled,
       isEarsExperimentalEnabled: this.earsExperimentalEnabled,
-      isInboundEventsEnabled: this.inboundEventsEnabled,
     };
   }
 

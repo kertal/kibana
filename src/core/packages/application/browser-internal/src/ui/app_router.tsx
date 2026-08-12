@@ -34,7 +34,6 @@ interface Props {
   setAppLeaveHandler: (appId: string, handler: AppLeaveHandler) => void;
   setAppActionMenu: (appId: string, mount: MountPoint | undefined) => void;
   setIsMounting: (isMounting: boolean) => void;
-  setAppNotFoundState: (active: boolean) => void;
   hasCustomBranding$?: Observable<boolean>;
 }
 
@@ -51,7 +50,6 @@ export const AppRouter: FunctionComponent<Props> = ({
   setAppActionMenu,
   appStatuses$,
   setIsMounting,
-  setAppNotFoundState,
   hasCustomBranding$,
 }) => {
   const appStatuses = useObservable(appStatuses$, new Map());
@@ -77,7 +75,6 @@ export const AppRouter: FunctionComponent<Props> = ({
                     appPath={path}
                     appStatus={appStatuses.get(appId) ?? AppStatus.inaccessible}
                     createScopedHistory={createScopedHistory}
-                    setAppNotFoundState={setAppNotFoundState}
                     {...{
                       appId,
                       mounter,
@@ -108,7 +105,6 @@ export const AppRouter: FunctionComponent<Props> = ({
                     appId={id ?? appId}
                     appStatus={appStatuses.get(appId) ?? AppStatus.inaccessible}
                     createScopedHistory={createScopedHistory}
-                    setAppNotFoundState={setAppNotFoundState}
                     {...{
                       mounter,
                       setAppLeaveHandler,

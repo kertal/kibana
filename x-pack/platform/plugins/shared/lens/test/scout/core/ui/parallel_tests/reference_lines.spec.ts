@@ -50,20 +50,18 @@ spaceTest.describe('Lens reference lines', { tag: '@local-stateful-classic' }, (
 
         await lens.layers.activateLayerTab(1);
         // The default static value is backend-computed; assert the structure, not the number.
-        expect(await lens.dimensions.getDimensionTriggerText(REFERENCE_LINE_LEFT)).toMatch(
-          /^Static value: /
-        );
+        expect(await lens.getDimensionTriggerText(REFERENCE_LINE_LEFT)).toMatch(/^Static value: /);
       });
 
       await spaceTest.step(
         'creates a dynamic reference line when dragging a field onto it',
         async () => {
-          await lens.dragDrop.dragFieldToDimensionTrigger(
+          await lens.dragFieldToDimensionTrigger(
             'bytes',
             `${REFERENCE_LINE_LEFT} > lns-empty-dimension`
           );
 
-          const triggers = await lens.dimensions.getDimensionTriggersTexts(REFERENCE_LINE_LEFT);
+          const triggers = await lens.getDimensionTriggersTexts(REFERENCE_LINE_LEFT);
           expect(triggers).toHaveLength(2);
           expect(triggers[0]).toMatch(/^Static value: /);
           expect(triggers[1]).toBe('Median of bytes');
@@ -78,7 +76,7 @@ spaceTest.describe('Lens reference lines', { tag: '@local-stateful-classic' }, (
           field: 'bytes',
           keepOpen: true,
         });
-        await lens.dimensions.changeAxisSide('right');
+        await lens.changeAxisSide('right');
         await lens.closeDimensionEditor();
 
         await lens.layers.activateLayerTab(1);
@@ -90,23 +88,18 @@ spaceTest.describe('Lens reference lines', { tag: '@local-stateful-classic' }, (
       await spaceTest.step(
         'carries the style when moving a reference line to another group',
         async () => {
-          await lens.dimensions.openDimensionEditor(
-            `${REFERENCE_LINE_LEFT} > lns-dimensionTrigger`,
-            1
-          );
-          await lens.style.setReferenceLineFillBelow();
+          await lens.openDimensionEditor(`${REFERENCE_LINE_LEFT} > lns-dimensionTrigger`, 1);
+          await lens.setReferenceLineFillBelow();
           // Snapshot before close: closing the editor (and applying the fill) must produce a
           // newer chart render. Settling on the pre-edit count lets the drag land on stale
           // state and drop the dimension without adding it to the target group.
-          const renderCountBeforeClose = await lens.workspace.getVisualizationRenderCount(
-            'xyVisChart'
-          );
+          const renderCountBeforeClose = await lens.getVisualizationRenderCount('xyVisChart');
           await lens.closeDimensionEditor();
           await lens.waitForVisualization('xyVisChart', {
             afterCount: renderCountBeforeClose ?? undefined,
           });
 
-          await lens.dragDrop.dragDimensionToDimension({
+          await lens.dragDimensionToDimension({
             from: `${REFERENCE_LINE_LEFT} > lns-dimensionTrigger`,
             to: `${REFERENCE_LINE_RIGHT} > lns-empty-dimension`,
           });
@@ -121,14 +114,8 @@ spaceTest.describe('Lens reference lines', { tag: '@local-stateful-classic' }, (
           ).toHaveCount(1);
           await lens.waitForVisualization('xyVisChart');
 
-          await lens.dimensions.openDimensionEditor(
-            `${REFERENCE_LINE_RIGHT} > lns-dimensionTrigger`,
-            1
-          );
-          await expect(lens.style.referenceLineFillBelowButton).toHaveAttribute(
-            'aria-pressed',
-            'true'
-          );
+          await lens.openDimensionEditor(`${REFERENCE_LINE_RIGHT} > lns-dimensionTrigger`, 1);
+          await expect(lens.referenceLineFillBelowButton).toHaveAttribute('aria-pressed', 'true');
           await lens.closeDimensionEditor();
         }
       );
@@ -136,7 +123,7 @@ spaceTest.describe('Lens reference lines', { tag: '@local-stateful-classic' }, (
       await spaceTest.step(
         'duplicates the original style when duplicating a reference line',
         async () => {
-          await lens.dragDrop.dragDimensionToDimension({
+          await lens.dragDimensionToDimension({
             from: `${REFERENCE_LINE_RIGHT} > lns-dimensionTrigger`,
             to: `${REFERENCE_LINE_RIGHT} > lns-empty-dimension`,
           });
@@ -145,15 +132,8 @@ spaceTest.describe('Lens reference lines', { tag: '@local-stateful-classic' }, (
           ).toHaveCount(2);
           await lens.waitForVisualization('xyVisChart');
 
-          await lens.dimensions.openDimensionEditor(
-            `${REFERENCE_LINE_RIGHT} > lns-dimensionTrigger`,
-            1,
-            1
-          );
-          await expect(lens.style.referenceLineFillBelowButton).toHaveAttribute(
-            'aria-pressed',
-            'true'
-          );
+          await lens.openDimensionEditor(`${REFERENCE_LINE_RIGHT} > lns-dimensionTrigger`, 1, 1);
+          await expect(lens.referenceLineFillBelowButton).toHaveAttribute('aria-pressed', 'true');
           await lens.closeDimensionEditor();
         }
       );

@@ -43,12 +43,6 @@ describe('config validation', () => {
         "enabledActionTypes": Array [
           "*",
         ],
-        "inboundEvents": Object {
-          "enabled": false,
-          "maxBodyBytes": ByteSizeValue {
-            "valueInBytes": 1048576,
-          },
-        },
         "maxResponseContentLength": ByteSizeValue {
           "valueInBytes": 1048576,
         },
@@ -97,12 +91,6 @@ describe('config validation', () => {
         "enabledActionTypes": Array [
           "*",
         ],
-        "inboundEvents": Object {
-          "enabled": false,
-          "maxBodyBytes": ByteSizeValue {
-            "valueInBytes": 1048576,
-          },
-        },
         "maxResponseContentLength": ByteSizeValue {
           "valueInBytes": 1048576,
         },
@@ -260,12 +248,6 @@ describe('config validation', () => {
         "enabledActionTypes": Array [
           "*",
         ],
-        "inboundEvents": Object {
-          "enabled": false,
-          "maxBodyBytes": ByteSizeValue {
-            "valueInBytes": 1048576,
-          },
-        },
         "maxResponseContentLength": ByteSizeValue {
           "valueInBytes": 1048576,
         },
@@ -450,12 +432,6 @@ describe('config validation', () => {
         "enabledActionTypes": Array [
           "*",
         ],
-        "inboundEvents": Object {
-          "enabled": false,
-          "maxBodyBytes": ByteSizeValue {
-            "valueInBytes": 1048576,
-          },
-        },
         "maxResponseContentLength": ByteSizeValue {
           "valueInBytes": 1048576,
         },
@@ -499,20 +475,6 @@ describe('config validation', () => {
     config.webhook = { ssl: { pfx: { enabled: true } } };
     result = configSchema.validate(config);
     expect(result.webhook?.ssl.pfx.enabled).toEqual(true);
-  });
-
-  test('validates xpack.actions.inboundEvents', () => {
-    const empty = configSchema.validate({});
-    expect(empty.inboundEvents.enabled).toBe(false);
-    expect(empty.inboundEvents.maxBodyBytes.getValueInBytes()).toBe(1024 * 1024);
-
-    const enabled = configSchema.validate({ inboundEvents: { enabled: true } });
-    expect(enabled.inboundEvents.enabled).toBe(true);
-    expect(enabled.inboundEvents.maxBodyBytes.getValueInBytes()).toBe(1024 * 1024);
-
-    const customSize = configSchema.validate({ inboundEvents: { maxBodyBytes: '512kb' } });
-    expect(customSize.inboundEvents.enabled).toBe(false);
-    expect(customSize.inboundEvents.maxBodyBytes.getValueInBytes()).toBe(512 * 1024);
   });
 
   describe('email.services.ses', () => {

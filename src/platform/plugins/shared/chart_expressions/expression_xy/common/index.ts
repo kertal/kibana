@@ -16,7 +16,6 @@ export {
   FillStyles,
   FittingFunctions,
   PointVisibilityOptions,
-  AreaFillOptions,
 } from './constants';
 
 export type {
@@ -81,5 +80,4 @@ export type {
   EventAnnotationResultFn,
   LayeredXyVisFn,
   PointVisibility,
-  AreaFillOption,
 } from './types';

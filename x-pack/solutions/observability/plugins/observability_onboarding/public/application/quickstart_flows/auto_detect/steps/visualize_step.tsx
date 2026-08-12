@@ -18,11 +18,13 @@ import { ProgressIndicator } from '../../shared/progress_indicator';
 import { AccordionWithIcon } from '../../shared/accordion_with_icon';
 import { GetStartedPanel } from '../../shared/get_started_panel';
 import { isSupportedLogo, LogoIcon } from '../../../shared/logo_icon';
+import { WIRED_ECS_DATA_VIEW_SPEC } from '../../shared/wired_streams_data_view';
 
 export interface AutoDetectVisualizeStepProps {
   status: 'notStarted' | 'inProgress' | 'awaitingData' | 'dataReceived';
   installedIntegrations: InstalledIntegration[];
   onboardingFlowId?: string;
+  useWiredStreams: boolean;
   isMetricsOnboardingEnabled: boolean;
   accordionId: string;
   logsLocator: LocatorPublic<LogsLocatorParams> | undefined;
@@ -34,6 +36,7 @@ export const AutoDetectVisualizeStep: React.FC<AutoDetectVisualizeStepProps> = (
   status,
   installedIntegrations,
   onboardingFlowId,
+  useWiredStreams,
   isMetricsOnboardingEnabled,
   accordionId,
   logsLocator,
@@ -279,13 +282,23 @@ export const AutoDetectVisualizeStep: React.FC<AutoDetectVisualizeStepProps> = (
                       <EuiButtonEmpty
                         data-test-subj="observabilityOnboardingAutoDetectPanelButton"
                         href={
-                          logsLocator?.getRedirectUrl({
-                            dataViewSpec: {
-                              name: integration.pkgName,
-                              title: `${datastream.type}-${datastream.dataset}-*`,
-                              timeFieldName: '@timestamp',
-                            },
-                          }) ?? ''
+                          logsLocator?.getRedirectUrl(
+                            useWiredStreams
+                              ? {
+                                  dataViewSpec: WIRED_ECS_DATA_VIEW_SPEC,
+                                  query: {
+                                    language: 'kuery',
+                                    query: `service.name: "${integration.pkgName}"`,
+                                  },
+                                }
+                              : {
+                                  dataViewSpec: {
+                                    name: integration.pkgName,
+                                    title: `${datastream.type}-${datastream.dataset}-*`,
+                                    timeFieldName: '@timestamp',
+                                  },
+                                }
+                          ) ?? ''
                         }
                         target="_blank"
                         iconType="document"

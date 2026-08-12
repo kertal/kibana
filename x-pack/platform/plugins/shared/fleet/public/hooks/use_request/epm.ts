@@ -29,7 +29,6 @@ import type {
   GetInputsTemplatesRequest,
   GetInputsTemplatesResponse,
 } from '../../types';
-import type { NamespaceConflictWarning } from '../../../common/types/rest_spec/epm';
 import type {
   BulkUpgradePackagesRequest,
   BulkOperationPackagesResponse,
@@ -519,27 +518,6 @@ export const useUpdatePackageMutation = () => {
       queryClient.invalidateQueries([pkgName]);
       queryClient.invalidateQueries(['get-packages']);
     },
-  });
-};
-
-interface NamespacePreflightCheckArgs {
-  pkgName: string;
-  namespaces: string[];
-}
-
-interface NamespacePreflightCheckResponse {
-  warnings: NamespaceConflictWarning[];
-}
-
-export const useNamespacePreflightCheckMutation = () => {
-  return useMutation<NamespacePreflightCheckResponse, RequestError, NamespacePreflightCheckArgs>({
-    mutationFn: ({ pkgName, namespaces }: NamespacePreflightCheckArgs) =>
-      sendRequestForRq<NamespacePreflightCheckResponse>({
-        path: epmRouteService.getNamespacePreflightCheckPath(pkgName),
-        method: 'post',
-        version: API_VERSIONS.internal.v1,
-        body: { namespaces },
-      }),
   });
 };
 

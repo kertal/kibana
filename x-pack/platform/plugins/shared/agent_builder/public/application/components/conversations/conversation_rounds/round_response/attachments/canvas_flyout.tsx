@@ -169,7 +169,6 @@ export const CanvasFlyout: React.FC<CanvasFlyoutProps> = ({ attachmentsService }
         actionButtons={canvasHeaderActionButtons}
         onClose={closeCanvas}
         previewBadgeState="preview_available"
-        isCanvas
       />
       <EuiFlyoutBody css={flyoutBodyStyles}>
         <AttachmentRenderErrorBoundary

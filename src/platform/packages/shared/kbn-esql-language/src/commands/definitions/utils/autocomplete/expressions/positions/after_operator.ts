@@ -28,7 +28,6 @@ import { SuggestionBuilder } from '../suggestion_builder';
 import { shouldSuggestOperators } from './after_complete/should_suggest_operators';
 import {
   getIncompleteOperatorReason,
-  getRightmostOperator,
   normalizePreferredExpressionTypes,
   type IncompleteOperatorReason,
 } from '../utils';
@@ -44,8 +43,7 @@ export async function suggestAfterOperator(ctx: ExpressionContext): Promise<ISug
     return [];
   }
 
-  const rightmostOperator = getRightmostOperator(expressionRoot as ESQLFunction);
-
+  const rightmostOperator = getRightmostOperatorInFunctionTree(expressionRoot as ESQLFunction);
   // If we don't pass rightmostOperator, for "field IN (x) AND field NOT IN (y"
   // dispatchOperators sees AND (no handler) instead of NOT IN, failing to suggest comma.
   const ctxWithRightmostOperator = { ...ctx, expressionRoot: rightmostOperator };
@@ -220,4 +218,26 @@ async function handleIncompleteOperator(
   }
 
   return builder.build();
+}
+
+/**
+ * Finds the deepest binary operator in the right branch of an expression tree.
+ *
+ * Uses structural right-first traversal instead of position-based detection
+ * to avoid ANTLR error recovery issues where incomplete expressions get
+ * positions that corrupt location.min values.
+ */
+function getRightmostOperatorInFunctionTree(fn: ESQLFunction): ESQLFunction {
+  const rightArg = fn.args[1];
+
+  if (
+    fn.subtype === 'binary-expression' &&
+    rightArg &&
+    !Array.isArray(rightArg) &&
+    rightArg.type === 'function'
+  ) {
+    return getRightmostOperatorInFunctionTree(rightArg as ESQLFunction);
+  }
+
+  return fn;
 }

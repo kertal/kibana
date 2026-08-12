@@ -32,7 +32,6 @@ import { filterSchema } from '../filter';
 import { cornerPositionSchema } from '../alignments';
 import {
   DEFAULT_AREAS_FILL_OPACITY,
-  DEFAULT_AREAS_FILL,
   DEFAULT_BARS_MINIMUM_HEIGHT,
   DEFAULT_CURRENT_TIME_MARKER_VISIBLE,
   DEFAULT_DATA_LABELS_VISIBLE,
@@ -380,18 +379,6 @@ const xyStylingSchema = z
           .default(DEFAULT_AREAS_FILL_OPACITY)
           .optional()
           .meta({ description: 'Area fill opacity (0-1 typical, max 2 for legacy)' }),
-        fill: z
-          .enum(['solid', 'gradient'])
-          .default(DEFAULT_AREAS_FILL)
-          .optional()
-          .meta({
-            description: 'Area fill type: solid or gradient. Defaults to solid.',
-            openapi: {
-              availability: {
-                since: '9.6.0',
-              },
-            },
-          }),
       })
       .strict()
       .optional()

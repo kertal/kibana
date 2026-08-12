@@ -5,11 +5,12 @@
  * 2.0.
  */
 
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import type { EuiStepsProps } from '@elastic/eui';
 import { i18n } from '@kbn/i18n';
 import { useKibana } from '@kbn/kibana-react-plugin/public';
 import { useLocation } from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom-v5-compat';
 import useAsyncFn from 'react-use/lib/useAsyncFn';
 import { type LogsLocatorParams, LOGS_LOCATOR_ID } from '@kbn/logs-shared-plugin/common';
 import { usePerformanceContext } from '@kbn/ebt-tools';
@@ -22,6 +23,7 @@ import type { SupportedLogo } from '../../shared/logo_icon';
 import { usePreExistingDataCheck } from '../../quickstart_flows/shared/use_pre_existing_data_check';
 import { useWindowBlurDataMonitoringTrigger } from '../../quickstart_flows/shared/use_window_blur_data_monitoring_trigger';
 import { useTimeWindowDataDetection } from '../../quickstart_flows/shared/use_time_window_data_detection';
+import { useWiredStreamsStatus } from '../../../hooks/use_wired_streams_status';
 import { useManagedOtlpServiceAvailability } from '../../shared/use_managed_otlp_service_availability';
 import { usePricingFeature } from '../../quickstart_flows/shared/use_pricing_feature';
 import { ObservabilityOnboardingPricingFeature } from '../../../../common/pricing_features';
@@ -35,11 +37,16 @@ import {
   OTEL_HOST_FETCH_INTERVAL_MS,
   OTEL_HOST_SHOW_TROUBLESHOOTING_DELAY_MS,
 } from '../../quickstart_flows/otel_logs/data_detection_constants';
+import {
+  parseIngestionMode,
+  type IngestionMode,
+} from '../../quickstart_flows/shared/wired_streams_ingestion_selector';
 import { FeedbackButtons } from '../../quickstart_flows/shared/feedback_buttons';
 import { MultiIntegrationInstallBanner } from '../../quickstart_flows/otel_logs/multi_integration_install_banner';
 import { ManagedOtlpCallout } from '../../quickstart_flows/shared/managed_otlp_callout';
 import { EmptyPrompt } from '../../quickstart_flows/shared/empty_prompt';
 import { useFlowBreadcrumb } from '../../shared/use_flow_breadcrumbs';
+import { WIRED_OTEL_DATA_VIEW_SPEC } from '../../quickstart_flows/shared/wired_streams_data_view';
 import {
   buildHostCollectionMethodOptions,
   HOST_SELECTOR_LEGEND,
@@ -68,9 +75,23 @@ export const HostOtelPage: React.FC<HostOtelPageProps> = ({
   useFlowBreadcrumb(breadcrumbLabel);
 
   const location = useLocation();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const ingestionMode = parseIngestionMode(searchParams.get('ingestion'));
+  const setIngestionMode = useCallback(
+    (mode: IngestionMode) => {
+      const next = new URLSearchParams(searchParams);
+      if (mode === 'classic') {
+        next.delete('ingestion');
+      } else {
+        next.set('ingestion', mode);
+      }
+      setSearchParams(next, { replace: true });
+    },
+    [searchParams, setSearchParams]
+  );
 
   const {
-    services: { share },
+    services: { share, docLinks },
   } = useKibana<ObservabilityOnboardingAppServices>();
 
   const { onPageReady } = usePerformanceContext();
@@ -79,6 +100,7 @@ export const HostOtelPage: React.FC<HostOtelPageProps> = ({
     ObservabilityOnboardingPricingFeature.METRICS_ONBOARDING
   );
   const isManagedOtlpServiceAvailable = useManagedOtlpServiceAvailability();
+  const wiredStreamsStatus = useWiredStreamsStatus();
 
   const {
     data: setupData,
@@ -119,8 +141,12 @@ export const HostOtelPage: React.FC<HostOtelPageProps> = ({
   }, [isMonitoringStepActive, sessionStartTime]);
 
   const onboardingId = setupData?.onboardingId;
+  const useWiredStreams = ingestionMode === 'wired';
   // OTel semantic-convention `host.os.type` filter so cross-OS ingest in the
-  // same cluster can't complete an unrelated session.
+  // same cluster can't complete an unrelated session. Skipped for wired
+  // streams because the streams pipeline does not project host.os.type onto
+  // the indexed docs, and wired streams are already per-stream-name isolated
+  // so cross-OS bleed-through isn't a risk there.
   const hostOsTypeFilter: Record<HostOs, string> = {
     linux: 'linux',
     mac: 'darwin',
@@ -135,7 +161,7 @@ export const HostOtelPage: React.FC<HostOtelPageProps> = ({
     flowType: 'otel_logs',
     onboardingId: onboardingId ?? '',
     endpoint: '/internal/observability_onboarding/otel_host/has-data',
-    extraQueryParams: { osType: hostOsTypeFilter[os] },
+    extraQueryParams: useWiredStreams ? undefined : { osType: hostOsTypeFilter[os] },
     keepExtraParamsOnFallback: true,
   });
 
@@ -150,13 +176,17 @@ export const HostOtelPage: React.FC<HostOtelPageProps> = ({
 
   const logsLocator = share.url.locators.get<LogsLocatorParams>(LOGS_LOCATOR_ID);
   const hostsLocator = share.url.locators.get('HOSTS_LOCATOR');
+  const logsLocatorParams = useMemo<LogsLocatorParams>(
+    () => (useWiredStreams ? { dataViewSpec: WIRED_OTEL_DATA_VIEW_SPEC } : {}),
+    [useWiredStreams]
+  );
 
   const [{ value: deeplinks }, getDeeplinks] = useAsyncFn(async () => {
     return {
-      logs: logsLocator?.getRedirectUrl({}),
+      logs: logsLocator?.getRedirectUrl(logsLocatorParams),
       metrics: hostsLocator?.getRedirectUrl({}),
     };
-  }, [logsLocator, hostsLocator]);
+  }, [logsLocator, logsLocatorParams, hostsLocator]);
 
   useEffect(() => {
     getDeeplinks();
@@ -230,8 +260,12 @@ export const HostOtelPage: React.FC<HostOtelPageProps> = ({
             <OtelLogsInstallStep
               os={os}
               setupData={setupData}
+              ingestionMode={ingestionMode}
+              onIngestionModeChange={setIngestionMode}
               isMetricsOnboardingEnabled={isMetricsOnboardingEnabled}
               isManagedOtlpServiceAvailable={isManagedOtlpServiceAvailable}
+              wiredStreamsStatus={wiredStreamsStatus}
+              streamsDocLink={docLinks?.links.observability.logsStreams}
               useInlineCopyOnly
               useColoredSyntax
             />
@@ -282,8 +316,12 @@ export const HostOtelPage: React.FC<HostOtelPageProps> = ({
     error,
     refetch,
     setupData,
+    ingestionMode,
+    setIngestionMode,
     isMetricsOnboardingEnabled,
     isManagedOtlpServiceAvailable,
+    wiredStreamsStatus,
+    docLinks?.links.observability.logsStreams,
     isMonitoringStepActive,
     hasData,
     hasPreExistingDataFinal,

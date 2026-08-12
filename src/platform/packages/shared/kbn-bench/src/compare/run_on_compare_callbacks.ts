@@ -41,7 +41,6 @@ export async function runOnCompareCallbacks({
       leftSummary: toConfigSummary(left),
       rightSummary: toConfigSummary(right),
       comparison: toConfigComparison(left, right),
-      pairedComparison: left.pairedComparison,
     };
 
     await onCompare(context);

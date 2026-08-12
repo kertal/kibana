@@ -45,7 +45,6 @@ import { SpanDatabase } from './span_db';
 import { StickySpanProperties } from './sticky_span_properties';
 import { useTimeRange } from '../../../hooks/use_time_range';
 import { useFetcher, isPending } from '../../../hooks/use_fetcher';
-import { useApmPluginContext } from '../../../context/apm_plugin/use_apm_plugin_context';
 import { getTimestampUs } from '../../../../common/utils/get_timestamp_us';
 import type { SpanLinksCount } from '../span_links';
 
@@ -247,14 +246,10 @@ function SpanFlyoutBody({
     timestamp: span['@timestamp'],
   });
 
-  const { core } = useApmPluginContext();
-
   const genAiTabContent = getGenAiTabContent({
     isGenAiSpan,
     genAi,
     ebt: { element: SPAN_FLYOUT_EBT_ELEMENTS.TABS },
-    reportEvent: core.analytics.reportEvent,
-    resourceId: span.span?.id,
   });
 
   const tabs = [

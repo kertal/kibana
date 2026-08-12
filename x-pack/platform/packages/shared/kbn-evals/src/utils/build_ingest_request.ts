@@ -69,7 +69,6 @@ function buildScorePayload(event: EvaluationCompleteEvent): IngestScore {
       id: event.exampleId,
       index: taskRun.exampleIndex,
       ...(isPlainObject(taskRun.input) && { input: taskRun.input }),
-      ...(isPlainObject(taskRun.metadata) && { metadata: taskRun.metadata }),
       dataset: {
         id: event.datasetId,
         name: event.datasetName,

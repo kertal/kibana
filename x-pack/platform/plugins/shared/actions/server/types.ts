@@ -100,7 +100,6 @@ export interface ActionTypeExecutorOptions<
   signal?: AbortSignal;
   authMode?: AuthMode;
   profileUid?: string;
-  connectorVersion?: string;
 }
 
 export type ActionResult = Connector;

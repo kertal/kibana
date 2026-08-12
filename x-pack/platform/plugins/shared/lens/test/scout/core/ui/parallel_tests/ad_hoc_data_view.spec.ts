@@ -89,8 +89,7 @@ spaceTest.describe('Lens ad hoc data view', { tag: '@local-stateful-classic' }, 
       // Default terms size is Top 9 (+ Other). Exact bucket values belong at the API layer.
       await expect
         .poll(async () => {
-          const bars =
-            (await lens.workspace.getCurrentChartDebugState('xyVisChart')).bars?.[0]?.bars ?? [];
+          const bars = (await lens.getCurrentChartDebugState('xyVisChart')).bars?.[0]?.bars ?? [];
           return {
             length: bars.length,
             hasOther: bars.some((bar) => bar.x === 'Other'),
@@ -142,10 +141,10 @@ spaceTest.describe('Lens ad hoc data view', { tag: '@local-stateful-classic' }, 
 
       await spaceTest.step('switch to another data view and back', async () => {
         await page.testSubj.locator('lnsIndexPatternFieldSearch').fill('');
-        await lens.dragDrop.switchDataPanelIndexPattern(testData.DATA_VIEW_ID.LOGSTASH);
+        await lens.switchDataPanelIndexPattern(testData.DATA_VIEW_ID.LOGSTASH);
         await expect(page.testSubj.locator('lnsFieldListPanelField-runtimefield')).toHaveCount(0);
 
-        await lens.dragDrop.switchDataPanelIndexPattern(testData.AD_HOC_DATA_VIEW_NAME);
+        await lens.switchDataPanelIndexPattern(testData.AD_HOC_DATA_VIEW_NAME);
         // Scope to Available fields — the same test subject also appears under Selected.
         await expect(
           page.testSubj
@@ -194,7 +193,7 @@ spaceTest.describe('Lens ad hoc data view', { tag: '@local-stateful-classic' }, 
       await lens.waitForVisualization('mtrVis');
       await expect
         .poll(async () => {
-          const metric = (await lens.metric.getMetricVisualizationData())[0];
+          const metric = (await lens.getMetricVisualizationData())[0];
           if (!metric?.title || !metric?.value) {
             return null;
           }
@@ -236,7 +235,7 @@ spaceTest.describe('Lens ad hoc data view', { tag: '@local-stateful-classic' }, 
       // Poll title + value together — chart tiles can briefly disappear after save.
       await expect
         .poll(async () => {
-          const metric = (await lens.metric.getMetricVisualizationData())[0];
+          const metric = (await lens.getMetricVisualizationData())[0];
           if (!metric?.title || !metric?.value) {
             return null;
           }
@@ -317,7 +316,7 @@ spaceTest.describe('Lens ad hoc data view', { tag: '@local-stateful-classic' }, 
       // Stable chart + data before Export — empty activeData makes CSV auto-download a no-op.
       await expect
         .poll(async () => {
-          const metric = (await lens.metric.getMetricVisualizationData())[0];
+          const metric = (await lens.getMetricVisualizationData())[0];
           if (!metric?.title || !metric?.value) {
             return null;
           }

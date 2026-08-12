@@ -47,8 +47,7 @@ export const useChromeAppHeaderRegistration = (config: ChromeAppHeaderConfig) =>
  * `@elastic/appex-sharedux`.
  */
 export const ChromeAppHeaderRegistration = React.memo<ChromeAppHeaderConfig>((props) => {
-  const { title, back, tabs, badges, menu, favorite, share, description, metadata, spacing } =
-    props;
+  const { title, back, tabs, badges, menu, favorite, description, metadata, spacing } = props;
 
   const config = useMemo<ChromeAppHeaderConfig>(
     () => ({
@@ -58,11 +57,10 @@ export const ChromeAppHeaderRegistration = React.memo<ChromeAppHeaderConfig>((pr
       badges,
       menu,
       favorite,
-      share,
       ...(description ? { description } : { metadata }),
       spacing,
     }),
-    [title, back, tabs, badges, menu, favorite, share, description, metadata, spacing]
+    [title, back, tabs, badges, menu, favorite, description, metadata, spacing]
   );
 
   useChromeAppHeaderRegistration(config);

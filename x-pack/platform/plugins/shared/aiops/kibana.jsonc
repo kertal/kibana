@@ -19,6 +19,7 @@
       "licensing",
       "uiActions",
       "embeddable",
+      "presentationUtil",
       "dashboard",
       "fieldFormats",
       "unifiedSearch",
@@ -39,8 +40,7 @@
       "kibanaUtils",
       "cases",
       "savedSearch",
-      "savedObjectsFinder",
-      "presentationUtil"
+      "savedObjectsFinder"
     ]
   }
 }

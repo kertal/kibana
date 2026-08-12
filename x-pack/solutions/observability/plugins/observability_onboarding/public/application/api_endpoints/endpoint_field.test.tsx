@@ -31,15 +31,13 @@ describe('EndpointField', () => {
 
   it('renders a custom label and suffixed test subjects', () => {
     renderField({
-      url: 'https://otlp.example.com/inputs/vercel/_default_',
+      url: 'https://otlp.example.com/vercel',
       label: 'Vercel endpoint',
       dataTestSubjSuffix: '-vercel',
     });
 
     expect(screen.getByText('Vercel endpoint')).toBeInTheDocument();
-    expect(screen.getByLabelText('Vercel endpoint')).toHaveValue(
-      'https://otlp.example.com/inputs/vercel/_default_'
-    );
+    expect(screen.getByLabelText('Vercel endpoint')).toHaveValue('https://otlp.example.com/vercel');
     expect(
       screen.getByTestId('observabilityOnboardingApiEndpointValue-vercel')
     ).toBeInTheDocument();

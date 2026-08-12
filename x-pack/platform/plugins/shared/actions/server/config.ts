@@ -273,10 +273,6 @@ export const configSchema = schema.object({
       })
     ),
   }),
-  inboundEvents: schema.object({
-    enabled: schema.boolean({ defaultValue: false }),
-    maxBodyBytes: schema.byteSize({ defaultValue: '1mb' }),
-  }),
 });
 
 export type ActionsConfig = TypeOf<typeof configSchema>;

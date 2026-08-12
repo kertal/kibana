@@ -237,7 +237,7 @@ describe('Actions', () => {
         jest.mocked(AlertContextMenu).mockClear();
       });
 
-      it('should not mark the document as remote when it is local', () => {
+      it('should not be disabled when document is local', () => {
         render(
           <TestProviders>
             <Actions {...defaultProps} />
@@ -245,12 +245,12 @@ describe('Actions', () => {
         );
 
         expect(jest.mocked(AlertContextMenu)).toHaveBeenCalledWith(
-          expect.objectContaining({ isRemoteDocument: false }),
+          expect.objectContaining({ disabled: false }),
           expect.anything()
         );
       });
 
-      it('should mark the document as remote when the index is non-local', () => {
+      it('should be disabled when document is remote', () => {
         const props = {
           ...defaultProps,
           ecsData: {
@@ -266,7 +266,7 @@ describe('Actions', () => {
         );
 
         expect(jest.mocked(AlertContextMenu)).toHaveBeenCalledWith(
-          expect.objectContaining({ isRemoteDocument: true }),
+          expect.objectContaining({ disabled: true }),
           expect.anything()
         );
       });

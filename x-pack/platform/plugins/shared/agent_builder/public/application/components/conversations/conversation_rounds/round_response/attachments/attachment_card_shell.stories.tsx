@@ -55,18 +55,7 @@ const Shell: React.FC<ShellArgs> = ({
       previewBadgeState={previewBadgeState}
       onClosePreview={action('close preview')}
     />
-    <EuiSplitPanel.Inner
-      grow={false}
-      paddingSize="none"
-      css={css`
-        border-radius: 0 0 ${AB_PANEL_RADIUS}px ${AB_PANEL_RADIUS}px;
-        overflow: hidden;
-
-        > .euiPanel {
-          border-radius: 0 0 ${AB_PANEL_RADIUS}px ${AB_PANEL_RADIUS}px;
-        }
-      `}
-    >
+    <EuiSplitPanel.Inner grow={false} paddingSize="none">
       <AttachmentRenderErrorBoundary>{() => body}</AttachmentRenderErrorBoundary>
     </EuiSplitPanel.Inner>
   </EuiSplitPanel.Outer>

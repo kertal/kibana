@@ -105,13 +105,6 @@ describe('QuerySandbox', () => {
     expect(screen.getByTestId('querySandbox')).toBeInTheDocument();
   });
 
-  it('renders the editor and results panels', () => {
-    renderSandbox();
-    expect(screen.getByTestId('querySandboxEditorPanel')).toBeInTheDocument();
-    expect(screen.getByTestId('querySandboxResultsPanel')).toBeInTheDocument();
-    expect(screen.getByTestId('querySandboxEditorResizeHandle')).toBeInTheDocument();
-  });
-
   it('renders the search button', () => {
     renderSandbox();
     expect(screen.getByTestId('querySandboxRunQuery')).toBeInTheDocument();
@@ -344,7 +337,7 @@ describe('QuerySandbox', () => {
   });
 
   describe('headerActions', () => {
-    it('renders headerActions in the in-editor toolbar when provided', () => {
+    it('renders headerActions in the query header row when provided', () => {
       renderSandbox({
         headerActions: <button data-test-subj="customHeaderAction">Split</button>,
       });

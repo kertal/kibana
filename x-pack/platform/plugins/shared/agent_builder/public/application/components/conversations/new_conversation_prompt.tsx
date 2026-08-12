@@ -16,6 +16,10 @@ import {
 } from './conversation.styles';
 import { useConversationContext } from '../../context/conversation/conversation_context';
 
+const titleStyles = css`
+  font-weight: 400;
+`;
+
 export const NewConversationPrompt: React.FC<{}> = () => {
   const { euiTheme } = useEuiTheme();
   const { isEmbeddedContext, greetingMessage } = useConversationContext();
@@ -49,7 +53,7 @@ export const NewConversationPrompt: React.FC<{}> = () => {
       data-test-subj="agentBuilderWelcomePage"
     >
       <EuiFlexItem grow={isEmbeddedContext ? true : false} css={centerFlexItemStyles}>
-        <EuiTitle size="m">
+        <EuiTitle size="m" css={titleStyles}>
           <h2>{greeting}</h2>
         </EuiTitle>
       </EuiFlexItem>

@@ -22,6 +22,7 @@
       "embeddable",
       "inspector",
       "screenshotMode",
+      "presentationUtil",
       "dataViews",
       "dataViewEditor",
       "unifiedSearch",
@@ -45,8 +46,7 @@
       "kibanaUtils",
       "kibanaReact",
       "charts",
-      "savedObjects",
-      "presentationUtil"
+      "savedObjects"
     ],
     "extraPublicDirs": [
       "common/constants",

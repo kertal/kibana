@@ -1,5 +1,5 @@
 {
-  "sha1": "79ac464505bbbdca911df903109ed4b23fb30f18",
+  "sha1": "fd0e313ad63046f5c898c438579728568716e40e",
   "testChannels": [
     "ci-on-commit",
     "ci-batch-3h"
@@ -109,14 +109,12 @@
       "expectedStatus": "passed",
       "tags": [
         "@local-stateful-classic",
-        "@cloud-stateful-classic",
-        "@local-serverless-observability_complete",
-        "@cloud-serverless-observability_complete"
+        "@cloud-stateful-classic"
       ],
       "location": {
         "file": "x-pack/solutions/observability/plugins/observability/test/scout/ui/tests/alerts/alerts_state_sync.spec.ts",
         "line": 30,
-        "column": 30
+        "column": 10
       }
     },
     {
@@ -125,14 +123,12 @@
       "expectedStatus": "passed",
       "tags": [
         "@local-stateful-classic",
-        "@cloud-stateful-classic",
-        "@local-serverless-observability_complete",
-        "@cloud-serverless-observability_complete"
+        "@cloud-stateful-classic"
       ],
       "location": {
         "file": "x-pack/solutions/observability/plugins/observability/test/scout/ui/tests/alerts/alerts_state_sync.spec.ts",
-        "line": 40,
-        "column": 20
+        "line": 39,
+        "column": 14
       }
     },
     {
@@ -483,14 +479,12 @@
       "expectedStatus": "passed",
       "tags": [
         "@local-stateful-classic",
-        "@cloud-stateful-classic",
-        "@local-serverless-observability_complete",
-        "@cloud-serverless-observability_complete"
+        "@cloud-stateful-classic"
       ],
       "location": {
         "file": "x-pack/solutions/observability/plugins/observability/test/scout/ui/tests/alerts/rule_stats.spec.ts",
-        "line": 48,
-        "column": 15
+        "line": 44,
+        "column": 24
       }
     },
     {
@@ -555,14 +549,12 @@
       "expectedStatus": "passed",
       "tags": [
         "@local-stateful-classic",
-        "@cloud-stateful-classic",
-        "@local-serverless-observability_complete",
-        "@cloud-serverless-observability_complete"
+        "@cloud-stateful-classic"
       ],
       "location": {
         "file": "x-pack/solutions/observability/plugins/observability/test/scout/ui/tests/cases/case_details_rule_link.spec.ts",
         "line": 49,
-        "column": 30
+        "column": 10
       }
     },
     {
@@ -571,14 +563,12 @@
       "expectedStatus": "passed",
       "tags": [
         "@local-stateful-classic",
-        "@cloud-stateful-classic",
-        "@local-serverless-observability_complete",
-        "@cloud-serverless-observability_complete"
+        "@cloud-stateful-classic"
       ],
       "location": {
         "file": "x-pack/solutions/observability/plugins/observability/test/scout/ui/tests/cases/cases_feature_controls.all.spec.ts",
-        "line": 34,
-        "column": 48
+        "line": 31,
+        "column": 28
       }
     },
     {
@@ -587,14 +577,12 @@
       "expectedStatus": "passed",
       "tags": [
         "@local-stateful-classic",
-        "@cloud-stateful-classic",
-        "@local-serverless-observability_complete",
-        "@cloud-serverless-observability_complete"
+        "@cloud-stateful-classic"
       ],
       "location": {
         "file": "x-pack/solutions/observability/plugins/observability/test/scout/ui/tests/cases/cases_feature_controls.all.spec.ts",
-        "line": 42,
-        "column": 10
+        "line": 37,
+        "column": 5
       }
     },
     {
@@ -603,30 +591,26 @@
       "expectedStatus": "passed",
       "tags": [
         "@local-stateful-classic",
-        "@cloud-stateful-classic",
-        "@local-serverless-observability_complete",
-        "@cloud-serverless-observability_complete"
+        "@cloud-stateful-classic"
       ],
       "location": {
         "file": "x-pack/solutions/observability/plugins/observability/test/scout/ui/tests/cases/cases_feature_controls.all.spec.ts",
-        "line": 46,
-        "column": 23
+        "line": 42,
+        "column": 38
       }
     },
     {
-      "id": "d3ffd39f648f151-343f30c629749f3",
-      "title": "Observability cases - no privileges returns Application unavailable when the Observability app is inaccessible",
+      "id": "d3ffd39f648f151-47502b229835fc7",
+      "title": "Observability cases - no privileges returns Application not found when the Observability app is inaccessible",
       "expectedStatus": "passed",
       "tags": [
         "@local-stateful-classic",
-        "@cloud-stateful-classic",
-        "@local-serverless-observability_complete",
-        "@cloud-serverless-observability_complete"
+        "@cloud-stateful-classic"
       ],
       "location": {
         "file": "x-pack/solutions/observability/plugins/observability/test/scout/ui/tests/cases/cases_feature_controls.none.spec.ts",
-        "line": 21,
-        "column": 25
+        "line": 17,
+        "column": 46
       }
     },
     {
@@ -681,7 +665,7 @@
       ],
       "location": {
         "file": "x-pack/solutions/observability/plugins/observability/test/scout/ui/tests/esql_landing.spec.ts",
-        "line": 45,
+        "line": 46,
         "column": 7
       }
     },
@@ -695,104 +679,8 @@
       ],
       "location": {
         "file": "x-pack/solutions/observability/plugins/observability/test/scout/ui/tests/esql_landing.spec.ts",
-        "line": 57,
+        "line": 58,
         "column": 10
-      }
-    },
-    {
-      "id": "16bb4a7ec47d274-1887bb9ce43cc37",
-      "title": "Observability Landing Page redirects to page specified in defaultRoute uiSetting",
-      "expectedStatus": "passed",
-      "tags": [
-        "@local-stateful-classic",
-        "@cloud-stateful-classic",
-        "@local-serverless-observability_complete",
-        "@cloud-serverless-observability_complete"
-      ],
-      "location": {
-        "file": "x-pack/solutions/observability/plugins/observability/test/scout/ui/tests/landing.spec.ts",
-        "line": 32,
-        "column": 10
-      }
-    },
-    {
-      "id": "16bb4a7ec47d274-b4d285151fca090",
-      "title": "Observability Landing Page redirects to Discover logs when logs data exists",
-      "expectedStatus": "passed",
-      "tags": [
-        "@local-stateful-classic",
-        "@cloud-stateful-classic",
-        "@local-serverless-observability_complete",
-        "@cloud-serverless-observability_complete"
-      ],
-      "location": {
-        "file": "x-pack/solutions/observability/plugins/observability/test/scout/ui/tests/landing.spec.ts",
-        "line": 50,
-        "column": 15
-      }
-    },
-    {
-      "id": "16bb4a7ec47d274-1089e5f36b13719",
-      "title": "Observability Landing Page redirects to APM services when only APM data exists",
-      "expectedStatus": "passed",
-      "tags": [
-        "@local-stateful-classic",
-        "@cloud-stateful-classic",
-        "@local-serverless-observability_complete",
-        "@cloud-serverless-observability_complete"
-      ],
-      "location": {
-        "file": "x-pack/solutions/observability/plugins/observability/test/scout/ui/tests/landing.spec.ts",
-        "line": 61,
-        "column": 18
-      }
-    },
-    {
-      "id": "16bb4a7ec47d274-b8a96bff3cd83db",
-      "title": "Observability Landing Page redirects to Discover logs when both logs and APM data exist (logs priority)",
-      "expectedStatus": "passed",
-      "tags": [
-        "@local-stateful-classic",
-        "@cloud-stateful-classic",
-        "@local-serverless-observability_complete",
-        "@cloud-serverless-observability_complete"
-      ],
-      "location": {
-        "file": "x-pack/solutions/observability/plugins/observability/test/scout/ui/tests/landing.spec.ts",
-        "line": 75,
-        "column": 13
-      }
-    },
-    {
-      "id": "16bb4a7ec47d274-00e86e3614855e3",
-      "title": "Observability Landing Page redirects to onboarding when no data exists",
-      "expectedStatus": "passed",
-      "tags": [
-        "@local-stateful-classic",
-        "@cloud-stateful-classic",
-        "@local-serverless-observability_complete",
-        "@cloud-serverless-observability_complete"
-      ],
-      "location": {
-        "file": "x-pack/solutions/observability/plugins/observability/test/scout/ui/tests/landing.spec.ts",
-        "line": 93,
-        "column": 7
-      }
-    },
-    {
-      "id": "16bb4a7ec47d274-d5a54704b60249e",
-      "title": "Observability Landing Page redirects to onboarding when log data that should be ignored exists",
-      "expectedStatus": "passed",
-      "tags": [
-        "@local-stateful-classic",
-        "@cloud-stateful-classic",
-        "@local-serverless-observability_complete",
-        "@cloud-serverless-observability_complete"
-      ],
-      "location": {
-        "file": "x-pack/solutions/observability/plugins/observability/test/scout/ui/tests/landing.spec.ts",
-        "line": 100,
-        "column": 7
       }
     }
   ]

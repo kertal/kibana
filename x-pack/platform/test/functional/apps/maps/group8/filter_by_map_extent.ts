@@ -22,8 +22,7 @@ export default function ({ getPageObjects, getService }: FtrProviderContext) {
    *
    * Migration: migrate to scout
    */
-  // Failing: See https://github.com/elastic/kibana/issues/283853
-  describe.skip('filter by map extent', () => {
+  describe('filter by map extent', () => {
     before(async () => {
       await security.testUser.setRoles(
         ['test_logstash_reader', 'global_maps_all', 'global_dashboard_all'],

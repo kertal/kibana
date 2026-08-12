@@ -27,9 +27,7 @@ export const PUBLIC_API_HEADERS = {
 } as const;
 
 export const ML_USERS: Record<string, KibanaRole> = {
-  // Mirrors FTR ft_ml_poweruser: machine_learning_admin + ft_ml_source/dest +
-  // ft_all_space_ml_none (discover/dashboard/visualize/indexPatterns extras).
-  // visualize is required for "Explore in custom visualization" navigation.
+  // Mirrors FTR: machine_learning_admin + ft_ml_source + ft_ml_dest + ft_ml_ui_extras + ml:all
   mlPoweruser: {
     kibana: [
       {
@@ -41,7 +39,6 @@ export const ML_USERS: Record<string, KibanaRole> = {
           indexPatterns: ['all'],
           discover: ['all'],
           dashboard: ['all'],
-          visualize: ['all'],
         },
         spaces: ['*'],
       },
@@ -67,7 +64,6 @@ export const ML_USERS: Record<string, KibanaRole> = {
           indexPatterns: ['read'],
           discover: ['read'],
           dashboard: ['read'],
-          visualize: ['read'],
         },
         spaces: ['*'],
       },

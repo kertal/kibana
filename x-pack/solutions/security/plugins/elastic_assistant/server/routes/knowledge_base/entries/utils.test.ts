@@ -63,38 +63,24 @@ describe('Utils', () => {
       expect(filter).toEqual('(NOT users: {name:* OR id:* })');
     });
 
-    it('should include private entries when `profile_uid` is defined', () => {
+    it('should return global filter when `username` is undefined', () => {
       const filter = getKBUserFilter({ profile_uid: 'fake_user_id' } as AuthenticatedUser);
       expect(filter).toEqual('(NOT users: {name:* OR id:* } OR users: {id: fake_user_id})');
     });
 
-    it('should return only global entries when `profile_uid` is undefined', () => {
+    it('should return global filter when `profile_uid` is undefined', () => {
       const filter = getKBUserFilter({ username: 'user1' } as AuthenticatedUser);
-      expect(filter).toEqual('(NOT users: {name:* OR id:* })');
+      expect(filter).toEqual('(NOT users: {name:* OR id:* } OR users: {name: "user1"})');
     });
 
-    it('should not use the username to filter private entries', () => {
+    it('should return global filter when `username` has semicolon', () => {
       const filter = getKBUserFilter({
         username: 'user:1',
         profile_uid: 'fake_user_id',
       } as AuthenticatedUser);
-      expect(filter).toEqual('(NOT users: {name:* OR id:* } OR users: {id: fake_user_id})');
-    });
-
-    it('returns distinct filters for users with the same username in different realms', () => {
-      const firstRealmFilter = getKBUserFilter({
-        username: 'shared-user',
-        profile_uid: 'first_realm_profile',
-      } as AuthenticatedUser);
-      const secondRealmFilter = getKBUserFilter({
-        username: 'shared-user',
-        profile_uid: 'second_realm_profile',
-      } as AuthenticatedUser);
-
-      expect(firstRealmFilter).toContain('users: {id: first_realm_profile}');
-      expect(secondRealmFilter).toContain('users: {id: second_realm_profile}');
-      expect(firstRealmFilter).not.toContain('shared-user');
-      expect(secondRealmFilter).not.toContain('shared-user');
+      expect(filter).toEqual(
+        '(NOT users: {name:* OR id:* } OR (users: {name: "user:1"} OR users: {id: fake_user_id}))'
+      );
     });
   });
 });

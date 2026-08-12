@@ -123,7 +123,7 @@ describe('useTopNavLinks', () => {
           <DiscoverToolkitTestProvider toolkit={toolkit}>{children}</DiscoverToolkitTestProvider>
         ),
       }
-    ).result.current.menu;
+    ).result.current;
   };
 
   it('should return results', async () => {
@@ -443,7 +443,7 @@ describe('useTopNavLinks', () => {
             <DiscoverToolkitTestProvider toolkit={toolkit}>{children}</DiscoverToolkitTestProvider>
           ),
         }
-      ).result.current.menu;
+      ).result.current;
     };
 
     it('should use the v2 selector flyout in ES|QL mode and the v1 popover in classic mode', async () => {

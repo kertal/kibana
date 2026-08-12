@@ -57,7 +57,6 @@ import type { DiscoverAppState } from '../../state_management/redux';
 import { useCurrentTabMenuActions } from '../../hooks/use_current_tab_menu_actions';
 import { useDataState } from '../../hooks/use_data_state';
 import { TransferAction } from '../../../../plugin_imports/embeddable_editor_service';
-import { useDiscoverShareAction } from './use_discover_share_action';
 
 const TAB_SCOPED_APP_MENU_ITEM_IDS = new Set<string>([
   AppMenuActionId.alerts,
@@ -77,11 +76,6 @@ export interface UseTopNavLinksParams {
   onOpenSaveAsModal: () => void;
 }
 
-export interface UseTopNavLinksResult {
-  menu: AppMenuConfig;
-  shareAction: ReturnType<typeof useDiscoverShareAction>;
-}
-
 /**
  * Helper function to build the top nav links
  */
@@ -95,7 +89,7 @@ export const useTopNavLinks = ({
   persistedDiscoverSession,
   onOpenSaveModal,
   onOpenSaveAsModal,
-}: UseTopNavLinksParams): UseTopNavLinksResult => {
+}: UseTopNavLinksParams): AppMenuConfig => {
   const intl = useI18n();
   const dispatch = useInternalStateDispatch();
   const getState = useInternalStateGetState();
@@ -153,16 +147,6 @@ export const useTopNavLinks = ({
     }),
     [isEsqlMode, dataView, adHocDataViews, authorizedRuleTypes]
   );
-
-  const shareAction = useDiscoverShareAction({
-    discoverParams,
-    services,
-    currentTab,
-    runtimeStateManager,
-    persistedDiscoverSession,
-    totalHitsState,
-    hasUnsavedChanges,
-  });
 
   const showCreateRuleV2 = isEsqlMode && shouldShowAlertingV2CreateRuleFlyout(services.core);
 
@@ -239,7 +223,6 @@ export const useTopNavLinks = ({
     }
 
     const shareAppMenuItem = getShareAppMenuItem({
-      shareAction,
       discoverParams,
       services,
       hasIntegrations: hasShareIntegration,
@@ -315,7 +298,6 @@ export const useTopNavLinks = ({
     intl,
     showCreateRuleV2,
     switchLanguageMode,
-    shareAction,
   ]);
 
   const getAppMenuAccessor = useProfileAccessor('getAppMenu');
@@ -461,25 +443,22 @@ export const useTopNavLinks = ({
     onOpenSaveAsModal,
   ]);
 
-  return useMemo((): UseTopNavLinksResult => {
+  return useMemo((): AppMenuConfig => {
     const config = appMenuRegistry.getAppMenuConfig();
 
     return {
-      menu: {
-        items: config.items?.map((item) =>
-          enhanceAppMenuItemWithRunAction({
-            appMenuItem: item,
+      items: config.items?.map((item) =>
+        enhanceAppMenuItemWithRunAction({
+          appMenuItem: item,
+          services,
+        })
+      ),
+      primaryActionItem: config.primaryActionItem
+        ? enhanceAppMenuItemWithRunAction({
+            appMenuItem: config.primaryActionItem,
             services,
           })
-        ),
-        primaryActionItem: config.primaryActionItem
-          ? enhanceAppMenuItemWithRunAction({
-              appMenuItem: config.primaryActionItem,
-              services,
-            })
-          : undefined,
-      },
-      shareAction,
+        : undefined,
     };
-  }, [appMenuRegistry, services, shareAction]);
+  }, [appMenuRegistry, services]);
 };

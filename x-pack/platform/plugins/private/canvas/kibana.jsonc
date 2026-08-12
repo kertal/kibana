@@ -23,6 +23,7 @@
       "expressions",
       "features",
       "inspector",
+      "presentationUtil",
       "uiActions",
       "share",
       "contentManagement",
@@ -39,8 +40,7 @@
       "kibanaUtils",
       "maps",
       "fieldFormats",
-      "savedSearch",
-      "presentationUtil"
+      "savedSearch"
     ]
   }
 }

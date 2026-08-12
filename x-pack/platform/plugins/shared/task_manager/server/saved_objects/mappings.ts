@@ -123,10 +123,3 @@ export const apiKeyToInvalidateMappings: SavedObjectsTypeMappingDefinition = {
     },
   },
 };
-
-// The single execution-control document is always fetched by id, never
-// searched, so none of its attributes need to be indexed.
-export const taskExecutionControlMapping: SavedObjectsTypeMappingDefinition = {
-  dynamic: false,
-  properties: {},
-};

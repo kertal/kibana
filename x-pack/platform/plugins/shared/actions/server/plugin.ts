@@ -46,7 +46,6 @@ import type { ServerlessPluginSetup, ServerlessPluginStart } from '@kbn/serverle
 import type { CloudSetup } from '@kbn/cloud-plugin/server';
 import type { AxiosInstance } from 'axios';
 import type { UsageApiSetup } from '@kbn/usage-api-plugin/server';
-import type { CredentialAccessor } from '@kbn/connector-specs';
 import { type ActionsConfig, type EnabledConnectorTypes } from './config';
 import { AllowedHosts, getValidatedConfig } from './config';
 import { resolveCustomHosts } from './lib/custom_host_settings';
@@ -57,13 +56,7 @@ import { AuthTypeRegistry, registerAuthTypes } from './auth_types';
 import { createBulkExecutionEnqueuerFunction } from './create_execute_function';
 import { registerActionsUsageCollector } from './usage';
 import type { ILicenseState } from './lib';
-import {
-  ActionExecutor,
-  TaskRunnerFactory,
-  LicenseState,
-  spaceIdToNamespace,
-  LeasePool,
-} from './lib';
+import { ActionExecutor, TaskRunnerFactory, LicenseState, spaceIdToNamespace } from './lib';
 import type {
   Services,
   ActionType,
@@ -125,8 +118,8 @@ import { createSystemConnectors } from './create_system_actions';
 import { ConnectorUsageReportingTask } from './usage/connector_usage_reporting_task';
 import { ConnectorRateLimiter } from './lib/connector_rate_limiter';
 import { OAuthRateLimiter } from './lib/oauth_rate_limiter';
-import type { GetAxiosInstanceWithAuthFnOpts, GetCredentialFnOpts } from './lib/get_axios_instance';
-import { getAxiosInstanceWithAuth, getCredentialWithAuth } from './lib/get_axios_instance';
+import type { GetAxiosInstanceWithAuthFnOpts } from './lib/get_axios_instance';
+import { getAxiosInstanceWithAuth } from './lib/get_axios_instance';
 import { RelayClient, type RelayClientContract } from './lib/relay';
 
 export interface PluginSetupContract {
@@ -147,14 +140,6 @@ export interface PluginSetupContract {
   ): void;
 
   getAxiosInstanceWithAuth(opts: GetAxiosInstanceWithAuthFnOpts): Promise<AxiosInstance>;
-
-  getCredential(opts: GetCredentialFnOpts): CredentialAccessor;
-
-  /**
-   * Process-wide pool for reusable, long-lived connector clients. Empty until a client
-   * type is registered.
-   */
-  getClientLeasePool(): LeasePool<unknown>;
 
   isPreconfiguredConnector(connectorId: string): boolean;
 
@@ -228,8 +213,6 @@ export interface PluginStartContract {
    * Remove a previously registered dynamic InMemoryConnector from the inMemoryConnectors list.
    * Only connectors flagged as dynamic (via registerDynamicConnector) can be removed this way;
    * preconfigured or system connectors are left untouched.
-   * Triggers client-pool eviction (fire-and-forget); cache keys are dropped before return so a
-   * re-register of the same id cannot reuse a stale pooled client.
    * @param connectorId id of the dynamic connector to remove
    * @returns boolean indicating whether the connector was removed or not
    */
@@ -292,14 +275,10 @@ export class ActionsPlugin
   private connectorUsageReportingTask: ConnectorUsageReportingTask | undefined;
   private connectorLifecycleListeners: ConnectorLifecycleListener[] = [];
   private skippedPreconfiguredConnectorIds: Set<string> = new Set();
-  // Process-wide: a warm client must outlive a single action, and the per-action context is
-  // discarded when the action returns, so the plugin instance owns the pool.
-  private readonly clientLeasePool: LeasePool<unknown>;
   private relayClient?: RelayClientContract;
 
   constructor(initContext: PluginInitializerContext) {
     this.logger = initContext.logger.get();
-    this.clientLeasePool = new LeasePool<unknown>(this.logger);
     this.actionsConfig = getValidatedConfig(
       this.logger,
       resolveCustomHosts(this.logger, initContext.config.get<ActionsConfig>())
@@ -514,8 +493,6 @@ export class ActionsPlugin
         actionsConfigUtils,
         plugins.cloud
       ),
-      getCredential: this.getCredentialHelper(actionsConfigUtils),
-      getClientLeasePool: () => this.clientLeasePool,
       isPreconfiguredConnector: (connectorId: string): boolean => {
         return !!this.inMemoryConnectors.find(
           (inMemoryConnector) =>
@@ -635,9 +612,6 @@ export class ActionsPlugin
         encryptedSavedObjectsClient,
         connectorLifecycleListeners: this.connectorLifecycleListeners,
         getCurrentUserProfileId,
-        evictClientPool: async (connectorId: string) => {
-          await this.clientLeasePool.evict(connectorId);
-        },
       });
     };
 
@@ -1019,9 +993,6 @@ export class ActionsPlugin
       connectorLifecycleListeners,
     } = this;
     const getSkippedPreconfiguredIds = () => this.skippedPreconfiguredConnectorIds;
-    const evictClientPool = async (connectorId: string): Promise<void> => {
-      await this.clientLeasePool.evict(connectorId);
-    };
 
     return async function actionsRouteHandlerContext(context, request) {
       const [coreStart, pluginsStart] = await core.getStartServices();
@@ -1083,7 +1054,6 @@ export class ActionsPlugin
             connectorLifecycleListeners,
             getCurrentUserProfileId: (requestWithAuth: KibanaRequest) =>
               getCurrentUserProfileIdFromRequest(requestWithAuth, pluginsStart.security, logger),
-            evictClientPool,
           });
         },
         listTypes: (featureId?: string) => {
@@ -1123,14 +1093,6 @@ export class ActionsPlugin
     };
   };
 
-  private getCredentialHelper = (actionsConfigUtils: ActionsConfigurationUtilities) => {
-    return getCredentialWithAuth({
-      authTypeRegistry: this.authTypeRegistry!,
-      configurationUtilities: actionsConfigUtils,
-      logger: this.logger,
-    });
-  };
-
   private registerDynamicConnector = (connector: InMemoryConnector): boolean => {
     if (!this.inMemoryConnectors.find((c) => c.id === connector.id)) {
       this.inMemoryConnectors.push({
@@ -1152,9 +1114,6 @@ export class ActionsPlugin
       return false;
     }
     this.inMemoryConnectors.splice(index, 1);
-    // Fire-and-forget: LeasePool.evict deletes cache keys synchronously before its first await,
-    // so a same-id re-register cannot hit a stale entry. Remote terminate may still be in flight.
-    void this.clientLeasePool.evict(connectorId);
     this.logger.info(`Unregistered dynamic connector with id ${connectorId}`);
     return true;
   };
@@ -1163,7 +1122,6 @@ export class ActionsPlugin
     if (this.licenseState) {
       this.licenseState.clean();
     }
-    this.clientLeasePool.stop();
   }
 }
 

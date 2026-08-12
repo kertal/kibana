@@ -125,7 +125,6 @@ export interface ConstructorOptions {
   isESOCanEncrypt: boolean;
   connectorLifecycleListeners?: ConnectorLifecycleListener[];
   getCurrentUserProfileId?: (request: KibanaRequest) => Promise<string | undefined>;
-  evictClientPool?: (connectorId: string) => Promise<void>;
 }
 
 export interface ActionsClientContext {
@@ -153,7 +152,6 @@ export interface ActionsClientContext {
   isESOCanEncrypt: boolean;
   connectorLifecycleListeners?: ConnectorLifecycleListener[];
   getCurrentUserProfileId?: (request: KibanaRequest) => Promise<string | undefined>;
-  evictClientPool?: (connectorId: string) => Promise<void>;
 }
 
 const noop = async (_request: KibanaRequest): Promise<string | undefined> => undefined;
@@ -184,7 +182,6 @@ export class ActionsClient {
     isESOCanEncrypt,
     connectorLifecycleListeners,
     getCurrentUserProfileId,
-    evictClientPool,
   }: ConstructorOptions) {
     this.context = {
       logger,
@@ -209,7 +206,6 @@ export class ActionsClient {
       isESOCanEncrypt,
       connectorLifecycleListeners,
       getCurrentUserProfileId: getCurrentUserProfileId ?? noop,
-      evictClientPool,
     };
   }
 
@@ -588,12 +584,7 @@ export class ActionsClient {
       );
     }
 
-    // Must run before deleting credentials or the saved object because client termination may
-    // need the connector's current credentials.
-    await this.context.evictClientPool?.(id);
-
-    // Must run before the saved-object delete below — needs the connector's secrets to revoke its
-    // OAuth grant.
+    // Must run before the delete below — needs the connector's secrets to revoke its OAuth grant.
     await this.deleteConnectorAuthTokens(id, authMode);
 
     const result = await this.context.unsecuredSavedObjectsClient.delete('action', id);
@@ -815,9 +806,5 @@ export class ActionsClient {
       );
       throw err;
     }
-  }
-
-  public async evictClientPool(connectorId: string): Promise<void> {
-    await this.context.evictClientPool?.(connectorId);
   }
 }

@@ -22,7 +22,6 @@ export const createConversationCreatedEvent = (
       conversation_id: conversation.id,
       title: conversation.title,
       access_control: conversation.access_control ?? getDefaultConversationAccessControl(),
-      user: conversation.user,
     },
   };
 };

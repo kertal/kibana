@@ -19,7 +19,8 @@ export default ({ getPageObject, getService }: FtrProviderContext) => {
   const svlObltNavigation = getService('svlObltNavigation');
   const toasts = getService('toasts');
 
-  describe('Cases list', function () {
+  // Failing: See https://github.com/elastic/kibana/issues/246157
+  describe.skip('Cases list', function () {
     before(async () => {
       await svlCommonPage.loginWithPrivilegedRole();
       await svlObltNavigation.navigateToLandingPage();
@@ -33,7 +34,7 @@ export default ({ getPageObject, getService }: FtrProviderContext) => {
 
     describe('empty state', () => {
       it('displays an empty list with an add button correctly', async () => {
-        await testSubjects.existOrFail('cases-list-add-case');
+        await testSubjects.existOrFail('cases-table-add-case');
       });
     });
 
@@ -217,7 +218,8 @@ export default ({ getPageObject, getService }: FtrProviderContext) => {
         await toasts.dismissAll();
       });
 
-      describe('Status', () => {
+      // FLAKY: https://github.com/elastic/kibana/issues/246048
+      describe.skip('Status', () => {
         createNCasesBeforeDeleteAllAfter(1, getPageObject, getService);
 
         it('to in progress', async () => {
@@ -241,22 +243,22 @@ export default ({ getPageObject, getService }: FtrProviderContext) => {
 
         it('to medium', async () => {
           await cases.casesTable.changeSeverity(CaseSeverity.MEDIUM, 0);
-          await testSubjects.existOrFail(`case-severity-badge-${CaseSeverity.MEDIUM}`);
+          await testSubjects.existOrFail(`case-table-column-severity-${CaseSeverity.MEDIUM}`);
         });
 
         it('to high', async () => {
           await cases.casesTable.changeSeverity(CaseSeverity.HIGH, 0);
-          await testSubjects.existOrFail(`case-severity-badge-${CaseSeverity.HIGH}`);
+          await testSubjects.existOrFail(`case-table-column-severity-${CaseSeverity.HIGH}`);
         });
 
         it('to critical', async () => {
           await cases.casesTable.changeSeverity(CaseSeverity.CRITICAL, 0);
-          await testSubjects.existOrFail(`case-severity-badge-${CaseSeverity.CRITICAL}`);
+          await testSubjects.existOrFail(`case-table-column-severity-${CaseSeverity.CRITICAL}`);
         });
 
         it('to low', async () => {
           await cases.casesTable.changeSeverity(CaseSeverity.LOW, 0);
-          await testSubjects.existOrFail(`case-severity-badge-${CaseSeverity.LOW}`);
+          await testSubjects.existOrFail(`case-table-column-severity-${CaseSeverity.LOW}`);
         });
       });
 

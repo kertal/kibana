@@ -39,7 +39,7 @@ export function Doc(props: DocProps) {
 
   const onBeforeFetch = useCallback(async () => {
     await scopedProfilesManager.resolveDataSourceProfile({
-      dataSource: dataView?.id ? createDataViewDataSource({ dataViewId: dataView.id }) : undefined,
+      dataSource: dataView?.id ? createDataViewDataSource({ dataViewId: dataView?.id }) : undefined,
       dataView,
       query: { query: '', language: 'kuery' },
     });

@@ -863,10 +863,6 @@ function mockHealthStats(overrides = {}) {
             },
             custom: {},
           },
-          execution_control: {
-            paused: false,
-            paused_task_types: [],
-          },
         },
       },
       workload: {

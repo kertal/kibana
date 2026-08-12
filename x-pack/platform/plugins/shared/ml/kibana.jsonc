@@ -34,6 +34,7 @@
       "savedObjectsManagement",
       "savedSearch",
       "contentManagement",
+      "presentationUtil",
       "fieldsMetadata",
       "fileUpload"
     ],
@@ -64,8 +65,7 @@
       "maps",
       "savedObjectsFinder",
       "usageCollection",
-      "alerting",
-      "presentationUtil"
+      "alerting"
     ],
     "extraPublicDirs": ["common"]
   }

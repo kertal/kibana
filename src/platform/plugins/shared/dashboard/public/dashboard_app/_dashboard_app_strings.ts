@@ -182,6 +182,14 @@ export const topNavStrings = {
       defaultMessage: 'Full Screen Mode',
     }),
   },
+  labs: {
+    label: i18n.translate('dashboard.topNav.labsButtonAriaLabel', {
+      defaultMessage: 'labs',
+    }),
+    description: i18n.translate('dashboard.topNav.labsConfigDescription', {
+      defaultMessage: 'Labs',
+    }),
+  },
   edit: {
     label: i18n.translate('dashboard.topNave.editButtonAriaLabel', {
       defaultMessage: 'edit',

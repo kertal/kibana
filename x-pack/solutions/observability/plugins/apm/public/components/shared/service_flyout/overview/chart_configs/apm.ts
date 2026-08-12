@@ -88,8 +88,7 @@ export const APM_ERROR_RATE_TITLE = i18n.translate(
 
 export function getCpuUsageChart(
   indices: string | undefined,
-  scope: ServiceScope,
-  projectRouting?: string
+  scope: ServiceScope
 ): FlyoutLensChartConfigDefinition {
   const cpuUsage = `AVG(TO_DOUBLE(${METRIC_SYSTEM_CPU_PERCENT}))`;
   const title = i18n.translate('xpack.apm.serviceFlyout.cpuUsageChartTitle', {
@@ -100,7 +99,6 @@ export function getCpuUsageChart(
     id: 'cpuUsage',
     title,
     indices,
-    projectRouting,
     buildQuery: (idx) => {
       const query = createApmBaseQuery({ indices: idx, processorEvent: 'metric', scope });
       query.pipe(`WHERE TO_DOUBLE(${METRIC_SYSTEM_CPU_PERCENT}) IS NOT NULL`);
@@ -122,8 +120,7 @@ export function getCpuUsageChart(
 
 export function getMemoryUsageChart(
   indices: string | undefined,
-  scope: ServiceScope,
-  projectRouting?: string
+  scope: ServiceScope
 ): FlyoutLensChartConfigDefinition {
   const title = i18n.translate('xpack.apm.serviceFlyout.memoryUsageChartTitle', {
     defaultMessage: 'Memory usage',
@@ -133,7 +130,6 @@ export function getMemoryUsageChart(
     id: 'memoryUsage',
     title,
     indices,
-    projectRouting,
     buildQuery: (idx) => {
       const query = createApmBaseQuery({ indices: idx, processorEvent: 'metric', scope });
       query.pipe(`EVAL cgroup_usage = TO_DOUBLE(${METRIC_CGROUP_MEMORY_USAGE_BYTES})`);

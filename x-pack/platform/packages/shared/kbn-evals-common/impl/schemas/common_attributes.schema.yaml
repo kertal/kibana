@@ -150,10 +150,6 @@ components:
           type: object
           additionalProperties: true
           nullable: true
-        metadata:
-          type: object
-          additionalProperties: true
-          nullable: true
         dataset:
           type: object
           properties:

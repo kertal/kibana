@@ -24,7 +24,7 @@ export const isLensEqual = (
   injectFilterReferences: FilterManager['inject'],
   datasourceMap: DatasourceMap,
   visualizationMap: VisualizationMap,
-  annotationGroups?: AnnotationGroups
+  annotationGroups: AnnotationGroups
 ) => {
   if (doc1In === undefined || doc2In === undefined) {
     return doc1In === doc2In;
@@ -33,7 +33,6 @@ export const isLensEqual = (
   // we do this so that undefined props are the same as non-existant props
   const doc1 = removeNonSerializable(doc1In);
   const doc2 = removeNonSerializable(doc2In);
-  const annotations = removeNonSerializable(annotationGroups ?? {});
 
   if (doc1?.visualizationType !== doc2?.visualizationType) {
     return false;
@@ -52,7 +51,7 @@ export const isLensEqual = (
             doc1.references,
             doc2.state.visualization,
             doc2.references,
-            annotations
+            annotationGroups
           );
         } catch (err) {
           return false;

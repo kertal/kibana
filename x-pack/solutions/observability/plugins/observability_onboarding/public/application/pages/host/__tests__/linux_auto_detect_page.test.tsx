@@ -11,7 +11,9 @@ import { HostLinuxAutoDetectPage } from '../linux_auto_detect_page';
 import { buildFetchError, renderWithHostPageProviders } from './test_helpers';
 
 jest.mock('../../../quickstart_flows/auto_detect/steps', () => ({
-  AutoDetectInstallStep: () => <div data-test-subj="autoDetectInstallStep" />,
+  AutoDetectInstallStep: ({ ingestionMode }: { ingestionMode: string }) => (
+    <div data-test-subj="autoDetectInstallStep" data-ingestion-mode={ingestionMode} />
+  ),
   AutoDetectVisualizeStep: () => <div data-test-subj="autoDetectVisualizeStep" />,
 }));
 
@@ -48,6 +50,17 @@ const { useOnboardingFlow: useOnboardingFlowMock } = jest.requireMock(
 
 jest.mock('../../../shared/use_flow_breadcrumbs', () => ({
   useFlowBreadcrumb: jest.fn(),
+}));
+
+jest.mock('../../../../hooks/use_wired_streams_status', () => ({
+  useWiredStreamsStatus: () => ({
+    isEnabled: false,
+    isLoading: false,
+    isEnabling: false,
+    error: null,
+    enableWiredStreams: jest.fn(),
+    refetch: jest.fn(),
+  }),
 }));
 
 jest.mock('@kbn/ebt-tools', () => ({
@@ -91,6 +104,20 @@ describe('HostLinuxAutoDetectPage', () => {
   it('renders the auto-detect install step', () => {
     renderPage();
     expect(screen.getByTestId('autoDetectInstallStep')).toBeInTheDocument();
+  });
+
+  it('uses wired ingestion mode when the URL says so', () => {
+    renderPage(['/host/linux/auto-detect?ingestion=wired']);
+    expect(screen.getByTestId('autoDetectInstallStep').getAttribute('data-ingestion-mode')).toBe(
+      'wired'
+    );
+  });
+
+  it('coerces an unrecognized ingestion param to classic in the install step', () => {
+    renderPage(['/host/linux/auto-detect?ingestion=foo']);
+    expect(screen.getByTestId('autoDetectInstallStep').getAttribute('data-ingestion-mode')).toBe(
+      'classic'
+    );
   });
 
   it('renders an inline EmptyPrompt and drops the visualize step when setup errors', () => {

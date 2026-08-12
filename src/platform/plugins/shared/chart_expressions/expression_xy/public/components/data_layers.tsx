@@ -29,7 +29,6 @@ import type {
   ValueLabelMode,
   XScaleType,
   PointVisibility,
-  AreaFillOption,
 } from '../../common';
 import { SeriesTypes, ValueLabelModes, AxisModes } from '../../common/constants';
 import type {
@@ -61,7 +60,6 @@ interface Props {
   timeZone: string;
   emphasizeFitting?: boolean;
   fillOpacity?: number;
-  areaFill?: AreaFillOption;
   minBarHeight: number;
   shouldShowValueLabels?: boolean;
   valueLabels: ValueLabelMode;
@@ -81,7 +79,6 @@ export const DataLayers: FC<Props> = ({
   syncColors,
   valueLabels,
   fillOpacity,
-  areaFill,
   minBarHeight,
   formatFactory,
   paletteService,
@@ -180,7 +177,6 @@ export const DataLayers: FC<Props> = ({
             timeZone,
             emphasizeFitting,
             fillOpacity,
-            areaFill,
             defaultXScaleType,
             fieldFormats,
             uiState,

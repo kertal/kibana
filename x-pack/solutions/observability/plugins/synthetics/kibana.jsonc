@@ -36,6 +36,7 @@
       "uiActions",
       "unifiedSearch",
       "kql",
+      "presentationUtil",
       "charts",
       "fieldsMetadata"
     ],
@@ -63,8 +64,7 @@
       "kibanaUtils",
       "observability",
       "unifiedDocViewer",
-      "observabilityAgentBuilder",
-      "presentationUtil"
+      "observabilityAgentBuilder"
     ]
   }
 }

@@ -8,7 +8,7 @@
  */
 
 import React, { Suspense } from 'react';
-import type { CoreSetup, CoreStart, Plugin } from '@kbn/core/public';
+import type { CoreStart, Plugin } from '@kbn/core/public';
 import type { APMClientV2 } from '@kbn/apm-api-shared';
 import type { FocusedTraceWaterfallProps, FullTraceWaterfallProps } from '@kbn/apm-types';
 import { dynamic } from '@kbn/shared-ux-utility';
@@ -50,15 +50,7 @@ const LoadingFallback = () => (
 export class ApmSharedPlugin
   implements Plugin<ApmSharedPluginSetup, ApmSharedPluginStart, {}, ApmSharedPluginStartDeps>
 {
-  public setup(core: CoreSetup): ApmSharedPluginSetup {
-    // Loaded lazily to keep `@kbn/apm-ui-shared` out of the page load bundle.
-    import('@kbn/apm-ui-shared')
-      .then(({ registerGenAiTabImpressionEventType }) =>
-        registerGenAiTabImpressionEventType(core.analytics)
-      )
-      .catch(() => {
-        // ignore; the impression reporters handle the unregistered event type
-      });
+  public setup(): ApmSharedPluginSetup {
     return {};
   }
 

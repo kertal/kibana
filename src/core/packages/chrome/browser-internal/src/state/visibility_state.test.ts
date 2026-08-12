@@ -8,25 +8,18 @@
  */
 
 import { renderHook, act } from '@testing-library/react';
-import { BehaviorSubject, EMPTY, of } from 'rxjs';
+import { BehaviorSubject, of } from 'rxjs';
 import { useObservable } from '@kbn/use-observable';
 import { createVisibilityState } from './visibility_state';
 import type { InternalApplicationStart } from '@kbn/core-application-browser-internal';
 
-const createMockApplication = ({
-  chromeless = false,
-  appNotFound = false,
-  currentAppId = 'testApp' as string | undefined,
-}: {
-  chromeless?: boolean;
-  appNotFound?: boolean;
-  currentAppId?: string | undefined;
-} = {}): Pick<InternalApplicationStart, 'currentAppId$' | 'applications$' | 'appNotFound$'> => {
-  const apps = new Map(currentAppId ? [['testApp', { chromeless }]] : []);
+const createMockApplication = (
+  chromeless = false
+): Pick<InternalApplicationStart, 'currentAppId$' | 'applications$'> => {
+  const apps = new Map([['testApp', { chromeless }]]);
   return {
-    currentAppId$: currentAppId ? of(currentAppId) : EMPTY,
+    currentAppId$: new BehaviorSubject('testApp'),
     applications$: of(apps as any),
-    appNotFound$: new BehaviorSubject(appNotFound),
   };
 };
 
@@ -34,7 +27,7 @@ describe('createVisibilityState', () => {
   describe('isVisible$ emits synchronously on subscribe (shareReplay(1))', () => {
     it('emits true when app is not chromeless', () => {
       const { isVisible$ } = createVisibilityState({
-        application: createMockApplication({ chromeless: false }) as InternalApplicationStart,
+        application: createMockApplication(false) as InternalApplicationStart,
       });
 
       let value: boolean | undefined;
@@ -47,7 +40,7 @@ describe('createVisibilityState', () => {
 
     it('emits false when app is chromeless', () => {
       const { isVisible$ } = createVisibilityState({
-        application: createMockApplication({ chromeless: true }) as InternalApplicationStart,
+        application: createMockApplication(true) as InternalApplicationStart,
       });
 
       let value: boolean | undefined;
@@ -59,37 +52,9 @@ describe('createVisibilityState', () => {
     });
   });
 
-  it('shows chrome when App Not Found even if no app is mounted', () => {
-    const { isVisible$ } = createVisibilityState({
-      application: createMockApplication({
-        appNotFound: true,
-        currentAppId: undefined,
-      }) as InternalApplicationStart,
-    });
-
-    let value: boolean | undefined;
-    isVisible$.subscribe((v) => {
-      value = v;
-    });
-
-    expect(value).toBe(true);
-  });
-
-  it('keeps chrome hidden for App Not Found when force-hidden', () => {
-    const { isVisible$, setIsVisible } = createVisibilityState({
-      application: createMockApplication({ appNotFound: true }) as InternalApplicationStart,
-    });
-
-    const values: boolean[] = [];
-    isVisible$.subscribe((v) => values.push(v));
-
-    setIsVisible(false);
-    expect(values.at(-1)).toBe(false);
-  });
-
   it('setIsVisible(false) hides chrome', () => {
     const { isVisible$, setIsVisible } = createVisibilityState({
-      application: createMockApplication() as InternalApplicationStart,
+      application: createMockApplication(false) as InternalApplicationStart,
     });
 
     const values: boolean[] = [];
@@ -101,7 +66,7 @@ describe('createVisibilityState', () => {
 
   it('setIsVisible(true) restores chrome after hiding', () => {
     const { isVisible$, setIsVisible } = createVisibilityState({
-      application: createMockApplication() as InternalApplicationStart,
+      application: createMockApplication(false) as InternalApplicationStart,
     });
 
     const values: boolean[] = [];
@@ -115,7 +80,7 @@ describe('createVisibilityState', () => {
   describe('useObservable integration', () => {
     it('useObservable(isVisible$, false) settles to the correct value synchronously', () => {
       const { isVisible$ } = createVisibilityState({
-        application: createMockApplication() as InternalApplicationStart,
+        application: createMockApplication(false) as InternalApplicationStart,
       });
 
       const { result } = renderHook(() => useObservable(isVisible$, false));
@@ -127,7 +92,7 @@ describe('createVisibilityState', () => {
 
     it('useObservable(isVisible$, false) stays false when app is chromeless', () => {
       const { isVisible$ } = createVisibilityState({
-        application: createMockApplication({ chromeless: true }) as InternalApplicationStart,
+        application: createMockApplication(true) as InternalApplicationStart,
       });
 
       const { result } = renderHook(() => useObservable(isVisible$, false));
@@ -137,7 +102,7 @@ describe('createVisibilityState', () => {
 
     it('reacts to setIsVisible changes', async () => {
       const { isVisible$, setIsVisible } = createVisibilityState({
-        application: createMockApplication() as InternalApplicationStart,
+        application: createMockApplication(false) as InternalApplicationStart,
       });
 
       const { result } = renderHook(() => useObservable(isVisible$, false));

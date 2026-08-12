@@ -21,7 +21,7 @@ import { generateObservabilityAlerts } from '../../fixtures/alerts_data';
 // them under the classic harness would be flaky. Tracked in the migration plan.
 test.describe(
   'Observability alerts - URL state synchronization',
-  { tag: [...tags.stateful.classic, ...tags.serverless.observability.complete] },
+  { tag: [...tags.stateful.classic] },
   () => {
     test.beforeAll(async ({ esClient }) => {
       await generateObservabilityAlerts(esClient);

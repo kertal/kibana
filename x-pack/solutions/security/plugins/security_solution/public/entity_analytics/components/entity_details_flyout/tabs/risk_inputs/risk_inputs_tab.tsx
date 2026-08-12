@@ -413,7 +413,6 @@ const RiskInputsTabContent = <T extends EntityType>({
   });
 
   const alerts = useRiskContributingAlerts<T>({ riskScore: activeRiskScore, entityType });
-  const { hasAlertsRead } = alerts;
 
   const entityNameByEuid = useMemo(() => {
     const map = new Map<string, string>();
@@ -671,7 +670,7 @@ const RiskInputsTabContent = <T extends EntityType>({
         watchlistNamesById={watchlistNamesById}
       />
       <EuiSpacer size="m" />
-      {hasAlertsRead && riskInputsAlertSection}
+      {riskInputsAlertSection}
     </>
   );
 };

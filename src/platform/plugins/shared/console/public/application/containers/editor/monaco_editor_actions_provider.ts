@@ -63,8 +63,7 @@ export class MonacoEditorActionsProvider {
     private editor: monaco.editor.IStandaloneCodeEditor,
     private setEditorActionsCss: (css: CSSProperties) => void,
     private highlightedLinesClassName: string,
-    customParsedRequestsProvider?: ConsoleParsedRequestsProvider,
-    private setSelectedRequestsCount?: (count: number) => void
+    customParsedRequestsProvider?: ConsoleParsedRequestsProvider
   ) {
     // Use custom provider if provided, otherwise fallback to default
     this.parsedRequestsProvider =
@@ -129,7 +128,6 @@ export class MonacoEditorActionsProvider {
     this.setEditorActionsCss({
       visibility: 'hidden',
     });
-    this.setSelectedRequestsCount?.(0);
   }
 
   private updateEditorActions(lineNumber?: number) {
@@ -159,8 +157,6 @@ export class MonacoEditorActionsProvider {
   private async highlightRequests(highlightedLinesClassName: string): Promise<void> {
     // get the requests in the selected range
     const parsedRequests = await this.getSelectedParsedRequests();
-    // Expose the selected-request count so tests can wait for the async parse/selection to settle.
-    this.setSelectedRequestsCount?.(parsedRequests.length);
     // if any requests are selected, highlight the lines and update the position of actions buttons
     if (parsedRequests.length > 0) {
       // display the actions buttons on the 1st line of the 1st selected request

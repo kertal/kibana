@@ -53,7 +53,7 @@ export const RoundResponse: React.FC<RoundResponseProps> = ({
   return (
     <EuiFlexGroup
       direction="column"
-      gutterSize="s"
+      gutterSize="m"
       aria-label={i18n.translate('xpack.agentBuilder.round.assistantResponse', {
         defaultMessage: 'Assistant response',
       })}

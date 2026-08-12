@@ -6,7 +6,8 @@
  */
 
 import React, { useState } from 'react';
-import { EuiFlexGroup, EuiFlexItem, EuiText } from '@elastic/eui';
+import { EuiFlexGroup, EuiFlexItem, EuiText, useEuiTheme } from '@elastic/eui';
+import { css } from '@emotion/react';
 import { FormattedMessage } from '@kbn/i18n-react';
 import { AGENT_BUILDER_UI_EBT } from '@kbn/agent-builder-common';
 import { isErrorResult } from '@kbn/agent-builder-common/tools/tool_result';
@@ -19,6 +20,7 @@ interface ToolCallGroupProps {
 }
 
 export const ToolCallGroup: React.FC<ToolCallGroupProps> = ({ steps }) => {
+  const { euiTheme } = useEuiTheme();
   const [isExpanded, setIsExpanded] = useState(false);
   const onToggle = () => setIsExpanded((v) => !v);
 
@@ -31,7 +33,7 @@ export const ToolCallGroup: React.FC<ToolCallGroupProps> = ({ steps }) => {
         {allRan ? (
           <FormattedMessage
             id="xpack.agentBuilder.roundEvents.toolCallGroup.ran"
-            defaultMessage="{count, plural, one {# tool ran} other {# tools ran}}"
+            defaultMessage="{count, plural, one {# tool ran.} other {# tools ran.}}"
             values={{ count: steps.length }}
           />
         ) : (
@@ -45,6 +47,10 @@ export const ToolCallGroup: React.FC<ToolCallGroupProps> = ({ steps }) => {
     </EuiText>
   );
 
+  const expansionStyles = css`
+    padding-left: ${euiTheme.size.s};
+  `;
+
   return (
     <div data-test-subj="agentBuilderToolCallGroup">
       <StepLayout
@@ -52,13 +58,15 @@ export const ToolCallGroup: React.FC<ToolCallGroupProps> = ({ steps }) => {
         onClick={onToggle}
         isExpanded={isExpanded}
         expansion={
-          <EuiFlexGroup direction="column" gutterSize="s">
-            {steps.map((step) => (
-              <EuiFlexItem grow={false} key={step.tool_call_id}>
-                <ToolCallStep step={step} />
-              </EuiFlexItem>
-            ))}
-          </EuiFlexGroup>
+          <div css={expansionStyles}>
+            <EuiFlexGroup direction="column" gutterSize="s">
+              {steps.map((step) => (
+                <EuiFlexItem grow={false} key={step.tool_call_id}>
+                  <ToolCallStep step={step} />
+                </EuiFlexItem>
+              ))}
+            </EuiFlexGroup>
+          </div>
         }
         ebtAction={AGENT_BUILDER_UI_EBT.action.conversation.EXPAND_TOOL_CALL_GROUP}
       />

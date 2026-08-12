@@ -97,8 +97,7 @@ export const RoundResponseActions: React.FC<RoundResponseActionsProps> = ({
 
   return (
     <EuiFlexGroup
-      direction="rowReverse"
-      justifyContent="flexStart"
+      direction="row"
       gutterSize="xs"
       alignItems="center"
       responsive={false}

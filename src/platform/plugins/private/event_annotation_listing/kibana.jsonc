@@ -15,6 +15,7 @@
       "savedObjectsManagement",
       "eventAnnotation",
       "data",
+      "presentationUtil",
       "visualizations",
       "dataViews",
       "kql",

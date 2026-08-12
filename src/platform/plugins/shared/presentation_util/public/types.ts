@@ -9,12 +9,14 @@
 
 import type { DataViewsPublicPluginStart } from '@kbn/data-views-plugin/public';
 import type { UiActionsStart } from '@kbn/ui-actions-plugin/public';
+import { type PresentationLabsService } from '.';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface PresentationUtilPluginSetup {}
 
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
-export interface PresentationUtilPluginStart {}
+export interface PresentationUtilPluginStart {
+  labsService: PresentationLabsService;
+}
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface PresentationUtilPluginSetupDeps {}

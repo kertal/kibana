@@ -146,7 +146,7 @@ export const DiscoverTopNav = ({
   }, []);
 
   const canEditDataView =
-    Boolean(dataViewEditor?.userPermissions.editDataView()) || !dataView.isPersisted();
+    Boolean(dataViewEditor?.userPermissions.editDataView()) || !dataView?.isPersisted();
 
   const editField = useMemo(
     () =>
@@ -327,7 +327,7 @@ export const DiscoverTopNav = ({
     [esqlModeErrors]
   );
 
-  const { topNavBadges, topNavMenu, shareAction } = useDiscoverTopNav({
+  const { topNavBadges, topNavMenu } = useDiscoverTopNav({
     onOpenSaveModal,
     onOpenSaveAsModal,
     persistedDiscoverSession,
@@ -338,11 +338,7 @@ export const DiscoverTopNav = ({
 
   return (
     <span>
-      <DiscoverTopNavMenu
-        topNavBadges={topNavBadges}
-        topNavMenu={topNavMenu}
-        shareAction={shareAction}
-      />
+      <DiscoverTopNavMenu topNavBadges={topNavBadges} topNavMenu={topNavMenu} />
       <SearchBar
         useBackgroundSearchButton={
           customizationContext.displayMode !== 'embedded' &&

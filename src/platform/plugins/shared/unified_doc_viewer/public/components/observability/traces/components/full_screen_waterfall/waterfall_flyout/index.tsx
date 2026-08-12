@@ -23,12 +23,10 @@ import {
 } from '@elastic/eui';
 import { css } from '@emotion/react';
 import {
-  GenAiTabImpression,
   GenAiTechnicalPreviewBadge,
   GENAI_EBT_CLICK_ACTIONS,
   hasGenAiData,
 } from '@kbn/apm-ui-shared';
-import type { AnalyticsServiceStart } from '@kbn/core/public';
 import type { DataTableRecord } from '@kbn/discover-utils';
 import { i18n } from '@kbn/i18n';
 import type { DocViewRenderProps } from '@kbn/unified-doc-viewer/types';
@@ -58,15 +56,7 @@ interface FlyoutTab {
   ebt?: EbtClickAttrs;
 }
 
-const getTabs = ({
-  showGenAi,
-  reportEvent,
-  resourceId,
-}: {
-  showGenAi: boolean;
-  reportEvent: AnalyticsServiceStart['reportEvent'];
-  resourceId?: string;
-}): FlyoutTab[] => [
+const getTabs = ({ showGenAi }: { showGenAi: boolean }): FlyoutTab[] => [
   {
     id: tabIds.OVERVIEW,
     name: i18n.translate(
@@ -86,16 +76,7 @@ const getTabs = ({
               defaultMessage: 'GenAI',
             }
           ),
-          prepend: (
-            <>
-              <GenAiTabImpression
-                reportEvent={reportEvent}
-                element={TRACES_DOC_VIEWER_EBT_ELEMENTS.FLYOUT_TABS}
-                resourceId={resourceId}
-              />
-              <GenAiTechnicalPreviewBadge />
-            </>
-          ),
+          prepend: <GenAiTechnicalPreviewBadge />,
           'data-test-subj': 'unifiedDocViewerTracesGenAiTab',
           ebt: {
             action: GENAI_EBT_CLICK_ACTIONS.VIEW_GENAI,
@@ -216,13 +197,8 @@ export function WaterfallFlyout({
   const originDocType = useOriginDocType();
 
   const tabs = useMemo(
-    () =>
-      getTabs({
-        showGenAi: hit != null && hasGenAiData(hit.flattened),
-        reportEvent: analytics.reportEvent,
-        resourceId: hit?.id,
-      }),
-    [hit, analytics.reportEvent]
+    () => getTabs({ showGenAi: hit != null && hasGenAiData(hit.flattened) }),
+    [hit]
   );
 
   // The GenAI tab is conditional: when switching to a document without GenAI

@@ -37,7 +37,6 @@ import { DashboardsButtons } from './dashboards_buttons';
 import { AgentPolicyFilter } from './filter_bar/agent_policy_filter';
 import { TagsFilter } from './filter_bar/tags_filter';
 import { AgentActivityBadge } from './agent_activity_badge';
-import { ScheduledActionsBadge } from './scheduled_actions_badge';
 
 export interface SearchAndFilterBarProps {
   agentPolicies: AgentPolicy[];
@@ -67,8 +66,6 @@ export interface SearchAndFilterBarProps {
   onClickAgentActivity: () => void;
   shouldShowAgentActivityTour?: boolean;
   latestAgentActionErrors: number;
-  scheduledActionsCount: number;
-  scheduledActionsCapped: boolean;
   sortField?: string;
   sortOrder?: 'asc' | 'desc';
   unsupportedMigrateAgents: Agent[];
@@ -103,8 +100,6 @@ export const SearchAndFilterBar: React.FunctionComponent<SearchAndFilterBarProps
   onClickAgentActivity,
   shouldShowAgentActivityTour,
   latestAgentActionErrors,
-  scheduledActionsCount,
-  scheduledActionsCapped,
   sortField,
   sortOrder,
   unsupportedMigrateAgents,
@@ -192,13 +187,6 @@ export const SearchAndFilterBar: React.FunctionComponent<SearchAndFilterBarProps
             {!isFirstTimeAgentUserLoading && !isFirstTimeAgentUser && <DashboardsButtons />}
           </EuiFlexItem>
           <EuiFlexGroup gutterSize="s" alignItems="center" justifyContent="flexEnd">
-            <EuiFlexItem grow={false}>
-              <ScheduledActionsBadge
-                scheduledActionsCount={scheduledActionsCount}
-                isCapped={scheduledActionsCapped}
-                onClick={onClickAgentActivity}
-              />
-            </EuiFlexItem>
             <EuiFlexItem grow={false}>
               <AgentActivityBadge
                 recentErrors={latestAgentActionErrors}

@@ -93,7 +93,7 @@ export const useNavigationProps = ({
   const [contextViewHref, setContextViewHref] = useState('');
 
   const index = useMemo(
-    () => (dataView.isPersisted() ? dataView.id! : dataView.toSpec(false)),
+    () => (dataView?.isPersisted() ? dataView?.id! : dataView?.toSpec(false)),
     [dataView]
   );
 

@@ -18,7 +18,6 @@ import {
 } from '@elastic/eui';
 import type { AppHeaderProps } from '@kbn/app-header';
 import { AppHeader } from '@kbn/app-header';
-import { RegisterAppMenu } from '@kbn/core-chrome-browser-hooks';
 import { useKibana } from '@kbn/kibana-react-plugin/public';
 import type { ObservabilityPageTemplateProps } from '@kbn/observability-shared-plugin/public';
 import type { KibanaPageTemplateProps } from '@kbn/shared-ux-page-kibana-template';
@@ -28,7 +27,6 @@ import { OBSERVABILITY_ONBOARDING_LOCATOR } from '@kbn/deeplinks-observability';
 import { useDefaultAiAssistantStarterPromptsForAPM } from '../../../../hooks/use_default_ai_assistant_starter_prompts_for_apm';
 import { FETCH_STATUS, useFetcher } from '../../../../hooks/use_fetcher';
 import type { ApmPluginStartDeps } from '../../../../plugin';
-import { useApmAppMenuConfig } from '../../app_root/apm_app_menu/apm_app_menu_context';
 import { ServiceGroupSaveButton } from '../../../app/service_groups';
 import { ActionsMenu } from './actions_menu';
 import { getNoDataConfig } from '../no_data_config';
@@ -93,7 +91,6 @@ export function ApmMainTemplate({
   ...pageTemplateProps
 }: ApmMainTemplateProps) {
   const location = useLocation();
-  const registeredAppMenu = useApmAppMenuConfig();
 
   const { services } = useKibana<ApmPluginStartDeps>();
   const { docLinks, observabilityShared, application, share } = services;
@@ -160,14 +157,6 @@ export function ApmMainTemplate({
   };
 
   if (header) {
-    // Always put the global menu on inline AppHeader (classic + solution). Do not also
-    // call chrome.setAppMenu here — ClassicHeader would duplicate the same actions
-    // next to breadcrumbs (kibana-team#3549).
-    const resolvedHeader: ApmMainTemplateHeaderProps = {
-      ...header,
-      menu: header.menu ?? registeredAppMenu,
-    };
-
     return (
       <ObservabilityPageTemplate
         {...sharedTemplateProps}
@@ -176,7 +165,7 @@ export function ApmMainTemplate({
           paddingSize: 'none',
         }}
       >
-        <AppHeader spacing="standard" {...resolvedHeader} />
+        <AppHeader spacing="standard" {...header} />
         <EuiPageSection
           paddingSize="m"
           restrictWidth={false}
@@ -243,24 +232,20 @@ export function ApmMainTemplate({
   );
 
   return (
-    <>
-      {/* Legacy routes: chrome owns the menu (ClassicHeader / Chrome Next fallback). */}
-      {registeredAppMenu ? <RegisterAppMenu config={registeredAppMenu} /> : null}
-      <ObservabilityPageTemplate
-        {...sharedTemplateProps}
-        pageSectionProps={pageSectionProps}
-        pageHeader={{
-          ...pageHeader,
-          color: 'subdued' as unknown as EuiPageHeaderProps['color'],
-          tabs: undefined,
-          rightSideItems: [],
-          pageTitle: titleWithActions,
-          children: headerChildren,
-        }}
-      >
-        {children}
-      </ObservabilityPageTemplate>
-    </>
+    <ObservabilityPageTemplate
+      {...sharedTemplateProps}
+      pageSectionProps={pageSectionProps}
+      pageHeader={{
+        ...pageHeader,
+        color: 'subdued' as unknown as EuiPageHeaderProps['color'],
+        tabs: undefined,
+        rightSideItems: [],
+        pageTitle: titleWithActions,
+        children: headerChildren,
+      }}
+    >
+      {children}
+    </ObservabilityPageTemplate>
   );
 }
 

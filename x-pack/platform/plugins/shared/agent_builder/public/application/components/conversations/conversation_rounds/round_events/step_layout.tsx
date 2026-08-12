@@ -55,7 +55,7 @@ export const StepLayout: React.FC<StepLayoutProps> = ({
     <div>
       <EuiFlexGroup
         direction="row"
-        gutterSize="xs"
+        gutterSize="s"
         alignItems="center"
         responsive={false}
         css={rowStyles}
@@ -84,7 +84,7 @@ export const StepLayout: React.FC<StepLayoutProps> = ({
         {isClickable && isExpandable && (
           <EuiFlexItem grow={false}>
             <EuiIcon
-              type={isExpanded ? 'chevronSingleDown' : 'chevronSingleRight'}
+              type={isExpanded ? 'arrowUp' : 'arrowDown'}
               color={euiTheme.colors.textDisabled}
               size="s"
               aria-hidden={true}

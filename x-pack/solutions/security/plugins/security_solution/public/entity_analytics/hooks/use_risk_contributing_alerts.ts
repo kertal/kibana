@@ -43,7 +43,6 @@ export interface UseRiskContributingAlertsResult {
   loading: boolean;
   error: boolean;
   data?: InputAlert[];
-  hasAlertsRead: boolean;
 }
 
 /**
@@ -73,9 +72,7 @@ export const useRiskContributingAlerts = <T extends EntityType>({
     });
   }, [riskScore, inputs, setQuery]);
 
-  // When the query is skipped (no alert read privileges), data is undefined by
-  // design — not an error.
-  const error = hasAlertsRead && !loading && data === undefined;
+  const error = !loading && data === undefined;
 
   const alerts = inputs.map((input) => {
     const source = data?.hits.hits.find((alert) => alert._id === input.id)?._source;
@@ -92,7 +89,6 @@ export const useRiskContributingAlerts = <T extends EntityType>({
     loading,
     error,
     data: alerts,
-    hasAlertsRead,
   };
 };
 

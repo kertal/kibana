@@ -47,7 +47,10 @@ describe('DocumentsDataWriter', () => {
             path: 'users',
             query: {
               bool: {
-                should: [{ term: { 'users.id': 'my_profile_uid' } }],
+                should: [
+                  { term: { 'users.id': 'my_profile_uid' } },
+                  { term: { 'users.name': 'elastic' } },
+                ],
                 minimum_should_match: 1,
               },
             },
@@ -112,7 +115,7 @@ describe('DocumentsDataWriter', () => {
     },
   };
 
-  const GLOBAL_ONLY_FILTER = {
+  const USER_WITHOUT_PROFILE_FILTER = {
     bool: {
       should: [
         {
@@ -125,6 +128,17 @@ describe('DocumentsDataWriter', () => {
                     field: 'users',
                   },
                 },
+              },
+            },
+          },
+        },
+        {
+          nested: {
+            path: 'users',
+            query: {
+              bool: {
+                should: [{ term: { 'users.name': 'elastic' } }],
+                minimum_should_match: 1,
               },
             },
           },
@@ -500,7 +514,7 @@ describe('DocumentsDataWriter', () => {
         });
       });
 
-      it('only matches global documents when profile_uid is not available', async () => {
+      it('only matches on username when profile_uid is not available', async () => {
         (esClientMock.search as jest.Mock).mockResolvedValue({
           hits: {
             hits: [{ _id: '1', _index: '.kibana-elastic-ai-assistant-knowledge-base-default' }],
@@ -518,7 +532,7 @@ describe('DocumentsDataWriter', () => {
         });
 
         expect(esClientMock.search).toHaveBeenCalledWith({
-          ...buildSearchQuery(GLOBAL_ONLY_FILTER),
+          ...buildSearchQuery(USER_WITHOUT_PROFILE_FILTER),
           index: '.kibana-elastic-ai-assistant-knowledge-base-default',
         });
       });

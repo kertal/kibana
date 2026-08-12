@@ -23,7 +23,7 @@ const TIMESTAMP_FIELD = {
 
 apiTest.describe(
   'API /infra/log_analysis/validation/log_entry_rate_indices',
-  { tag: [...tags.stateful.all, ...tags.serverless.observability.complete] },
+  { tag: tags.stateful.all },
   () => {
     let viewerApiCredentials: RoleApiCredentials;
 

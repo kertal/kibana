@@ -15,6 +15,7 @@ export interface OtelKubernetesVisualizeStepProps {
   data?: { onboardingId: string };
   actionLinks: ActionLink[];
   onDataReceived: () => void;
+  respectPreExistingData?: boolean;
 }
 
 export const OtelKubernetesVisualizeStep: React.FC<OtelKubernetesVisualizeStepProps> = ({
@@ -22,6 +23,7 @@ export const OtelKubernetesVisualizeStep: React.FC<OtelKubernetesVisualizeStepPr
   data,
   actionLinks,
   onDataReceived,
+  respectPreExistingData = false,
 }) => {
   if (!isMonitoringStepActive || !data) {
     return (
@@ -47,6 +49,7 @@ export const OtelKubernetesVisualizeStep: React.FC<OtelKubernetesVisualizeStepPr
       integration="kubernetes_otel"
       actionLinks={actionLinks}
       onDataReceived={onDataReceived}
+      respectPreExistingData={respectPreExistingData}
     />
   );
 };

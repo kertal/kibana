@@ -17,9 +17,7 @@
       "dataViews",
       "uiActions",
       "unifiedSearch",
-      "embeddable"
-    ],
-    "requiredBundles": [
+      "embeddable",
       "presentationUtil"
     ]
   }

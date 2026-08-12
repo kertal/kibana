@@ -34,7 +34,6 @@ const mockEncryptedSavedObjectsClient = {
 
 const mockActionsClient = {
   get: jest.fn(),
-  evictClientPool: jest.fn(),
 };
 
 const createMockCoreSetup = () => ({
@@ -135,16 +134,8 @@ describe('oauthDisconnectRoute', () => {
   });
 
   it('returns 204 on successful disconnect', async () => {
-    const callOrder: string[] = [];
     mockActionsClient.get.mockResolvedValue({ id: 'connector-1' });
-    mockActionsClient.evictClientPool.mockImplementation(async () => {
-      callOrder.push('evictClientPoolStarted');
-      await Promise.resolve();
-      callOrder.push('evictClientPoolFinished');
-    });
-    mockConnectorTokenClientInstance.deleteConnectorTokens.mockImplementation(async () => {
-      callOrder.push('deleteConnectorTokens');
-    });
+    mockConnectorTokenClientInstance.deleteConnectorTokens.mockResolvedValue(undefined);
 
     const [, handler] = registerRoute();
     const context = createMockContext();
@@ -156,12 +147,6 @@ describe('oauthDisconnectRoute', () => {
     await handler(context, req, res);
 
     expect(res.noContent).toHaveBeenCalled();
-    expect(mockActionsClient.evictClientPool).toHaveBeenCalledWith('connector-1');
-    expect(callOrder).toEqual([
-      'evictClientPoolStarted',
-      'evictClientPoolFinished',
-      'deleteConnectorTokens',
-    ]);
   });
 
   it('verifies the connector exists before deleting tokens', async () => {

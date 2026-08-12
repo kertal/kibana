@@ -56,7 +56,6 @@ export const RoundInput = ({
     ${euiTextBreakWord()}
     white-space: pre-wrap;
     border-radius: ${AB_PANEL_RADIUS}px ${AB_PANEL_RADIUS}px 0 ${AB_PANEL_RADIUS}px;
-    padding: ${euiTheme.size.m} ${euiTheme.size.base};
   `;
 
   return (
@@ -69,13 +68,14 @@ export const RoundInput = ({
     >
       <EuiPanel
         css={inputContainerStyles}
+        paddingSize="m"
         hasShadow={false}
         hasBorder={false}
         aria-label={labels.userMessage}
       >
         <EuiFlexGroup direction="column" gutterSize="s">
           <EuiFlexItem grow={false}>
-            <EuiText size="s">
+            <EuiText size="m">
               <CommandBadgeText text={input} />
             </EuiText>
           </EuiFlexItem>

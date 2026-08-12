@@ -18,17 +18,6 @@ import {
 import { WORKFLOWS_EXECUTIONS_INDEX } from '../../common';
 import { retryTransientEsErrors } from '../lib/retry_transient_es_errors';
 
-/**
- * An execution document is written by several independent writers while the run is in flight:
- * the run's own periodic state flush, inline flushes from the execution loop, and out-of-band
- * writers such as the concurrency manager (`cancel-in-progress`), the cancel API and task
- * recovery. Partial-doc updates are last-writer-wins per field, so letting Elasticsearch re-read
- * and re-apply the merge is safe — and necessary, since an unretried 409 surfaces as a
- * `version_conflict_engine_exception` that fails the workflow. `retryTransientEsErrors` does not
- * cover 409, so the retry has to happen server-side.
- */
-const UPDATE_RETRY_ON_CONFLICT = 3;
-
 export class WorkflowExecutionRepository {
   private indexName = WORKFLOWS_EXECUTIONS_INDEX;
 
@@ -180,7 +169,6 @@ export class WorkflowExecutionRepository {
           index: this.indexName,
           id,
           refresh: options.refresh ?? false,
-          retry_on_conflict: UPDATE_RETRY_ON_CONFLICT,
           doc: workflowExecution,
         }),
       { logger: this.logger }
@@ -213,10 +201,7 @@ export class WorkflowExecutionRepository {
         this.esClient.bulk({
           refresh: true,
           index: this.indexName,
-          body: updates.flatMap((update) => [
-            { update: { _id: update.id, retry_on_conflict: UPDATE_RETRY_ON_CONFLICT } },
-            { doc: update },
-          ]),
+          body: updates.flatMap((update) => [{ update: { _id: update.id } }, { doc: update }]),
         }),
       { logger: this.logger }
     );

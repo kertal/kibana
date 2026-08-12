@@ -33,6 +33,7 @@ import type {
   ObservabilitySharedPluginSetup,
   ObservabilitySharedPluginStart,
 } from '@kbn/observability-shared-plugin/public';
+import type { PresentationUtilPluginStart } from '@kbn/presentation-util-plugin/public';
 import type {
   DefaultClientOptions,
   RouteRepositoryClient,
@@ -67,6 +68,7 @@ export interface SLOPublicPluginsSetup {
   observability: ObservabilityPublicSetup;
   observabilityAIAssistant?: ObservabilityAIAssistantPublicSetup;
   observabilityShared: ObservabilitySharedPluginSetup;
+  presentationUtil: PresentationUtilPluginStart;
   serverless?: ServerlessPluginSetup;
   share: SharePluginSetup;
   triggersActionsUi: TriggersAndActionsUIPublicPluginSetup;
@@ -95,6 +97,7 @@ export interface SLOPublicPluginsStart {
   observability: ObservabilityPublicStart;
   observabilityAIAssistant?: ObservabilityAIAssistantPublicStart;
   observabilityShared: ObservabilitySharedPluginStart;
+  presentationUtil: PresentationUtilPluginStart;
   serverless?: ServerlessPluginStart;
   share: SharePluginStart;
   spaces?: SpacesPluginStart;

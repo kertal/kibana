@@ -724,10 +724,6 @@ const BaseActionsConfig: ActionsConfig = {
       },
     },
   },
-  inboundEvents: {
-    enabled: false,
-    maxBodyBytes: new ByteSizeValue(1024 * 1024),
-  },
 };
 
 function getACUfromConfig(config: Partial<ActionsConfig> = {}): ActionsConfigurationUtilities {

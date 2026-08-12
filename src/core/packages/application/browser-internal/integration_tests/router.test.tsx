@@ -58,7 +58,6 @@ describe('AppRouter', () => {
         setAppLeaveHandler={noop}
         setAppActionMenu={noop}
         setIsMounting={noop}
-        setAppNotFoundState={noop}
         theme$={theme$}
       />
     );

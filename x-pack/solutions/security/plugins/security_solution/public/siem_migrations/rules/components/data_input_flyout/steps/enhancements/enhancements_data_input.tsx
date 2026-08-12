@@ -23,7 +23,7 @@ import {
   useEuiTheme,
 } from '@elastic/eui';
 import type { EuiFilePickerClass } from '@elastic/eui/src/components/form/file_picker/file_picker';
-import type { MigrationSource, MigrationStepProps } from '../../../../../common/types';
+import type { MigrationStepProps } from '../../../../../common/types';
 import type { RuleMigrationTaskStats } from '../../../../../../../common/siem_migrations/model/rule_migration.gen';
 import type { QRadarMitreMappingsData } from '../../../../../../../common/siem_migrations/model/vendor/rules/qradar.gen';
 import { FILE_UPLOAD_ERROR } from '../../../../../common/translations/file_upload_error';
@@ -31,12 +31,11 @@ import { useParseFileInput } from '../../../../../common/hooks/use_parse_file_in
 import { getEuiStepStatus } from '../../../../../common/utils/get_eui_step_status';
 import { useEnhanceRules } from '../../../../service/hooks/use_enhance_rules';
 import * as i18n from './translations';
-import { EnhancementType, type AddedEnhancement } from './types';
+import { EnhancementType, QRADAR_ENHANCEMENT_OPTS, type AddedEnhancement } from './types';
 import { QradarDataInputStep } from '../../types';
-import { useRuleMigrationVendorCopy } from '../../../../hooks/use_rule_migration_vendor_copy';
 
 export const EnhancementsDataInput = React.memo<MigrationStepProps>(
-  ({ dataInputStep, migrationStats, migrationSource }) => {
+  ({ dataInputStep, migrationStats }) => {
     const dataInputStatus = useMemo(
       () => getEuiStepStatus(QradarDataInputStep.Enhancements, dataInputStep),
       [dataInputStep]
@@ -64,10 +63,7 @@ export const EnhancementsDataInput = React.memo<MigrationStepProps>(
           </EuiFlexItem>
           {dataInputStatus === 'current' && migrationStats && (
             <EuiFlexItem>
-              <EnhancementsDataInputContent
-                migrationStats={migrationStats}
-                migrationSource={migrationSource}
-              />
+              <EnhancementsDataInputContent migrationStats={migrationStats} />
             </EuiFlexItem>
           )}
         </EuiFlexGroup>
@@ -79,13 +75,10 @@ EnhancementsDataInput.displayName = 'EnhancementsDataInput';
 
 interface EnhancementsDataInputContentProps {
   migrationStats: RuleMigrationTaskStats;
-  migrationSource: MigrationSource;
 }
 
 const EnhancementsDataInputContent = React.memo<EnhancementsDataInputContentProps>(
-  ({ migrationStats, migrationSource }) => {
-    const { enhancements } = useRuleMigrationVendorCopy(migrationSource);
-
+  ({ migrationStats }) => {
     const [selectedType, setSelectedType] = useState<EnhancementType>(EnhancementType.MITRE);
     const [selectedFile, setSelectedFile] = useState<File | null>(null);
     const [parsedData, setParsedData] = useState<QRadarMitreMappingsData | null>(null);
@@ -157,11 +150,11 @@ const EnhancementsDataInputContent = React.memo<EnhancementsDataInputContentProp
 
     const typeOptions = useMemo(
       () =>
-        Object.values(EnhancementType).map((enhancementType) => ({
+        Array.from(QRADAR_ENHANCEMENT_OPTS.keys()).map((enhancementType) => ({
           value: enhancementType,
-          inputDisplay: enhancements?.typeOptions[enhancementType] ?? enhancementType,
+          inputDisplay: QRADAR_ENHANCEMENT_OPTS.get(enhancementType),
         })),
-      [enhancements?.typeOptions]
+      []
     );
 
     return (
@@ -239,9 +232,7 @@ const EnhancementsDataInputContent = React.memo<EnhancementsDataInputContentProp
               {addedEnhancements.map((enhancement, index) => (
                 <EuiFlexItem key={index}>
                   <EuiText size="s">
-                    {`${enhancements?.typeOptions[enhancement.type] ?? enhancement.type} - ${
-                      enhancement.fileName
-                    }`}
+                    {`${QRADAR_ENHANCEMENT_OPTS.get(enhancement.type)} - ${enhancement.fileName}`}
                   </EuiText>
                 </EuiFlexItem>
               ))}

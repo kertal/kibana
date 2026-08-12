@@ -1,5 +1,5 @@
 {
-  "sha1": "d3b50ba44c931d3d14d20753b41fb89c13b76074",
+  "sha1": "6090113c0c085886dfc68ac90df27ac49bf0cf3e",
   "testChannels": [
     "ci-on-commit",
     "ci-batch-3h"
@@ -432,7 +432,7 @@
       ],
       "location": {
         "file": "x-pack/platform/plugins/shared/lens/test/scout/open_in_lens/ui/parallel_tests/agg_based/pie.spec.ts",
-        "line": 93,
+        "line": 87,
         "column": 18
       }
     },
@@ -452,7 +452,7 @@
       ],
       "location": {
         "file": "x-pack/platform/plugins/shared/lens/test/scout/open_in_lens/ui/parallel_tests/agg_based/pie.spec.ts",
-        "line": 117,
+        "line": 103,
         "column": 13
       }
     },
@@ -685,7 +685,7 @@
       ],
       "location": {
         "file": "x-pack/platform/plugins/shared/lens/test/scout/open_in_lens/ui/parallel_tests/agg_based/xy.spec.ts",
-        "line": 84,
+        "line": 80,
         "column": 4
       }
     },
@@ -705,7 +705,7 @@
       ],
       "location": {
         "file": "x-pack/platform/plugins/shared/lens/test/scout/open_in_lens/ui/parallel_tests/agg_based/xy.spec.ts",
-        "line": 91,
+        "line": 87,
         "column": 70
       }
     },
@@ -725,7 +725,7 @@
       ],
       "location": {
         "file": "x-pack/platform/plugins/shared/lens/test/scout/open_in_lens/ui/parallel_tests/agg_based/xy.spec.ts",
-        "line": 106,
+        "line": 98,
         "column": 24
       }
     },
@@ -745,7 +745,7 @@
       ],
       "location": {
         "file": "x-pack/platform/plugins/shared/lens/test/scout/open_in_lens/ui/parallel_tests/agg_based/xy.spec.ts",
-        "line": 120,
+        "line": 110,
         "column": 75
       }
     },
@@ -765,7 +765,7 @@
       ],
       "location": {
         "file": "x-pack/platform/plugins/shared/lens/test/scout/open_in_lens/ui/parallel_tests/agg_based/xy.spec.ts",
-        "line": 124,
+        "line": 114,
         "column": 16
       }
     },
@@ -785,7 +785,7 @@
       ],
       "location": {
         "file": "x-pack/platform/plugins/shared/lens/test/scout/open_in_lens/ui/parallel_tests/agg_based/xy.spec.ts",
-        "line": 138,
+        "line": 126,
         "column": 72
       }
     },
@@ -805,8 +805,8 @@
       ],
       "location": {
         "file": "x-pack/platform/plugins/shared/lens/test/scout/open_in_lens/ui/parallel_tests/agg_based/xy.spec.ts",
-        "line": 145,
-        "column": 23
+        "line": 133,
+        "column": 16
       }
     },
     {
@@ -825,7 +825,7 @@
       ],
       "location": {
         "file": "x-pack/platform/plugins/shared/lens/test/scout/open_in_lens/ui/parallel_tests/agg_based/xy.spec.ts",
-        "line": 158,
+        "line": 146,
         "column": 16
       }
     },
@@ -845,7 +845,7 @@
       ],
       "location": {
         "file": "x-pack/platform/plugins/shared/lens/test/scout/open_in_lens/ui/parallel_tests/agg_based/xy.spec.ts",
-        "line": 175,
+        "line": 163,
         "column": 22
       }
     },
@@ -865,7 +865,7 @@
       ],
       "location": {
         "file": "x-pack/platform/plugins/shared/lens/test/scout/open_in_lens/ui/parallel_tests/agg_based/xy.spec.ts",
-        "line": 188,
+        "line": 176,
         "column": 11
       }
     },

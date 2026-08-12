@@ -54,7 +54,6 @@ const toEvaluationScoreDocuments = (
         id: score.example.id,
         index: score.example.index,
         input: score.example.input,
-        metadata: score.example.metadata,
         dataset: score.example.dataset,
       },
       task: {

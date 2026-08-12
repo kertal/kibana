@@ -7,13 +7,12 @@
  * License v3.0 only", or the "Server Side Public License, v 1".
  */
 
-import { isFunctionExpression, unaryExpressionGroup, UnaryExpressionGroup } from '@elastic/esql';
+import { isFunctionExpression } from '@elastic/esql';
 import type { ISuggestionItem } from '../../../../../registry/types';
 import { getOperatorSuggestion } from '../../../operators';
 import type { ExpressionContext } from '../types';
 import { SuggestionBuilder } from '../suggestion_builder';
 import { operatorsDefinitions } from '../../../../all_operators';
-import { getRightmostOperator } from '../utils';
 
 /**
  * Suggests completions after the NOT keyword
@@ -22,12 +21,9 @@ import { getRightmostOperator } from '../utils';
  */
 export async function suggestAfterNot(ctx: ExpressionContext): Promise<ISuggestionItem[]> {
   const { expressionRoot } = ctx;
-  const isAfterUnaryNot =
-    isFunctionExpression(expressionRoot) &&
-    unaryExpressionGroup(getRightmostOperator(expressionRoot)) === UnaryExpressionGroup.not;
 
   // Case 1: Unary NOT operator - suggest boolean expressions
-  if (isAfterUnaryNot) {
+  if (expressionRoot && isFunctionExpression(expressionRoot) && expressionRoot.name === 'not') {
     const builder = new SuggestionBuilder(ctx);
 
     await builder.addFields({

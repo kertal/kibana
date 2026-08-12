@@ -26,8 +26,6 @@ import type { TaskClaimerOpts, TaskClaimerFn, ClaimOwnershipResult } from '../ta
 import { getTaskClaimer } from '../task_claimers';
 import type { TaskPartitioner } from '../lib/task_partitioner';
 import { createWrappedLogger } from '../lib/wrapped_logger';
-import type { TaskExecutionControlState } from '../execution_control';
-import { DEFAULT_EXECUTION_CONTROL_STATE } from '../execution_control';
 
 export type { ClaimOwnershipResult } from '../task_claimers';
 export interface TaskClaimingOpts {
@@ -39,8 +37,6 @@ export interface TaskClaimingOpts {
   excludedTaskTypes: string[];
   getAvailableCapacity: (taskType?: string) => number;
   taskPartitioner: TaskPartitioner;
-  // Runtime task execution control (pause/resume). Defaults to unpaused.
-  getExecutionControlState?: () => TaskExecutionControlState;
 }
 
 export interface OwnershipClaimingOpts {
@@ -86,8 +82,7 @@ export class TaskClaiming {
   private logger: Logger;
   private readonly taskClaimingBatchesByType: TaskClaimingBatches;
   private readonly taskMaxAttempts: Record<string, number>;
-  private readonly staticExcludedTaskTypes: string[];
-  private readonly getExecutionControlState: () => TaskExecutionControlState;
+  private readonly excludedTaskTypes: string[];
   private readonly taskClaimer: TaskClaimerFn;
   private readonly taskPartitioner: TaskPartitioner;
 
@@ -105,9 +100,7 @@ export class TaskClaiming {
     this.logger = createWrappedLogger({ logger: opts.logger, tags: ['taskClaiming'] });
     this.taskClaimingBatchesByType = this.partitionIntoClaimingBatches(this.definitions);
     this.taskMaxAttempts = Object.fromEntries(this.normalizeMaxAttempts(this.definitions));
-    this.staticExcludedTaskTypes = opts.excludedTaskTypes;
-    this.getExecutionControlState =
-      opts.getExecutionControlState ?? (() => DEFAULT_EXECUTION_CONTROL_STATE);
+    this.excludedTaskTypes = opts.excludedTaskTypes;
     this.taskClaimer = getTaskClaimer(this.logger, opts.strategy);
     this.events$ = new Subject<TaskClaim>();
     this.taskPartitioner = opts.taskPartitioner;
@@ -164,14 +157,6 @@ export class TaskClaiming {
   public async claimAvailableTasksIfCapacityIsAvailable(
     claimingOptions: Omit<OwnershipClaimingOpts, 'size' | 'taskTypes'>
   ): Promise<Result<ClaimOwnershipResult, FillPoolResult>> {
-    const executionControl = this.getExecutionControlState();
-    if (executionControl.paused) {
-      this.logger.debug(
-        `[Task Ownership]: Task Manager execution is paused by an operator; skipping claim cycle.`
-      );
-      return asErr(FillPoolResult.NoTasksClaimed);
-    }
-
     if (this.getAvailableCapacity()) {
       try {
         const opts: TaskClaimerOpts = {
@@ -182,9 +167,7 @@ export class TaskClaiming {
           getCapacity: this.getAvailableCapacity,
           definitions: this.definitions,
           taskMaxAttempts: this.taskMaxAttempts,
-          // Merge the statically-excluded task types (config) with the
-          // runtime paused task types so both are dropped from the claim.
-          excludedTaskTypes: [...this.staticExcludedTaskTypes, ...executionControl.pausedTaskTypes],
+          excludedTaskTypes: this.excludedTaskTypes,
           logger: this.logger,
           taskPartitioner: this.taskPartitioner,
         };

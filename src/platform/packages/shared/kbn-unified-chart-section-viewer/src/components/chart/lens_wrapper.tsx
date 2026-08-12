@@ -36,12 +36,7 @@ export type LensWrapperProps = {
   quickActionIds?: QuickActionIds;
 } & Pick<UnifiedMetricsGridProps, 'services' | 'onBrushEnd' | 'onFilter'>;
 
-const DEFAULT_DISABLED_ACTIONS = [
-  'ACTION_CUSTOMIZE_PANEL',
-  'ACTION_EXPORT_CSV',
-  'ACTION_FILTERS_NOTIFICATION',
-  'alertRule',
-];
+const DEFAULT_DISABLED_ACTIONS = ['ACTION_CUSTOMIZE_PANEL', 'ACTION_EXPORT_CSV', 'alertRule'];
 export function LensWrapper({
   lensProps,
   services,
@@ -107,15 +102,8 @@ export function LensWrapper({
         query: resolvedQuery,
         tabLabel: lensProps.attributes.title,
         timeRange: lensProps.timeRange,
-        isApproximate: lensProps.isApproximate,
       }),
-    [
-      resolvedQuery,
-      lensProps.attributes.title,
-      lensProps.timeRange,
-      lensProps.isApproximate,
-      onExploreInDiscoverTab,
-    ]
+    [resolvedQuery, lensProps.attributes.title, lensProps.timeRange, onExploreInDiscoverTab]
   );
 
   const extraActions = useLensExtraActions({

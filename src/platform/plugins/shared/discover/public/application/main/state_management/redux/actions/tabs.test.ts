@@ -106,7 +106,6 @@ describe('tabs actions', () => {
           to: 'now',
         },
         tabLabel: 'Logs',
-        isApproximate: true,
       };
 
       await internalState.dispatch(internalStateActions.openInNewTabExtPointAction(params));
@@ -117,7 +116,6 @@ describe('tabs actions', () => {
       expect(tabs).toHaveLength(initialTabs.length + 1);
       expect(newTab.label).toBe('Logs');
       expect(newTab.appState.query).toEqual(params.query);
-      expect(newTab.appState.isApproximate).toBe(params.isApproximate);
       expect(newTab.globalState.timeRange).toEqual(params.timeRange);
     });
   });

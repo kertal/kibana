@@ -21,7 +21,6 @@ import type {
   GetOneBulkOperationPackagesRequestSchema,
 } from '../../types';
 import { updatePackage } from '../../services/epm/packages/update';
-import { runAndLogNamespacePreflightCheck } from '../../services/epm/packages/namespace_datastream_templates';
 import { scheduleSyncNamespaceTemplatesTask } from '../../tasks/sync_namespace_templates_task';
 import {
   getAllowedNamespacePrefixesForSpace,
@@ -264,19 +263,6 @@ export const postBulkNamespaceCustomizationHandler: FleetRequestHandler<
         });
         persistedList = newList;
 
-        let warnings;
-        if (namespaceCustomizationDiff.addedNamespaces.length > 0) {
-          const esClient = (await context.core).elasticsearch.client.asCurrentUser;
-          const detected = await runAndLogNamespacePreflightCheck({
-            esClient,
-            soClient: savedObjectsClient,
-            packageName,
-            namespaces: namespaceCustomizationDiff.addedNamespaces,
-            handlerName: 'postBulkNamespaceCustomizationHandler',
-          });
-          if (detected.length > 0) warnings = detected;
-        }
-
         if (
           namespaceCustomizationDiff.addedNamespaces.length > 0 ||
           namespaceCustomizationDiff.removedNamespaces.length > 0
@@ -293,7 +279,6 @@ export const postBulkNamespaceCustomizationHandler: FleetRequestHandler<
           name: packageName,
           success: true,
           namespace_customization_enabled_for: newList,
-          ...(warnings && { warnings }),
         };
       } catch (err) {
         return {

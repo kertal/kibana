@@ -39,6 +39,8 @@ describe('useDashboardMenuItems', () => {
       const { result } = renderHook(
         () =>
           useDashboardMenuItems({
+            isLabsShown: false,
+            setIsLabsShown: jest.fn(),
             maybeRedirect: jest.fn(),
           }),
         {
@@ -65,6 +67,8 @@ describe('useDashboardMenuItems', () => {
       const { result } = renderHook(
         () =>
           useDashboardMenuItems({
+            isLabsShown: false,
+            setIsLabsShown: jest.fn(),
             maybeRedirect: jest.fn(),
           }),
         {
@@ -104,6 +108,8 @@ describe('useDashboardMenuItems', () => {
       const { result } = renderHook(
         () =>
           useDashboardMenuItems({
+            isLabsShown: false,
+            setIsLabsShown: jest.fn(),
             maybeRedirect: jest.fn(),
           }),
         {
@@ -164,6 +170,8 @@ describe('useDashboardMenuItems', () => {
       const { result } = renderHook(
         () =>
           useDashboardMenuItems({
+            isLabsShown: false,
+            setIsLabsShown: jest.fn(),
             maybeRedirect: jest.fn(),
           }),
         {
@@ -199,6 +207,8 @@ describe('useDashboardMenuItems', () => {
         const { result } = renderHook(
           () =>
             useDashboardMenuItems({
+              isLabsShown: false,
+              setIsLabsShown: jest.fn(),
               maybeRedirect: jest.fn(),
             }),
           {
@@ -238,6 +248,8 @@ describe('useDashboardMenuItems', () => {
         const { result } = renderHook(
           () =>
             useDashboardMenuItems({
+              isLabsShown: false,
+              setIsLabsShown: jest.fn(),
               maybeRedirect: jest.fn(),
             }),
           {
@@ -264,6 +276,8 @@ describe('useDashboardMenuItems', () => {
         const { result } = renderHook(
           () =>
             useDashboardMenuItems({
+              isLabsShown: false,
+              setIsLabsShown: jest.fn(),
               maybeRedirect: jest.fn(),
             }),
           {

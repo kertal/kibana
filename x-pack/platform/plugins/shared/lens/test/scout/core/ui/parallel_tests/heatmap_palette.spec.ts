@@ -33,7 +33,7 @@ spaceTest.describe('Lens heatmap palette', { tag: '@local-stateful-classic' }, (
         field: 'ip',
         keepOpen: true,
       });
-      await lens.dimensions.setTermsNumberOfValues(5);
+      await lens.setTermsNumberOfValues(5);
       await lens.closeDimensionEditor();
 
       await lens.configureDimension({
@@ -43,7 +43,7 @@ spaceTest.describe('Lens heatmap palette', { tag: '@local-stateful-classic' }, (
       });
       await lens.waitForVisualization('xyVisChart');
 
-      const getHeatmapDebug = () => lens.workspace.getCurrentChartDebugState('heatmapChart');
+      const getHeatmapDebug = () => lens.getCurrentChartDebugState('heatmapChart');
 
       let previousFirstLegendKey = '';
       let previousFirstLegendColor = '';
@@ -63,13 +63,13 @@ spaceTest.describe('Lens heatmap palette', { tag: '@local-stateful-classic' }, (
       });
 
       await spaceTest.step('reflect stop color changes on the chart', async () => {
-        await lens.dimensions.openDimensionEditor('lnsHeatmap_cellPanel > lns-dimensionTrigger');
+        await lens.openDimensionEditor('lnsHeatmap_cellPanel > lns-dimensionTrigger');
         await lens.openPalettePanelFlyout();
         const { violations } = await page.checkA11y({
           include: ['[data-test-subj="lns-palettePanelFlyout"]'],
         });
         expect(violations).toHaveLength(0);
-        await lens.workspace.setInputValue('lnsPalettePanel_dynamicColoring_range_value_0', '10');
+        await lens.setInputValue('lnsPalettePanel_dynamicColoring_range_value_0', '10');
         await expect
           .poll(async () => {
             const debugState = await getHeatmapDebug();
@@ -82,7 +82,7 @@ spaceTest.describe('Lens heatmap palette', { tag: '@local-stateful-classic' }, (
       });
 
       await spaceTest.step('keep legend when switching percentage to number', async () => {
-        await lens.style.setPaletteRangeType('number');
+        await lens.setPaletteRangeType('number');
         await expect
           .poll(async () => {
             const debugState = await getHeatmapDebug();
@@ -95,7 +95,7 @@ spaceTest.describe('Lens heatmap palette', { tag: '@local-stateful-classic' }, (
       });
 
       await spaceTest.step('reflect stop changes in number mode', async () => {
-        await lens.workspace.setInputValue('lnsPalettePanel_dynamicColoring_range_value_0', '0');
+        await lens.setInputValue('lnsPalettePanel_dynamicColoring_range_value_0', '0');
         await expect
           .poll(async () => {
             const debugState = await getHeatmapDebug();
@@ -109,10 +109,7 @@ spaceTest.describe('Lens heatmap palette', { tag: '@local-stateful-classic' }, (
 
       await spaceTest.step('apply stop value without clearing cell fills', async () => {
         // Target a stop near the lower data bound; assert cells keep a fill color.
-        await lens.workspace.setInputValue(
-          'lnsPalettePanel_dynamicColoring_range_value_0',
-          '5722.7747'
-        );
+        await lens.setInputValue('lnsPalettePanel_dynamicColoring_range_value_0', '5722.7747');
         await expect
           .poll(async () => {
             const debugState = await getHeatmapDebug();
@@ -128,7 +125,7 @@ spaceTest.describe('Lens heatmap palette', { tag: '@local-stateful-classic' }, (
       });
 
       await spaceTest.step('reset stop numbers when changing palette', async () => {
-        await lens.style.changePaletteTo('status');
+        await lens.changePaletteTo('status');
         await expect
           .poll(async () => {
             const debugState = await getHeatmapDebug();
@@ -148,7 +145,7 @@ spaceTest.describe('Lens heatmap palette', { tag: '@local-stateful-classic' }, (
           key,
           color,
         }));
-        await lens.style.setPaletteRangeType('percent');
+        await lens.setPaletteRangeType('percent');
 
         const legendAfter = (await getHeatmapDebug()).legend?.items?.map(({ key, color }) => ({
           key,
@@ -160,8 +157,8 @@ spaceTest.describe('Lens heatmap palette', { tag: '@local-stateful-classic' }, (
       await spaceTest.step('change x-axis label rotation', async () => {
         await lens.closePalettePanelFlyout();
         await lens.closeDimensionEditor();
-        await lens.style.openStyleSettingsFlyout();
-        await lens.style.setAxisLabelOrientation('vertical');
+        await lens.openStyleSettingsFlyout();
+        await lens.setAxisLabelOrientation('vertical');
         await expect
           .poll(async () => {
             const debugState = await getHeatmapDebug();

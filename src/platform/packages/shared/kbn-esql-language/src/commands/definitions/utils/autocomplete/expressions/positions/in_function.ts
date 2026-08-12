@@ -12,7 +12,7 @@ import { within } from '@elastic/esql';
 import { suggestForExpression } from '../suggestion_engine';
 import type { ExpressionContext } from '../types';
 import type { ISuggestionItem } from '../../../../../registry/types';
-import { buildExpressionFunctionParameterContext, getRightmostOperator } from '../utils';
+import { buildExpressionFunctionParameterContext } from '../utils';
 import { endsWithComma, endsWithOpenParen } from '../../../regex';
 
 /** Suggests completions when cursor is inside a function call (e.g., CONCAT(field1, /)) */
@@ -29,8 +29,7 @@ export async function suggestInFunction(ctx: ExpressionContext): Promise<ISugges
     callbacks,
   } = ctx;
 
-  const functionExpression = getRightmostOperator(expressionRoot as ESQLFunction);
-
+  const functionExpression = expressionRoot as ESQLFunction;
   const startingNewParam = endsWithComma(innerText);
   const paramContext = buildExpressionFunctionParameterContext(
     functionExpression,

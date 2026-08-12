@@ -9,8 +9,8 @@ import React, { useEffect, useMemo } from 'react';
 import { EuiText, type EuiStepProps, type EuiStepStatus } from '@elastic/eui';
 import { useGetMissingResources } from '../../../../../../../common/hooks/use_get_missing_resources';
 import type { RuleMigrationTaskStats } from '../../../../../../../../../common/siem_migrations/model/rule_migration.gen';
-import { MigrationSource, type OnMissingResourcesFetched } from '../../../../../../../common/types';
-import { useRuleMigrationVendorCopy } from '../../../../../../hooks/use_rule_migration_vendor_copy';
+import * as i18n from './translations';
+import type { OnMissingResourcesFetched } from '../../../../../../../common/types';
 
 export interface CheckResourcesStepProps {
   status: EuiStepStatus;
@@ -26,7 +26,6 @@ export const useCheckResourcesStep = ({
     'rule',
     onMissingResourcesFetched
   );
-  const { checkResources } = useRuleMigrationVendorCopy(MigrationSource.SPLUNK);
 
   useEffect(() => {
     if (status === 'current' && migrationStats?.id) {
@@ -45,12 +44,10 @@ export const useCheckResourcesStep = ({
   }, [isLoading, error, status]);
 
   return {
-    title: checkResources.title,
+    title: i18n.RULES_DATA_INPUT_CHECK_RESOURCES_TITLE,
     status: uploadStepStatus,
     children: (
-      <EuiText size="s" data-test-subj="checkResourcesDescription">
-        {checkResources.description}
-      </EuiText>
+      <EuiText size="s">{i18n.RULES_DATA_INPUT_CHECK_RESOURCES_SPLUNK_DESCRIPTION}</EuiText>
     ),
   };
 };

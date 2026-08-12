@@ -44,6 +44,10 @@ export class HostPage {
     return this.page.getByTestId(`collectionMethodSelectorCard-${id}`);
   }
 
+  ingestionSelector() {
+    return this.page.getByTestId('observabilityOnboardingIngestionModeSelector');
+  }
+
   otelInstallCodeBlock() {
     return this.page.getByTestId('observabilityOnboardingOtelLogsPanelCodeBlock');
   }

@@ -15,7 +15,7 @@ import type { Logger, RequestHandlerContext } from '@kbn/core/server';
 import { SavedObjectsErrorHelpers } from '@kbn/core/server';
 import type { UsageCounter } from '@kbn/usage-collection-plugin/server';
 import { getRouteConfig } from './get_route_config';
-import { discoverSessionGetResponseSchema } from './schema';
+import { discoverSessionApiResponseSchema } from './schema';
 import { getDiscoverSession } from './session_get';
 
 export const registerGetRoute = (
@@ -47,7 +47,7 @@ export const registerGetRoute = (
           },
           response: {
             200: {
-              body: () => discoverSessionGetResponseSchema,
+              body: () => discoverSessionApiResponseSchema,
               description: 'Success',
             },
             403: { description: 'Forbidden' },

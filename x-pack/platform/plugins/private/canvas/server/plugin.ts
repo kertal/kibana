@@ -32,6 +32,7 @@ import { setupInterpreter } from './setup_interpreter';
 import { customElementType, workpadTypeFactory, workpadTemplateType } from './saved_objects';
 import type { CanvasSavedObjectTypeMigrationsDeps } from './saved_objects/migrations';
 import { initializeTemplates } from './templates';
+import { getUISettings } from './ui_settings';
 import type { CanvasRouteHandlerContext } from './workpad_route_context';
 import { createWorkpadRouteContext } from './workpad_route_context';
 import { setKibanaServices } from './kibana_services';
@@ -71,6 +72,7 @@ export class CanvasPlugin implements Plugin<void, void, SetupDeps, StartDeps> {
     });
 
     const deps: CanvasSavedObjectTypeMigrationsDeps = { expressions: expressionsSetup };
+    coreSetup.uiSettings.register(getUISettings());
     coreSetup.savedObjects.registerType(customElementType(deps));
     coreSetup.savedObjects.registerType(workpadTypeFactory(deps));
     coreSetup.savedObjects.registerType(workpadTemplateType(deps));

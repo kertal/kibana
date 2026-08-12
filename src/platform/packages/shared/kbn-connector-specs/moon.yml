@@ -25,7 +25,6 @@ dependsOn:
   - '@kbn/actions-utils'
   - '@kbn/i18n'
   - '@kbn/mcp-client'
-  - '@kbn/logging-mocks'
   - '@kbn/repo-info'
 tags:
   - shared-common

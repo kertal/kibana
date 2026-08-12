@@ -10,11 +10,7 @@
 import type { ESQLAstHeaderCommand, ESQLAstSetHeaderCommand } from '@elastic/esql/types';
 import { isBinaryExpression, isIdentifier, isMap, isStringLiteral } from '@elastic/esql';
 import { withAutoSuggest } from '../../../..';
-import {
-  isUnmappedFieldsStrategy,
-  UnmappedFieldsStrategy,
-  type ISuggestionItem,
-} from '../../registry/types';
+import { UnmappedFieldsStrategy, type ISuggestionItem } from '../../registry/types';
 import { SuggestionCategory } from '../../../language/autocomplete/utils/sorting/types';
 import { EsqlSettingNames, settings } from '../generated/settings';
 
@@ -78,9 +74,13 @@ export function getUnmappedFieldsStrategy(
     if (comand.name.toUpperCase() === 'SET') {
       const { settingName, settingValue } = getSettingData(comand as ESQLAstSetHeaderCommand);
       if (settingName?.toUpperCase() === EsqlSettingNames.UNMAPPED_FIELDS.toUpperCase()) {
-        const normalized = settingValue?.toUpperCase();
-        if (normalized && isUnmappedFieldsStrategy(normalized)) {
-          unmappedFieldsStrategy = normalized;
+        switch (settingValue?.toUpperCase()) {
+          case UnmappedFieldsStrategy.NULLIFY:
+            unmappedFieldsStrategy = UnmappedFieldsStrategy.NULLIFY;
+            break;
+          case UnmappedFieldsStrategy.LOAD:
+            unmappedFieldsStrategy = UnmappedFieldsStrategy.LOAD;
+            break;
         }
       }
     }
@@ -94,7 +94,6 @@ export function getUnmappedFieldsStrategy(
 export function getUnmappedFieldType(unmappedFieldsStrategy: UnmappedFieldsStrategy): string {
   switch (unmappedFieldsStrategy) {
     case UnmappedFieldsStrategy.LOAD:
-    case UnmappedFieldsStrategy.LOAD_ALL:
       return 'keyword';
     case UnmappedFieldsStrategy.NULLIFY:
       return 'null';

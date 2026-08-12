@@ -21,7 +21,6 @@ export const APP_HEADER_TEST_SUBJECTS = {
   titleActions: 'appHeaderTitleActions',
   badge: 'appHeaderBadge',
   sharePrefix: 'appHeaderShare',
-  shareButton: 'shareTopNavButton',
   favorite: 'appHeaderFavorite',
   favoriteButton: 'appHeaderFavoriteButton',
   description: 'appHeaderDescription',

@@ -42,10 +42,4 @@ export const BearerAuth: AuthTypeSpec<AuthSchemaType> = {
 
     return axiosInstance;
   },
-  getAuthHeaders: async (
-    _: AuthContext,
-    secret: AuthSchemaType
-  ): Promise<Record<string, string>> => {
-    return { Authorization: `Bearer ${secret.token}` };
-  },
 };

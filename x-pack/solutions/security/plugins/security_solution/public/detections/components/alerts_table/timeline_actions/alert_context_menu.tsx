@@ -59,7 +59,7 @@ interface AlertContextMenuProps {
   ariaLabel?: string;
   ariaRowindex: number;
   columnValues: string;
-  isRemoteDocument: boolean;
+  disabled: boolean;
   ecsRowData: Ecs;
   onRuleChange?: () => void;
   scopeId: string;
@@ -70,7 +70,7 @@ const AlertContextMenuComponent: React.FC<AlertContextMenuProps> = ({
   ariaLabel = i18n.MORE_ACTIONS,
   ariaRowindex,
   columnValues,
-  isRemoteDocument,
+  disabled,
   ecsRowData,
   onRuleChange,
   scopeId,
@@ -323,11 +323,7 @@ const AlertContextMenuComponent: React.FC<AlertContextMenuProps> = ({
 
   const button = useMemo(() => {
     const hasItems = !!items.length;
-    const tooltipContent = isRemoteDocument
-      ? i18n.REMOTE_DOCUMENT_ACTIONS_UNAVAILABLE
-      : hasItems
-      ? i18n.MORE_ACTIONS
-      : i18n.INSUFFICIENT_PRIVILEGES;
+    const tooltipContent = hasItems ? i18n.MORE_ACTIONS : i18n.INSUFFICIENT_PRIVILEGES;
 
     return (
       <EuiToolTip position="top" content={tooltipContent}>
@@ -338,12 +334,12 @@ const AlertContextMenuComponent: React.FC<AlertContextMenuProps> = ({
           iconType="boxesVertical"
           data-popover-open={isPopoverOpen}
           onClick={onButtonClick}
-          isDisabled={isRemoteDocument || !hasItems}
+          isDisabled={disabled || !hasItems}
           color={isPopoverOpen ? 'primary' : 'text'}
         />
       </EuiToolTip>
     );
-  }, [ariaLabel, isPopoverOpen, onButtonClick, isRemoteDocument, items.length]);
+  }, [ariaLabel, isPopoverOpen, onButtonClick, disabled, items.length]);
 
   const osqueryFlyout = useMemo(() => {
     return (

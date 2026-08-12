@@ -83,11 +83,6 @@ export function ChatMessageText({
     ol > li > p {
       margin-bottom: ${euiTheme.size.s};
     }
-
-    .euiMarkdownFormat > ul > li,
-    .euiMarkdownFormat > ol > li {
-      line-height: ${euiTheme.size.l};
-    }
   `;
 
   const { attachmentsService, renderersService, conversationsService, startDependencies } =
@@ -258,9 +253,9 @@ export function ChatMessageText({
 
   return (
     <>
-      <EuiText size="s" className={containerClassName}>
+      <EuiText size="m" className={containerClassName}>
         <EuiMarkdownFormat
-          textSize="s"
+          textSize="m"
           parsingPluginList={parsingPluginList}
           processingPluginList={processingPluginList}
         >

@@ -19,7 +19,8 @@ import type {
 } from '../types';
 import type { AIAssistantService } from '../ai_assistant_service';
 import { appContextService } from '../services/app_context';
-import { resolveCurrentUser } from './resolve_current_user';
+
+let hasLoggedProfileUidError = false;
 
 export interface IRequestContextFactory {
   create(
@@ -65,13 +66,42 @@ export class RequestContextFactory implements IRequestContextFactory {
     const getSpaceId = (): string =>
       startPlugins.spaces?.spacesService?.getSpaceId(request) || DEFAULT_NAMESPACE_STRING;
 
-    const getCurrentUser = () =>
-      resolveCurrentUser({
-        currentUser: coreContext.security.authc.getCurrentUser(),
-        logger: this.logger,
-        request,
-        security: startPlugins.security,
-      });
+    const getCurrentUser = async () => {
+      let contextUser = coreContext.security.authc.getCurrentUser();
+
+      if (contextUser && !contextUser?.profile_uid) {
+        // In some serverless/versioned Elasticsearch environments, `with_profile_uid` is unsupported,
+        // and API-key authenticated users may not have roles/username in the same way as realm users.
+        // Use stable fallbacks to avoid hard failures and noisy logs.
+        if (contextUser.authentication_type === 'api_key' && contextUser.api_key?.id) {
+          return { ...contextUser, profile_uid: contextUser.api_key.id };
+        }
+
+        try {
+          const users = await coreContext.elasticsearch.client.asCurrentUser.security.getUser({
+            username: contextUser.username,
+            with_profile_uid: true,
+          });
+
+          if (users[contextUser.username].profile_uid) {
+            contextUser = { ...contextUser, profile_uid: users[contextUser.username].profile_uid };
+          }
+        } catch (e) {
+          if (!hasLoggedProfileUidError) {
+            hasLoggedProfileUidError = true;
+            this.logger.warn(
+              `Failed to get user profile_uid; continuing without it. This can occur on some Elasticsearch versions/serverless deployments. ${e}`
+            );
+          }
+        }
+
+        if (contextUser && !contextUser.profile_uid && contextUser.username) {
+          contextUser = { ...contextUser, profile_uid: contextUser.username };
+        }
+      }
+
+      return contextUser;
+    };
 
     const savedObjectsClient = coreStart.savedObjects.getScopedClient(request);
     const rulesClient = await startPlugins.alerting.getRulesClientWithRequest(request);

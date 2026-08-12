@@ -55,7 +55,6 @@ interface Padding {
 interface Mark {
   color?: string;
   fill?: string;
-  stroke?: string;
 }
 
 type Renderer = 'svg' | 'canvas';

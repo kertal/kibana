@@ -65,7 +65,9 @@ const fleetAgentsRoute = createApmServerRoute({
   endpoint: routeDefinitions.fleet.agents.endpoint,
   security: {
     authz: {
-      requiredPrivileges: ['apm', 'apm_write'],
+      enabled: false,
+      reason:
+        "It's being used in the tutorial page, so it needs to be available for users even if they don't have APM permissions.",
     },
   },
   handler: async ({ core, plugins }): Promise<FleetAgentResponse> => {

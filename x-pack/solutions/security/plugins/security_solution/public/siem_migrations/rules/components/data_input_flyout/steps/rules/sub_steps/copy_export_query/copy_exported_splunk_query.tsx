@@ -6,16 +6,15 @@
  */
 
 import React, { useCallback } from 'react';
-import { EuiCodeBlock, EuiFlexGroup, EuiFlexItem, EuiText } from '@elastic/eui';
+import { EuiCode, EuiCodeBlock, EuiFlexGroup, EuiFlexItem, EuiText } from '@elastic/eui';
+import { FormattedMessage } from '@kbn/i18n-react';
 import { RULES_SPLUNK_QUERY } from '../../../../constants';
-import { MigrationSource } from '../../../../../../../common/types';
-import { useRuleMigrationVendorCopy } from '../../../../../../hooks/use_rule_migration_vendor_copy';
+import * as i18n from './translations';
 
 interface CopyExportQueryProps {
   onCopied: () => void;
 }
 export const CopyExportedSplunkQuery = React.memo<CopyExportQueryProps>(({ onCopied }) => {
-  const { copyExportQuery } = useRuleMigrationVendorCopy(MigrationSource.SPLUNK);
   const onClick: React.MouseEventHandler = useCallback(
     (ev) => {
       // The only button inside the element is the "copy" button.
@@ -29,7 +28,16 @@ export const CopyExportedSplunkQuery = React.memo<CopyExportQueryProps>(({ onCop
   return (
     <EuiFlexGroup direction="column" gutterSize="s">
       <EuiFlexItem>
-        <EuiText size="s">{copyExportQuery.description}</EuiText>
+        <EuiText size="s">
+          <FormattedMessage
+            id="xpack.securitySolution.siemMigrations.rules.dataInputFlyout.rules.copyExportQuery.description"
+            defaultMessage="Log in to your Splunk admin account, go to the {section} app and run the following query. Export your results as {format}."
+            values={{
+              section: <b>{i18n.RULES_DATA_INPUT_COPY_DESCRIPTION_SECTION}</b>,
+              format: <b>{'JSON'}</b>,
+            }}
+          />
+        </EuiText>
       </EuiFlexItem>
       <EuiFlexItem>
         {/* The click event is also dispatched when using the keyboard actions (space or enter) for "copy" button.
@@ -44,7 +52,11 @@ export const CopyExportedSplunkQuery = React.memo<CopyExportQueryProps>(({ onCop
       </EuiFlexItem>
       <EuiFlexItem>
         <EuiText color="subdued" size="xs">
-          {copyExportQuery.details?.queryLimitDisclaimer}
+          <FormattedMessage
+            id="xpack.securitySolution.siemMigrations.rulesFileUpload.disclaimer"
+            defaultMessage="Note: To avoid exceeding your LLM API rate limit when translating a large number of queries, consider exporting rules in batches, for example by adding {operator} to the query above"
+            values={{ operator: <EuiCode>{'| head'}</EuiCode> }}
+          />
         </EuiText>
       </EuiFlexItem>
     </EuiFlexGroup>

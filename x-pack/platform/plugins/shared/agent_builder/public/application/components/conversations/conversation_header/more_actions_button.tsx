@@ -10,6 +10,7 @@ import {
   EuiButtonIcon,
   EuiPopover,
   EuiContextMenuPanel,
+  EuiSpacer,
   EuiToolTip,
 } from '@elastic/eui';
 import { i18n } from '@kbn/i18n';
@@ -288,7 +289,7 @@ export const MoreActionsButton: React.FC<MoreActionsButtonProps> = ({ onCloseSid
   const buttonProps = {
     iconType: 'boxesVertical' as const,
     color: 'text' as const,
-    size: 's' as const,
+    size: 'm' as const,
     'aria-label': fullscreenLabels.actionsAriaLabel,
     onClick: togglePopover,
     'data-test-subj': 'agentBuilderMoreActionsButton',
@@ -305,11 +306,12 @@ export const MoreActionsButton: React.FC<MoreActionsButtonProps> = ({ onCloseSid
         button={<EuiButtonIcon {...buttonProps} />}
         isOpen={isPopoverOpen}
         closePopover={closePopover}
-        panelPaddingSize="none"
-        anchorPosition="downRight"
+        panelPaddingSize="xs"
+        anchorPosition="downCenter"
         aria-label={fullscreenLabels.actionsAriaLabel}
       >
         <EuiContextMenuPanel items={menuItems} />
+        <EuiSpacer size="s" />
       </EuiPopover>
     </>
   );

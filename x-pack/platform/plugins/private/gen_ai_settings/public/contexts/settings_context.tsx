@@ -32,7 +32,6 @@ import {
   AGENT_BUILDER_TRACING_SYSTEM_PROMPT_SETTING_ID,
   AGENT_BUILDER_TRACING_REAL_NAMES_SETTING_ID,
   AGENT_BUILDER_TRACING_REAL_IDS_SETTING_ID,
-  AGENT_BUILDER_TRACING_USER_DATA_SETTING_ID,
 } from '@kbn/management-settings-ids';
 import { i18n } from '@kbn/i18n';
 import { useKibana } from '../hooks/use_kibana';
@@ -69,7 +68,6 @@ const SETTING_KEYS = [
   AGENT_BUILDER_TRACING_SYSTEM_PROMPT_SETTING_ID,
   AGENT_BUILDER_TRACING_REAL_NAMES_SETTING_ID,
   AGENT_BUILDER_TRACING_REAL_IDS_SETTING_ID,
-  AGENT_BUILDER_TRACING_USER_DATA_SETTING_ID,
 ];
 
 export const SettingsContextProvider = ({ children }: { children: React.ReactNode }) => {

@@ -11,28 +11,24 @@ import { toAsCodeTags } from '@kbn/as-code-shared-transforms';
 import type { SavedObjectReference } from '@kbn/core/server';
 import type { DiscoverSessionAttributes } from '@kbn/saved-search-plugin/server';
 import { fromStoredTab } from '../../../common/embeddable/transform_utils';
-import type { DiscoverSessionApiData, DiscoverSessionWarning } from '../schema';
+import type { DiscoverSessionApiData } from '../schema';
 import { transformControlPanelsOut } from './transform_control_panels';
 import { transformVisContextOut } from './transform_vis_context';
 
 export const transformDiscoverSessionOut = (
   attributes: DiscoverSessionAttributes,
   references: SavedObjectReference[] = []
-): { sessionState: DiscoverSessionApiData; warnings: DiscoverSessionWarning[] } => {
+): DiscoverSessionApiData => {
   const { tags } = toAsCodeTags(references);
-  const warnings: DiscoverSessionWarning[] = [];
-  const sessionState: DiscoverSessionApiData = {
+
+  return {
     title: attributes.title,
     description: attributes.description,
     tags,
     tabs: attributes.tabs.map((tab) => {
       const apiTab = fromStoredTab(tab.attributes, references);
       const visContext = transformVisContextOut(tab.attributes.visContext);
-      const { panels: controlPanels, warnings: controlPanelWarnings } = transformControlPanelsOut(
-        tab.attributes.controlGroupJson,
-        tab.id
-      );
-      warnings.push(...controlPanelWarnings);
+      const controlPanels = transformControlPanelsOut(tab.attributes.controlGroupJson);
 
       return {
         id: tab.id,
@@ -62,6 +58,4 @@ export const transformDiscoverSessionOut = (
       };
     }),
   };
-
-  return { sessionState, warnings };
 };

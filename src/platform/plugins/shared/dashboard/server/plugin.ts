@@ -25,7 +25,6 @@ import type {
   Plugin,
   Logger,
   SavedObjectsClientContract,
-  UiSettingsParams,
 } from '@kbn/core/server';
 import { registerContentInsights } from '@kbn/content-management-content-insights-server';
 import {
@@ -38,13 +37,12 @@ import type { SavedObjectTaggingStart } from '@kbn/saved-objects-tagging-plugin/
 import type { SecurityPluginStart } from '@kbn/security-plugin-types-server';
 import { registerAccessControl } from '@kbn/content-management-access-control-server';
 import { once } from 'lodash';
-import { schema } from '@kbn/config-schema';
-import { i18n } from '@kbn/i18n';
 import {
   initializeDashboardTelemetryTask,
   scheduleDashboardTelemetry,
   TASK_ID,
 } from './usage/dashboard_telemetry_collection_task';
+import { getUISettings } from './ui_settings';
 import { capabilitiesProvider } from './capabilities_provider';
 import type { DashboardPluginSetup, DashboardPluginStart } from './types';
 import { createDashboardSavedObjectType } from './dashboard_saved_object';
@@ -56,8 +54,6 @@ import { setKibanaServices } from './kibana_services';
 import { scanDashboards } from './scan_dashboards';
 import { registerDashboardDrilldown } from './dashboard_drilldown/register_dashboard_drilldown';
 import { getDashboardStateSchema } from './api/dashboard_state_schemas';
-
-export const DEFER_BELOW_FOLD = `labs:dashboard:deferBelowFold` as const;
 
 interface SetupDeps {
   embeddable: EmbeddableSetup;
@@ -135,22 +131,7 @@ export class DashboardPlugin
       dashboardPersistableStateServiceFactory(plugins.embeddable)
     );
 
-    const dashboardUiSettings: Record<string, UiSettingsParams<boolean>> = {
-      [DEFER_BELOW_FOLD]: {
-        schema: schema.boolean(),
-        requiresPageReload: true,
-        category: ['Dashboard'],
-        value: false,
-        name: i18n.translate('dashboard.labs.enableDeferBelowFoldProjectName', {
-          defaultMessage: 'Defer loading panels below "the fold"',
-        }),
-        description: i18n.translate('dashboard.labs.enableDeferBelowFoldProjectDescription', {
-          defaultMessage:
-            'Any panels below "the fold"-- the area hidden beyond the bottom of the window, accessed by scrolling-- will not be loaded immediately, but only when they enter the viewport',
-        }),
-      },
-    };
-    core.uiSettings.register(dashboardUiSettings);
+    core.uiSettings.register(getUISettings());
 
     registerRoutes(core.http, this.apiUsageCounter, this.logger);
 

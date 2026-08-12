@@ -49,7 +49,6 @@ const evaluationsDataStreamMappings = {
         id: { type: 'keyword' },
         index: { type: 'integer' },
         input: { type: 'object', enabled: false },
-        metadata: { type: 'flattened' },
         dataset: {
           type: 'object',
           properties: {

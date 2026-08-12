@@ -94,7 +94,6 @@ describe('executeEsqlQuery', () => {
         ),
       })
     );
-    expect(mockGetESQLResults.mock.calls[0][0]).not.toHaveProperty('approximation');
   });
 
   it('passes metrics info execution context so the request is labeled in APM', async () => {

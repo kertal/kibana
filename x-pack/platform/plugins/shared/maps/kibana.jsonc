@@ -33,6 +33,7 @@
       "embeddable",
       "mapsEms",
       "share",
+      "presentationUtil",
       "contentManagement"
     ],
     "optionalPlugins": [
@@ -55,8 +56,7 @@
       "unifiedSearch",
       "fieldFormats",
       "esql",
-      "savedObjects",
-      "presentationUtil"
+      "savedObjects"
     ],
     "extraPublicDirs": [
       "common"

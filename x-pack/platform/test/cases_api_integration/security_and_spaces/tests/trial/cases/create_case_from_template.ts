@@ -191,16 +191,18 @@ export default ({ getService }: FtrProviderContext): void => {
       expect(JSON.stringify(res)).to.contain('not found');
     });
 
-    it('silently accepts an unknown key in extended_fields (no longer rejected)', async () => {
+    it('rejects a merged map that violates the template validation (unknown key)', async () => {
       const template = await createTemplate(kitchenSinkDefinition);
 
-      const createdCase = await createCase(supertest, {
-        ...getPostCaseRequest({ owner: OWNER }),
-        template: { id: template.templateId },
-        extended_fields: { not_a_field_as_keyword: 'x' },
-      });
-
-      expect(createdCase.template?.id).to.eql(template.templateId);
+      await createCase(
+        supertest,
+        {
+          ...getPostCaseRequest({ owner: OWNER }),
+          template: { id: template.templateId },
+          extended_fields: { not_a_field_as_keyword: 'x' },
+        },
+        400
+      );
     });
 
     it('allows a user with only case-create privileges (no manageTemplates) to create from a template', async () => {

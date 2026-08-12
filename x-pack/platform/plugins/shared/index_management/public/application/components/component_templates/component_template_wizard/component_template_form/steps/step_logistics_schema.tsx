@@ -13,7 +13,7 @@ import { i18n } from '@kbn/i18n';
 import type { FormSchema } from '../../../shared_imports';
 import { FIELD_TYPES, fieldValidators, fieldFormatters } from '../../../shared_imports';
 
-const { emptyField, indexTemplateNameField, isJsonField } = fieldValidators;
+const { emptyField, containsCharsField, isJsonField } = fieldValidators;
 const { toInt } = fieldFormatters;
 
 const stringifyJson = (json: { [key: string]: any }): string =>
@@ -37,12 +37,6 @@ export const logisticsFormSchema: FormSchema = {
     label: i18n.translate('xpack.idxMgmt.componentTemplateForm.stepLogistics.nameFieldLabel', {
       defaultMessage: 'Name',
     }),
-    helpText: (
-      <FormattedMessage
-        id="xpack.idxMgmt.componentTemplateForm.stepLogistics.nameHelpText"
-        defaultMessage="Must not contain uppercase characters, a space, comma, hash, asterisk, or start with an underscore."
-      />
-    ),
     type: FIELD_TYPES.TEXT,
     validations: [
       {
@@ -53,7 +47,15 @@ export const logisticsFormSchema: FormSchema = {
         ),
       },
       {
-        validator: indexTemplateNameField(i18n),
+        validator: containsCharsField({
+          chars: ' ',
+          message: i18n.translate(
+            'xpack.idxMgmt.componentTemplateForm.stepLogistics.validation.nameSpacesError',
+            {
+              defaultMessage: 'Spaces are not allowed in a component template name.',
+            }
+          ),
+        }),
       },
     ],
   },
@@ -77,7 +79,7 @@ export const logisticsFormSchema: FormSchema = {
         }}
       />
     ),
-    serializer: (value: string) => {
+    serializer: (value) => {
       const result = parseJson(value);
       // If an empty object was passed, strip out this value entirely.
       if (!Object.keys(result).length) {

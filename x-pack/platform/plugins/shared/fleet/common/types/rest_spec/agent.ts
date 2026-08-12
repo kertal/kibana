@@ -347,7 +347,6 @@ export interface GetActionStatusRequest {
     page?: number;
     date?: string;
     latest?: number;
-    scheduledOnly?: boolean;
   };
 }
 export interface GetActionStatusResponse {

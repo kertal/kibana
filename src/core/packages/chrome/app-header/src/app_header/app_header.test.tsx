@@ -36,45 +36,11 @@ const renderAppHeader = (
 };
 
 describe('AppHeaderView', () => {
-  it('renders an explicit share action in the title row only', () => {
-    const onClick = jest.fn();
-
-    renderAppHeader(
-      <AppHeaderView
-        title="Dashboard"
-        share={{
-          onClick,
-          tooltip: { content: 'Share this dashboard', title: 'Share' },
-        }}
-        menu={{
-          items: [
-            {
-              id: 'settings',
-              order: 1,
-              label: 'Settings',
-              iconType: 'gear',
-              run: jest.fn(),
-            },
-          ],
-        }}
-      />
-    );
-
-    const titleShare = screen.getByTestId(
-      `${APP_HEADER_TEST_SUBJECTS.sharePrefix} ${APP_HEADER_TEST_SUBJECTS.shareButton}`
-    );
-    fireEvent.click(titleShare);
-    expect(onClick).toHaveBeenCalledTimes(1);
-    expect(typeof onClick.mock.calls[0][0].returnFocus).toBe('function');
-    expect(onClick.mock.calls[0][0].triggerElement).toBeUndefined();
-  });
-
-  it('does not derive a title share action from a menu share item', async () => {
+  it('renders app menu share as a title action while keeping it in the menu', async () => {
     const runShare = jest.fn();
 
     renderAppHeader(
       <AppHeaderView
-        title="Dashboard"
         menu={{
           items: [
             {
@@ -82,7 +48,7 @@ describe('AppHeaderView', () => {
               order: 0,
               label: 'Share',
               iconType: 'share',
-              testId: 'menuShare',
+              testId: 'shareTopNavButton',
               run: runShare,
             },
           ],
@@ -90,49 +56,19 @@ describe('AppHeaderView', () => {
       />
     );
 
-    expect(
-      screen.queryByTestId(
-        `${APP_HEADER_TEST_SUBJECTS.sharePrefix} ${APP_HEADER_TEST_SUBJECTS.shareButton}`
-      )
-    ).not.toBeInTheDocument();
+    expect(screen.getByTestId(APP_HEADER_TEST_SUBJECTS.root)).toBeInTheDocument();
 
-    fireEvent.click(await screen.findByTestId(APP_MENU_TEST_SUBJECTS.overflowButton));
-    expect(await screen.findByTestId('menuShare')).toBeInTheDocument();
-  });
-
-  it('keeps an app-owned menu share item alongside an explicit title share action', async () => {
-    const explicitOnClick = jest.fn();
-    const menuRun = jest.fn();
-
-    renderAppHeader(
-      <AppHeaderView
-        title="Dashboard"
-        share={{ onClick: explicitOnClick }}
-        menu={{
-          items: [
-            {
-              id: 'share',
-              order: 0,
-              label: 'Share',
-              iconType: 'share',
-              testId: 'menuShare',
-              run: menuRun,
-            },
-          ],
-        }}
-      />
-    );
-
+    // The title-row share button is derived from the menu item.
     fireEvent.click(
-      screen.getByTestId(
-        `${APP_HEADER_TEST_SUBJECTS.sharePrefix} ${APP_HEADER_TEST_SUBJECTS.shareButton}`
-      )
+      screen.getByTestId(`${APP_HEADER_TEST_SUBJECTS.sharePrefix} shareTopNavButton`)
     );
-    expect(explicitOnClick).toHaveBeenCalledTimes(1);
-    expect(menuRun).not.toHaveBeenCalled();
+    expect(runShare).toHaveBeenCalledTimes(1);
 
-    fireEvent.click(await screen.findByTestId(APP_MENU_TEST_SUBJECTS.overflowButton));
-    expect(await screen.findByTestId('menuShare')).toBeInTheDocument();
+    // The share item remains visible in the trailing app menu.
+    if (!screen.queryByTestId('shareTopNavButton')) {
+      fireEvent.click(await screen.findByTestId(APP_MENU_TEST_SUBJECTS.overflowButton));
+    }
+    expect(await screen.findByTestId('shareTopNavButton')).toBeInTheDocument();
   });
 
   it('renders when the only content is a favorite action', () => {

@@ -11,7 +11,6 @@ import type { ReactNode } from 'react';
 import React, { useMemo } from 'react';
 import { css } from '@emotion/react';
 import type { AppMenuConfig, AppMenuItemType } from '@kbn/core-chrome-app-menu-components';
-import type { AppHeaderShareAction } from '@kbn/app-header';
 import { DiscoverAppHeader } from '@kbn/app-header/discover';
 import { AppMenuActionId } from '@kbn/discover-utils';
 import { getChromeHeaderBack, getChromeHeaderTitle } from './utils';
@@ -21,11 +20,10 @@ import { useIsChromeNextProjectHeader } from './use_is_chrome_next_project_heade
 
 interface ChromeAppHeaderProps {
   menu?: AppMenuConfig;
-  share?: AppHeaderShareAction;
   tabsBar?: ReactNode;
 }
 
-export const ChromeAppHeader = ({ menu, share, tabsBar }: ChromeAppHeaderProps) => {
+export const ChromeAppHeader = ({ menu, tabsBar }: ChromeAppHeaderProps) => {
   const { embeddableEditor } = useDiscoverServices();
   const isChromeNextProjectHeader = useIsChromeNextProjectHeader();
   const persistedDiscoverSession = useInternalStateSelector(
@@ -84,7 +82,6 @@ export const ChromeAppHeader = ({ menu, share, tabsBar }: ChromeAppHeaderProps) 
         title={title}
         back={back}
         menu={appMenu}
-        share={share}
         sticky={false}
         spacing="compact"
         tabsBar={tabsBar}

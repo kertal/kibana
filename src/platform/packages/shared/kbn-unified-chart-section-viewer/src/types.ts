@@ -21,7 +21,6 @@ interface ChartSectionActions {
     query?: Query | AggregateQuery;
     tabLabel?: string;
     timeRange?: TimeRange;
-    isApproximate?: boolean;
   }) => void;
   updateESQLQuery?: (queryOrUpdater: string | ((prevQuery: string) => string)) => void;
 }

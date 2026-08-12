@@ -21,9 +21,6 @@ const config = {
     active_nodes_lookback: '30s',
     interval: 10000,
   },
-  execution_control: {
-    poll_interval: 5000,
-  },
   kibanas_per_partition: 2,
   enabled: true,
   index: 'foo',
@@ -98,10 +95,6 @@ const getStatsWithTimestamp = ({
             },
           },
           poll_interval: 3000,
-          execution_control: {
-            paused: false,
-            paused_task_types: [],
-          },
         },
         status: HealthStatus.OK,
       },

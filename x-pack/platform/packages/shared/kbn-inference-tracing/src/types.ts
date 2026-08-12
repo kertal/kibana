@@ -42,12 +42,6 @@ export enum ElasticGenAIAttributes {
   ConversationTitle = 'elastic.conversation.title',
 }
 
-export enum UserAttributes {
-  UserId = 'user.id',
-  UserName = 'user.name',
-  UserHash = 'user.hash',
-}
-
 export interface GenAISemConvAttributes {
   [GenAISemanticConventions.GenAIUsageCost]?: number;
   [GenAISemanticConventions.GenAIUsageInputTokens]?: number;
@@ -80,9 +74,6 @@ export interface GenAISemConvAttributes {
   [ElasticGenAIAttributes.InferenceSpanKind]?: 'CHAIN' | 'AGENT' | 'LLM' | 'TOOL';
   [ElasticGenAIAttributes.ToolChoice]?: string;
   [ElasticGenAIAttributes.ConversationTitle]?: string;
-  [UserAttributes.UserId]?: string;
-  [UserAttributes.UserName]?: string;
-  [UserAttributes.UserHash]?: string;
 }
 
 /**

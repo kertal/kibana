@@ -14,7 +14,6 @@ import type { TaskStore } from '../task_store';
 import type { TaskPollingLifecycle } from '../polling_lifecycle';
 import type { AdHocTaskCounter } from '../lib/adhoc_task_counter';
 import type { TaskTypeDictionary } from '../task_type_dictionary';
-import type { TaskExecutionControlService } from '../execution_control';
 
 export type { MonitoringStats, RawMonitoringStats } from './monitoring_stats_stream';
 export {
@@ -33,7 +32,6 @@ export interface CreateMonitoringStatsOpts {
   taskDefinitions: TaskTypeDictionary;
   startingCapacity: number;
   taskPollingLifecycle?: TaskPollingLifecycle;
-  executionControlService?: TaskExecutionControlService;
 }
 
 export function createMonitoringStats(

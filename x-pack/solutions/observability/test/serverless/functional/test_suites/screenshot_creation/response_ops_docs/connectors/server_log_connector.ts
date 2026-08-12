@@ -13,8 +13,7 @@ export default function ({ getService, getPageObjects }: FtrProviderContext) {
   const pageObjects = getPageObjects(['common', 'header', 'svlCommonPage']);
   const testSubjects = getService('testSubjects');
 
-  // Failing: See https://github.com/elastic/kibana/issues/283730
-  describe.skip('server log connector', function () {
+  describe('server log connector', function () {
     beforeEach(async () => {
       await pageObjects.svlCommonPage.loginWithPrivilegedRole();
     });

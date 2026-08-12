@@ -26,9 +26,6 @@ export interface SignificantEventsScheduledWorkflowsConfig {
   reviewIntervalMinutes: number;
   discoveryBatchSize: number;
   maxReviewPasses: number;
-  flakyRuleDetectionThreshold: number;
-  flakyRuleProbeAfterMinutes: number;
-  flakyRuleExemptSeverityScore: number;
 }
 
 export interface SignificantEventsScheduledWorkflowsService {
@@ -146,9 +143,6 @@ export const createSignificantEventsScheduledWorkflowsService = ({
           reviewIntervalMinutes: config.reviewIntervalMinutes,
           discoveryBatchSize: config.discoveryBatchSize,
           maxReviewPasses: config.maxReviewPasses,
-          flakyRuleDetectionThreshold: config.flakyRuleDetectionThreshold,
-          flakyRuleProbeAfterMinutes: config.flakyRuleProbeAfterMinutes,
-          flakyRuleExemptSeverityScore: config.flakyRuleExemptSeverityScore,
         },
       }),
     ]);

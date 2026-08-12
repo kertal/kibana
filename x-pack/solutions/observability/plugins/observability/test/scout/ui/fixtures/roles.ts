@@ -47,7 +47,7 @@ export const CASES_READ_ROLE: KibanaRole = observabilityRole({
 
 /**
  * No observability privileges at all — only `discover: ['all']`. Mirrors the FTR
- * "no observability privileges" role and is expected to see Application unavailable
+ * "no observability privileges" role and is expected to see Application not found
  * when navigating to the Observability app.
  */
 export const NO_CASES_ROLE: KibanaRole = {

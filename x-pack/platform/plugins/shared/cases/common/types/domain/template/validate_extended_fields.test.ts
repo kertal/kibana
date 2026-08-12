@@ -145,6 +145,7 @@ describe('validateExtendedFields', () => {
         fields
       );
 
+      expect(errors).toContain('Unknown extended field key: "rogue_as_keyword"');
       expect(errors).toContain(
         `Extended field "rogue_as_keyword" exceeds the maximum size of ${MAX_EXTENDED_FIELD_VALUE_BYTES} bytes`
       );
@@ -164,19 +165,19 @@ describe('validateExtendedFields', () => {
   });
 
   describe('unknown keys', () => {
-    it('silently ignores an unknown key', () => {
+    it('reports error for unknown key', () => {
       const fields: FieldSchemaType[] = [makeInputTextField()];
       const extendedFields = { unknown_as_keyword: 'value' };
       const errors = validateExtendedFields(extendedFields, fields);
-      expect(errors).toEqual([]);
+      expect(errors).toContain('Unknown extended field key: "unknown_as_keyword"');
     });
 
-    it('silently ignores a key with mismatched type suffix', () => {
+    it('reports error for key with mismatched type', () => {
       const fields: FieldSchemaType[] = [makeInputTextField()];
       // the key uses wrong type suffix
       const extendedFields = { summary_as_long: 'value' };
       const errors = validateExtendedFields(extendedFields, fields);
-      expect(errors).toEqual([]);
+      expect(errors).toContain('Unknown extended field key: "summary_as_long"');
     });
   });
 
@@ -223,10 +224,10 @@ describe('validateExtendedFields', () => {
       expect(errors).toEqual([]);
     });
 
-    it('silently ignores a value submitted for a display-only field', () => {
+    it('treats a value submitted for a display-only field as an unknown key', () => {
       const fields: FieldSchemaType[] = [makeMarkdownField()];
       const errors = validateExtendedFields({ instructions_as_keyword: 'value' }, fields);
-      expect(errors).toEqual([]);
+      expect(errors).toContain('Unknown extended field key: "instructions_as_keyword"');
     });
   });
 

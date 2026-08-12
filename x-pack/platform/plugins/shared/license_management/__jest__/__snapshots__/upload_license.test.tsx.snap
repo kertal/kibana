@@ -42,7 +42,6 @@ exports[`UploadLicense should display a modal when license requires acknowledgem
           >
             <input
               aria-describedby="licenseFile-filePicker__prompt"
-              aria-label="License file"
               class="euiFilePicker__input emotion-euiFilePicker__input-largeInteractive"
               id="licenseFile"
               type="file"
@@ -202,7 +201,6 @@ exports[`UploadLicense should display an error when ES says license is expired 1
           >
             <input
               aria-describedby="licenseFile-filePicker__prompt"
-              aria-label="License file"
               class="euiFilePicker__input emotion-euiFilePicker__input-largeInteractive"
               id="licenseFile"
               type="file"
@@ -362,7 +360,6 @@ exports[`UploadLicense should display an error when ES says license is invalid 1
           >
             <input
               aria-describedby="licenseFile-filePicker__prompt"
-              aria-label="License file"
               class="euiFilePicker__input emotion-euiFilePicker__input-largeInteractive"
               id="licenseFile"
               type="file"
@@ -522,7 +519,6 @@ exports[`UploadLicense should display an error when submitting invalid JSON 1`] 
           >
             <input
               aria-describedby="licenseFile-filePicker__prompt"
-              aria-label="License file"
               class="euiFilePicker__input emotion-euiFilePicker__input-largeInteractive"
               id="licenseFile"
               type="file"
@@ -682,7 +678,6 @@ exports[`UploadLicense should display error when ES returns error 1`] = `
           >
             <input
               aria-describedby="licenseFile-filePicker__prompt"
-              aria-label="License file"
               class="euiFilePicker__input emotion-euiFilePicker__input-largeInteractive"
               id="licenseFile"
               type="file"

@@ -699,6 +699,12 @@ export default async function ({ readConfigFile }: FtrConfigProviderContext) {
           ],
         },
 
+        license_management_user: {
+          elasticsearch: {
+            cluster: ['manage'],
+          },
+        },
+
         logstash_read_user: {
           elasticsearch: {
             cluster: ['manage_logstash_pipelines'],

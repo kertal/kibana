@@ -120,6 +120,7 @@ export const getTopNavConfig = (
     visualizeCapabilities,
     dashboardCapabilities,
     savedObjectsTagging,
+    presentationUtil,
     getKibanaVersion,
     serverless,
     ...startServices

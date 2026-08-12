@@ -1,5 +1,5 @@
 {
-  "sha1": "717023ff8e02d320a6c64ad0d0d5aa7035a1ad03",
+  "sha1": "7d5b5b9d255fd56d821a72345826885129735ff5",
   "testChannels": [
     "ci-on-commit",
     "ci-batch-3h"
@@ -2941,7 +2941,7 @@
       ],
       "location": {
         "file": "x-pack/solutions/observability/plugins/apm/test/scout/ui/parallel_tests/service_overview/service_overview_transaction_details.spec.ts",
-        "line": 19,
+        "line": 18,
         "column": 25
       }
     },
@@ -2957,7 +2957,7 @@
       ],
       "location": {
         "file": "x-pack/solutions/observability/plugins/apm/test/scout/ui/parallel_tests/service_overview/service_overview_transaction_details.spec.ts",
-        "line": 41,
+        "line": 42,
         "column": 13
       }
     },
@@ -2973,7 +2973,7 @@
       ],
       "location": {
         "file": "x-pack/solutions/observability/plugins/apm/test/scout/ui/parallel_tests/service_overview/service_overview_transaction_details.spec.ts",
-        "line": 52,
+        "line": 53,
         "column": 13
       }
     },
@@ -2989,7 +2989,7 @@
       ],
       "location": {
         "file": "x-pack/solutions/observability/plugins/apm/test/scout/ui/parallel_tests/service_overview/service_overview_transaction_details.spec.ts",
-        "line": 83,
+        "line": 84,
         "column": 9
       }
     },
@@ -3005,8 +3005,8 @@
       ],
       "location": {
         "file": "x-pack/solutions/observability/plugins/apm/test/scout/ui/parallel_tests/service_overview/service_overview_transaction_details.spec.ts",
-        "line": 108,
-        "column": 11
+        "line": 112,
+        "column": 20
       }
     },
     {
@@ -3021,7 +3021,7 @@
       ],
       "location": {
         "file": "x-pack/solutions/observability/plugins/apm/test/scout/ui/parallel_tests/service_overview/service_overview_transaction_details.spec.ts",
-        "line": 125,
+        "line": 128,
         "column": 15
       }
     },
@@ -3079,14 +3079,12 @@
       "expectedStatus": "passed",
       "tags": [
         "@local-stateful-classic",
-        "@cloud-stateful-classic",
-        "@local-serverless-observability_complete",
-        "@cloud-serverless-observability_complete"
+        "@cloud-stateful-classic"
       ],
       "location": {
         "file": "x-pack/solutions/observability/plugins/apm/test/scout/ui/parallel_tests/settings/agent_explorer.spec.ts",
-        "line": 18,
-        "column": 10
+        "line": 12,
+        "column": 14
       }
     },
     {
@@ -3095,14 +3093,12 @@
       "expectedStatus": "passed",
       "tags": [
         "@local-stateful-classic",
-        "@cloud-stateful-classic",
-        "@local-serverless-observability_complete",
-        "@cloud-serverless-observability_complete"
+        "@cloud-stateful-classic"
       ],
       "location": {
         "file": "x-pack/solutions/observability/plugins/apm/test/scout/ui/parallel_tests/settings/agent_explorer.spec.ts",
-        "line": 28,
-        "column": 15
+        "line": 22,
+        "column": 54
       }
     },
     {
@@ -3111,14 +3107,12 @@
       "expectedStatus": "passed",
       "tags": [
         "@local-stateful-classic",
-        "@cloud-stateful-classic",
-        "@local-serverless-observability_complete",
-        "@cloud-serverless-observability_complete"
+        "@cloud-stateful-classic"
       ],
       "location": {
         "file": "x-pack/solutions/observability/plugins/apm/test/scout/ui/parallel_tests/settings/agent_explorer.spec.ts",
-        "line": 40,
-        "column": 13
+        "line": 31,
+        "column": 9
       }
     },
     {
@@ -3127,14 +3121,12 @@
       "expectedStatus": "passed",
       "tags": [
         "@local-stateful-classic",
-        "@cloud-stateful-classic",
-        "@local-serverless-observability_complete",
-        "@cloud-serverless-observability_complete"
+        "@cloud-stateful-classic"
       ],
       "location": {
         "file": "x-pack/solutions/observability/plugins/apm/test/scout/ui/parallel_tests/settings/agent_explorer.spec.ts",
-        "line": 49,
-        "column": 20
+        "line": 40,
+        "column": 5
       }
     },
     {

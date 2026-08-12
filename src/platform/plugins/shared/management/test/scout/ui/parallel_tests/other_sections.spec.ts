@@ -11,13 +11,17 @@
 
 import { expect } from '@kbn/scout/ui';
 import { tags } from '@kbn/scout';
-import { CUSTOM_ROLES, test } from '../fixtures';
+import { test, CUSTOM_ROLES } from '../fixtures';
 
-test.describe('Stack Management — ingest, security, and stack sections', () => {
-  test(
-    'logstash_read_user sees only the ingest section with pipelines',
-    { tag: tags.stateful.classic },
-    async ({ browserAuth, pageObjects }) => {
+// Failing: See https://github.com/elastic/kibana/issues/272033
+test.describe.skip(
+  'Stack Management — ingest, security, and stack sections',
+  { tag: tags.stateful.classic },
+  () => {
+    test('logstash_read_user sees only the ingest section with pipelines', async ({
+      browserAuth,
+      pageObjects,
+    }) => {
       await browserAuth.loginWithCustomRole(CUSTOM_ROLES.dashboard_read_and_logstash);
 
       await test.step('navigate to management and assert nav link + sidebar', async () => {
@@ -37,14 +41,13 @@ test.describe('Stack Management — ingest, security, and stack sections', () =>
           sectionLinks: ['settings'],
         });
       });
-    }
-  );
+    });
 
-  // Pre-migration tag 'skipFIPS'
-  test(
-    'manage_security sees only the security section with all four links',
-    { tag: tags.stateful.classic },
-    async ({ browserAuth, pageObjects }) => {
+    // Pre-migration tag 'skipFIPS'
+    test('manage_security sees only the security section with all four links', async ({
+      browserAuth,
+      pageObjects,
+    }) => {
       await browserAuth.loginWithCustomRole(CUSTOM_ROLES.dashboard_read_and_manage_security);
 
       await test.step('navigate to management and assert nav link + sidebar', async () => {
@@ -64,13 +67,12 @@ test.describe('Stack Management — ingest, security, and stack sections', () =>
           sectionLinks: ['settings'],
         });
       });
-    }
-  );
+    });
 
-  test(
-    'cluster:manage surfaces ingest, data (incl. remote_clusters) and stack (license_management) sections',
-    { tag: '@local-stateful-classic' },
-    async ({ browserAuth, pageObjects }) => {
+    test('cluster:manage surfaces ingest, data (incl. remote_clusters) and stack (license_management) sections', async ({
+      browserAuth,
+      pageObjects,
+    }) => {
       await browserAuth.loginWithCustomRole(CUSTOM_ROLES.dashboard_read_and_license_management);
 
       await test.step('navigate to management and assert nav link + sidebar', async () => {
@@ -91,6 +93,7 @@ test.describe('Stack Management — ingest, security, and stack sections', () =>
           sectionLinks: [
             'index_management',
             'index_lifecycle_management',
+            'data_federation',
             'snapshot_restore',
             'rollup_jobs',
             'transform',
@@ -106,6 +109,6 @@ test.describe('Stack Management — ingest, security, and stack sections', () =>
           sectionLinks: ['license_management'],
         });
       });
-    }
-  );
-});
+    });
+  }
+);

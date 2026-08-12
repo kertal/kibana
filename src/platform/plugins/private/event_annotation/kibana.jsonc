@@ -14,6 +14,7 @@
     "requiredPlugins": [
       "expressions",
       "data",
+      "presentationUtil",
       "visualizations",
       "dataViews",
       "unifiedSearch",

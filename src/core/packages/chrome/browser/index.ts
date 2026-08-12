@@ -19,7 +19,6 @@ export type {
   AppHeaderEditableTitle,
   AppHeaderFavoriteAction,
   AppHeaderFavoriteStatus,
-  AppHeaderShareAction,
   AppHeaderMetadataButtonItem,
   AppHeaderMetadataHealthItem,
   AppHeaderMetadataItem,

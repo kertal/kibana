@@ -518,9 +518,9 @@ export const openInNewTab: InternalStateThunkActionCreator<
 export const openInNewTabExtPointAction: InternalStateThunkActionCreator<
   [OpenInNewTabParams],
   Promise<void>
-> = ({ query, tabLabel, timeRange, isApproximate }) =>
+> = ({ query, tabLabel, timeRange }) =>
   function openInNewTabExtPointActionThunkFn(dispatch) {
-    const appState: TabState['appState'] = { query, isApproximate };
+    const appState: TabState['appState'] = { query };
     const globalState: TabState['globalState'] = { timeRange };
 
     return dispatch(

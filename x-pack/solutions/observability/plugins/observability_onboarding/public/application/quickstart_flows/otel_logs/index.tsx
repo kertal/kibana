@@ -26,9 +26,11 @@ import { useFetcher } from '../../../hooks/use_fetcher';
 import { usePreExistingDataCheck } from '../shared/use_pre_existing_data_check';
 import { useWindowBlurDataMonitoringTrigger } from '../shared/use_window_blur_data_monitoring_trigger';
 import { useTimeWindowDataDetection } from '../shared/use_time_window_data_detection';
+import { useWiredStreamsStatus } from '../../../hooks/use_wired_streams_status';
 import { MultiIntegrationInstallBanner } from './multi_integration_install_banner';
 import { EmptyPrompt } from '../shared/empty_prompt';
 import { FeedbackButtons } from '../shared/feedback_buttons';
+import { type IngestionMode } from '../shared/wired_streams_ingestion_selector';
 import { useFlowBreadcrumb } from '../../shared/use_flow_breadcrumbs';
 import {
   OtelLogsInstallStep,
@@ -39,6 +41,7 @@ import {
 import { useManagedOtlpServiceAvailability } from '../../shared/use_managed_otlp_service_availability';
 import { usePricingFeature } from '../shared/use_pricing_feature';
 import { ManagedOtlpCallout } from '../shared/managed_otlp_callout';
+import { WIRED_OTEL_DATA_VIEW_SPEC } from '../shared/wired_streams_data_view';
 import {
   OTEL_HOST_FETCH_INTERVAL_MS,
   OTEL_HOST_SHOW_TROUBLESHOOTING_DELAY_MS,
@@ -52,7 +55,7 @@ export const OtelLogsPanel: React.FC = () => {
   );
   const { onPageReady } = usePerformanceContext();
   const {
-    services: { share },
+    services: { share, docLinks },
   } = useKibana<ObservabilityOnboardingAppServices>();
 
   const {
@@ -114,15 +117,28 @@ export const OtelLogsPanel: React.FC = () => {
   );
   const isManagedOtlpServiceAvailable = useManagedOtlpServiceAvailability();
 
+  const {
+    isEnabled: isWiredStreamsEnabled,
+    isLoading: isWiredStreamsLoading,
+    isEnabling,
+    enableWiredStreams,
+  } = useWiredStreamsStatus();
+  const [ingestionMode, setIngestionMode] = useState<IngestionMode>('classic');
+  const useWiredStreams = ingestionMode === 'wired';
+
   const logsLocator = share.url.locators.get<LogsLocatorParams>(LOGS_LOCATOR_ID);
   const hostsLocator = share.url.locators.get('HOSTS_LOCATOR');
+  const logsLocatorParams = useMemo<LogsLocatorParams>(
+    () => (useWiredStreams ? { dataViewSpec: WIRED_OTEL_DATA_VIEW_SPEC } : {}),
+    [useWiredStreams]
+  );
 
   const [{ value: deeplinks }, getDeeplinks] = useAsyncFn(async () => {
     return {
-      logs: logsLocator?.getRedirectUrl({}),
+      logs: logsLocator?.getRedirectUrl(logsLocatorParams),
       metrics: hostsLocator?.getRedirectUrl({}),
     };
-  }, [logsLocator, hostsLocator]);
+  }, [logsLocator, logsLocatorParams, hostsLocator]);
 
   useEffect(() => {
     getDeeplinks();
@@ -192,16 +208,18 @@ export const OtelLogsPanel: React.FC = () => {
                 <EuiFlexGroup direction="column" gutterSize="l">
                   <EuiFlexItem grow={false}>
                     <EuiFlexGroup direction="column" gutterSize="s">
-                      <EuiText size="s">
-                        <strong>
-                          {i18n.translate(
-                            'xpack.observability_onboarding.otelLogsPanel.operatingSystemLabel',
-                            {
-                              defaultMessage: 'Operating system',
-                            }
-                          )}
-                        </strong>
-                      </EuiText>
+                      {!isWiredStreamsLoading && (
+                        <EuiText size="s">
+                          <strong>
+                            {i18n.translate(
+                              'xpack.observability_onboarding.otelLogsPanel.operatingSystemLabel',
+                              {
+                                defaultMessage: 'Operating system',
+                              }
+                            )}
+                          </strong>
+                        </EuiText>
+                      )}
                       <EuiFlexItem grow={false}>
                         <EuiButtonGroup
                           legend={i18n.translate(
@@ -227,8 +245,17 @@ export const OtelLogsPanel: React.FC = () => {
                   <OtelLogsInstallStep
                     os={selectedTab}
                     setupData={setupData}
+                    ingestionMode={ingestionMode}
+                    onIngestionModeChange={setIngestionMode}
                     isMetricsOnboardingEnabled={isMetricsOnboardingEnabled}
                     isManagedOtlpServiceAvailable={isManagedOtlpServiceAvailable}
+                    wiredStreamsStatus={{
+                      isEnabled: isWiredStreamsEnabled,
+                      isLoading: isWiredStreamsLoading,
+                      isEnabling,
+                      enableWiredStreams,
+                    }}
+                    streamsDocLink={docLinks?.links.observability.logsStreams}
                   />
                 </EuiFlexGroup>
               ),

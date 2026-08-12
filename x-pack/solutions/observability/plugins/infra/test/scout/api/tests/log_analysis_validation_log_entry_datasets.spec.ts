@@ -18,7 +18,7 @@ import { apiTest, testData } from '../fixtures';
 
 apiTest.describe(
   'API /infra/log_analysis/validation/log_entry_datasets',
-  { tag: [...tags.stateful.all, ...tags.serverless.observability.complete] },
+  { tag: tags.stateful.all },
   () => {
     let viewerApiCredentials: RoleApiCredentials;
 

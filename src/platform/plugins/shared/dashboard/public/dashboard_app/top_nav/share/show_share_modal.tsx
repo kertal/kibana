@@ -37,10 +37,9 @@ export interface ShowShareModalProps {
   accessControlClient: AccessControlClient;
   saveDashboard: () => Promise<void>;
   changeAccessMode: (accessMode: SavedObjectAccessControl['accessMode']) => Promise<void>;
-  onClose?: () => void;
 }
 
-export const showPublicUrlSwitch = (anonymousUserCapabilities: Capabilities): boolean => {
+export const showPublicUrlSwitch = (anonymousUserCapabilities: Capabilities) => {
   if (!anonymousUserCapabilities.dashboard_v2) return false;
 
   const dashboard = anonymousUserCapabilities.dashboard_v2;
@@ -57,7 +56,6 @@ export function ShowShareModal({
   accessControlClient,
   saveDashboard,
   changeAccessMode,
-  onClose,
 }: ShowShareModalProps) {
   if (!shareService) return;
 
@@ -142,7 +140,6 @@ export function ShowShareModal({
 
   shareService.toggleShareContextMenu({
     ...shareOptions,
-    onClose,
     onSave: canSave ? saveDashboard : undefined,
     objectTypeMeta: {
       title: i18n.translate('dashboard.share.shareModal.title', {

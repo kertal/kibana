@@ -14,10 +14,12 @@ import {
   Wrapper,
 } from './wrapper';
 import { TestProviders } from '../../../common/mock';
-import type { DataView } from '@kbn/data-views-plugin/public';
+import { useDataView } from '../../../data_view_manager/hooks/use_data_view';
+import type { DataView } from '@kbn/data-views-plugin/common';
 import { createStubDataView } from '@kbn/data-views-plugin/common/data_views/data_view.stub';
 
 jest.mock('../../../common/hooks/use_experimental_features');
+jest.mock('../../../data_view_manager/hooks/use_data_view');
 jest.mock('./content', () => ({
   AlertsPageContent: () => <div data-test-subj={'alerts-page-content'} />,
 }));
@@ -30,9 +32,11 @@ describe('<Wrapper />', () => {
   });
 
   it('should render a loading skeleton if the dataView status is pristine', async () => {
+    (useDataView as jest.Mock).mockReturnValue({ dataView, status: 'pristine' });
+
     render(
       <TestProviders>
-        <Wrapper dataView={dataView} status="pristine" />
+        <Wrapper />
       </TestProviders>
     );
 
@@ -43,9 +47,11 @@ describe('<Wrapper />', () => {
   });
 
   it('should render a loading skeleton if the dataView status is loading', async () => {
+    (useDataView as jest.Mock).mockReturnValue({ dataView, status: 'loading' });
+
     render(
       <TestProviders>
-        <Wrapper dataView={dataView} status="loading" />
+        <Wrapper />
       </TestProviders>
     );
 
@@ -56,9 +62,14 @@ describe('<Wrapper />', () => {
   });
 
   it('should render an error if the dataView status is error', async () => {
+    (useDataView as jest.Mock).mockReturnValue({
+      dataView: undefined,
+      status: 'error',
+    });
+
     render(
       <TestProviders>
-        <Wrapper dataView={dataView} status="error" />
+        <Wrapper />
       </TestProviders>
     );
 
@@ -69,15 +80,18 @@ describe('<Wrapper />', () => {
   });
 
   it('should render an error if the dataView status is ready but it has no indices', async () => {
-    const invalidDataView = {
-      ...dataView,
-      getRuntimeMappings: jest.fn(),
-      hasMatchedIndices: jest.fn().mockReturnValue(false),
-    } as unknown as DataView;
+    (useDataView as jest.Mock).mockReturnValue({
+      dataView: {
+        ...dataView,
+        getRuntimeMappings: jest.fn(),
+        hasMatchedIndices: jest.fn().mockReturnValue(false),
+      },
+      status: 'ready',
+    });
 
     render(
       <TestProviders>
-        <Wrapper dataView={invalidDataView} status="ready" />
+        <Wrapper />
       </TestProviders>
     );
 
@@ -90,17 +104,20 @@ describe('<Wrapper />', () => {
   });
 
   it('should render the content', async () => {
-    const validDataView = {
-      ...dataView,
-      id: 'id',
-      getIndexPattern: jest.fn().mockReturnValue('title'),
-      getRuntimeMappings: jest.fn(),
-      hasMatchedIndices: jest.fn().mockReturnValue(true),
-    } as unknown as DataView;
+    (useDataView as jest.Mock).mockReturnValue({
+      dataView: {
+        ...dataView,
+        id: 'id',
+        getIndexPattern: jest.fn().mockReturnValue('title'),
+        getRuntimeMappings: jest.fn(),
+        hasMatchedIndices: jest.fn().mockReturnValue(true),
+      },
+      status: 'ready',
+    });
 
     render(
       <TestProviders>
-        <Wrapper dataView={validDataView} status="ready" />
+        <Wrapper />
       </TestProviders>
     );
 

@@ -49,11 +49,4 @@ export const BasicAuth: AuthTypeSpec<AuthSchemaType> = {
 
     return axiosInstance;
   },
-  getAuthHeaders: async (
-    _: AuthContext,
-    secret: AuthSchemaType
-  ): Promise<Record<string, string>> => {
-    const encoded = Buffer.from(`${secret.username}:${secret.password}`).toString('base64');
-    return { Authorization: `Basic ${encoded}` };
-  },
 };

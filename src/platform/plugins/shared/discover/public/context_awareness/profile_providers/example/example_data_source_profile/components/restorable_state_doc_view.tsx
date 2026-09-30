@@ -7,16 +7,28 @@
  * License v3.0 only", or the "Server Side Public License, v 1".
  */
 
-import { EuiButton, EuiFlexGroup, EuiFlexItem, useEuiTheme } from '@elastic/eui';
+import {
+  EuiButton,
+  EuiFieldText,
+  EuiFlexGroup,
+  EuiFlexItem,
+  EuiFormRow,
+  EuiText,
+  useEuiTheme,
+} from '@elastic/eui';
 import React from 'react';
 import { createRestorableStateProvider } from '@kbn/restorable-state';
 import { KbnInfoCallout } from '@kbn/ui-callout';
 import { z } from '@kbn/zod';
 
+const MAX_CUSTOM_STRING_LENGTH = 10_000;
+
 const RestorableStateDocViewBase: React.FC<{
   clickCount: number;
+  customString: string;
   onIncrement: () => void;
-}> = ({ clickCount, onIncrement }) => {
+  onCustomStringChange: (value: string) => void;
+}> = ({ clickCount, customString, onIncrement, onCustomStringChange }) => {
   const { euiTheme } = useEuiTheme();
 
   return (
@@ -63,19 +75,38 @@ const RestorableStateDocViewBase: React.FC<{
           </EuiButton>
         </EuiFlexItem>
       </EuiFlexGroup>
+      <EuiFlexItem grow={false}>
+        <EuiFormRow
+          label="Custom string (restorable & shareable)"
+          helpText={
+            <EuiText size="xs">
+              {customString.length} / {MAX_CUSTOM_STRING_LENGTH} characters
+            </EuiText>
+          }
+        >
+          <EuiFieldText
+            value={customString}
+            onChange={(e) => onCustomStringChange(e.target.value)}
+            maxLength={MAX_CUSTOM_STRING_LENGTH}
+            data-test-subj="example-restorable-state-doc-view-custom-string"
+          />
+        </EuiFormRow>
+      </EuiFlexItem>
     </EuiFlexGroup>
   );
 };
 
 interface RestorableStateDocViewState {
   clickCount: number;
+  customString: string;
 }
 
 /**
- * Marks the doc view's `clickCount` as URL-shareable, so a shared document link restores the counter.
+ * Marks the doc view's `clickCount` and `customString` as URL-shareable, so a shared document link restores them.
  */
 export const restorableStateDocViewShareableStateSchema = z.object({
   clickCount: z.number().int().nonnegative().max(1_000_000),
+  customString: z.string().max(MAX_CUSTOM_STRING_LENGTH).optional(),
 });
 
 const { withRestorableState, useRestorableState } =
@@ -83,11 +114,14 @@ const { withRestorableState, useRestorableState } =
 
 export const RestorableStateDocView = withRestorableState(() => {
   const [clickCount, setClickCount] = useRestorableState('clickCount', 0);
+  const [customString, setCustomString] = useRestorableState('customString', '');
 
   return (
     <RestorableStateDocViewBase
       clickCount={clickCount}
+      customString={customString}
       onIncrement={() => setClickCount(clickCount + 1)}
+      onCustomStringChange={setCustomString}
     />
   );
 });

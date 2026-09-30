@@ -30,4 +30,28 @@ describe('restorableStateDocViewShareableStateSchema', () => {
       restorableStateDocViewShareableStateSchema.safeParse({ clickCount: 1_000_001 }).success
     ).toBe(false);
   });
+
+  it('keeps customString when present', () => {
+    const result = restorableStateDocViewShareableStateSchema.safeParse({
+      clickCount: 1,
+      customString: 'hello',
+    });
+
+    expect(result).toEqual({ success: true, data: { clickCount: 1, customString: 'hello' } });
+  });
+
+  it('allows missing customString for backwards-compatible URLs', () => {
+    const result = restorableStateDocViewShareableStateSchema.safeParse({ clickCount: 0 });
+
+    expect(result).toEqual({ success: true, data: { clickCount: 0 } });
+  });
+
+  it('rejects a customString exceeding the max length', () => {
+    expect(
+      restorableStateDocViewShareableStateSchema.safeParse({
+        clickCount: 0,
+        customString: 'x'.repeat(10_001),
+      }).success
+    ).toBe(false);
+  });
 });
